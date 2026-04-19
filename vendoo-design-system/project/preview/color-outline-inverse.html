@@ -1,0 +1,42 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<link rel="stylesheet" href="role-cards.css">
+</head><body>
+<div class="card">
+  <h2>Outline</h2>
+  <p class="desc"><b>outline</b> for important boundaries (text field borders, dividers requiring 3:1). <b>outline-variant</b> for decorative dividers where adjacent content already provides contrast.</p>
+
+  <div class="roles two">
+    <div class="role" style="background:var(--sys-surface);color:var(--sys-outline);border:2px solid var(--sys-outline);"><span class="name">outline</span><span class="hex">#7A7486</span></div>
+    <div class="role" style="background:var(--sys-surface);color:var(--sys-on-surface-variant);border:2px solid var(--sys-outline-variant);"><span class="name">outline-variant</span><span class="hex">#CBC3D7</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>Inverse — for contrast against surface</h2>
+  <p class="desc">Selective roles for elements that need to pop off the surrounding UI — snackbars, tooltips, toast banners.</p>
+
+  <div class="roles three">
+    <div class="role" style="background:var(--sys-inverse-surface);color:var(--sys-inverse-on-surface);"><span class="name">inverse-surface</span><span class="hex">#322F39</span></div>
+    <div class="role" style="background:var(--sys-inverse-surface);color:var(--sys-inverse-on-surface);"><span class="name">inverse-on-surface</span><span class="hex">#F5EEFC</span></div>
+    <div class="role" style="background:var(--sys-inverse-surface);color:var(--sys-inverse-primary);"><span class="name">inverse-primary</span><span class="hex">#CEBDFF</span></div>
+  </div>
+
+  <div class="uses">
+    <div class="use" style="background:var(--sys-inverse-surface);color:var(--sys-inverse-on-surface);display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:16px;">
+      <span>Listing saved to drafts</span>
+      <span style="color:var(--sys-inverse-primary);font-weight:500;">Undo</span>
+    </div>
+    <div class="use" style="background:var(--sys-scrim);color:#fff;"><span class="tag" style="color:#bbb;">Scrim · #000 @ 40%</span>Modal backdrop</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <h2>Scrim &amp; shadow</h2>
+  <div class="roles two">
+    <div class="role" style="background:var(--sys-scrim);color:#fff;"><span class="name">scrim</span><span class="hex">#000000</span></div>
+    <div class="role" style="background:var(--sys-surface);color:var(--sys-on-surface);box-shadow:var(--sys-shadow-level3);border-color:transparent;"><span class="name">shadow · level3</span><span class="hex">#000000</span></div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,180 @@
+{
+  "ref": {
+    "opacity": {
+      "0": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "OPACITY"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-opacity-0)"
+          }
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "8": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.hiddenFromPublishing": false
+        },
+        "$type": "number",
+        "$value": 8
+      },
+      "10": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "OPACITY"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-opacity-0-10)"
+          }
+        },
+        "$type": "number",
+        "$value": 10
+      },
+      "12": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "OPACITY"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-opacity-0-12)"
+          }
+        },
+        "$type": "number",
+        "$value": 12
+      },
+      "16": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "OPACITY"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-opacity-0-16)"
+          }
+        },
+        "$type": "number",
+        "$value": 16
+      },
+      "38": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "OPACITY"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-opacity-0-08)"
+          }
+        },
+        "$type": "number",
+        "$value": 38
+      },
+      "100": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "OPACITY"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-opacity-1)"
+          }
+        },
+        "$type": "number",
+        "$value": 100
+      }
+    }
+  },
+  "sys": {
+    "opacity": {
+      "state-layer": {
+        "hover": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "OPACITY"
+            ],
+            "com.figma.hiddenFromPublishing": false,
+            "com.figma.codeSyntax": {
+              "Web": "var(--go-flow-sys-opacity-state-layer-hover)"
+            }
+          },
+          "$type": "number",
+          "$value": "{ref.opacity.8}"
+        },
+        "focus": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "OPACITY"
+            ],
+            "com.figma.hiddenFromPublishing": false,
+            "com.figma.codeSyntax": {
+              "Web": "var(--go-flow-sys-opacity-state-layer-focus)"
+            }
+          },
+          "$type": "number",
+          "$value": "{ref.opacity.10}"
+        },
+        "pressed": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "OPACITY"
+            ],
+            "com.figma.hiddenFromPublishing": false,
+            "com.figma.codeSyntax": {
+              "Web": "var(--go-flow-sys-opacity-state-layer-pressed)"
+            }
+          },
+          "$type": "number",
+          "$value": "{ref.opacity.10}"
+        },
+        "dragged": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "OPACITY"
+            ],
+            "com.figma.hiddenFromPublishing": false,
+            "com.figma.codeSyntax": {
+              "Web": "var(--go-flow-sys-opacity-state-layer-dragged)"
+            }
+          },
+          "$type": "number",
+          "$value": "{ref.opacity.16}"
+        }
+      },
+      "disabled": {
+        "container": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "OPACITY"
+            ],
+            "com.figma.hiddenFromPublishing": false,
+            "com.figma.codeSyntax": {
+              "Web": "var(--go-flow-sys-opacity-disabled-container)"
+            }
+          },
+          "$type": "number",
+          "$value": "{ref.opacity.100}"
+        },
+        "content": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "OPACITY"
+            ],
+            "com.figma.hiddenFromPublishing": false,
+            "com.figma.codeSyntax": {
+              "Web": "var(--go-flow-sys-opacity-disabled-content)"
+            }
+          },
+          "$type": "number",
+          "$value": "{ref.opacity.38}"
+        }
+      }
+    }
+  }
+}

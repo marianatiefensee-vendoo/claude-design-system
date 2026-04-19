@@ -1,0 +1,26 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  html,body{margin:0;padding:0;background:var(--sys-surface);color:var(--sys-on-surface);font-family:var(--font-sans);}
+  .card{width:760px;padding:22px 24px;box-sizing:border-box;}
+  .row{display:flex;align-items:baseline;gap:16px;padding:8px 0;border-bottom:1px solid var(--sys-outline-variant);}
+  .row:last-child{border-bottom:none;}
+  .meta{font:500 11px/14px var(--font-sans);letter-spacing:.6px;color:var(--sys-on-surface-variant);text-transform:uppercase;width:130px;flex:none;}
+  .spec{font:400 11px/14px ui-monospace,Menlo,monospace;color:var(--sys-on-surface-variant);margin-left:auto;flex:none;}
+  .sample{color:var(--sys-on-surface);}
+  h2{font:500 12px/16px var(--font-sans);color:var(--sys-on-surface-variant);letter-spacing:.5px;text-transform:uppercase;margin:0 0 6px;}
+  .btn{background:var(--sys-primary);color:var(--sys-on-primary);border-radius:4px;padding:10px 18px;border:none;}
+</style></head>
+<body><div class="card">
+
+  <h2>Label</h2>
+  <div class="row"><span class="meta">label-lg</span><span class="sample label-lg">Save draft</span><span class="spec">14/20 · 500 · +.10</span></div>
+  <div class="row"><span class="meta">label-md</span><span class="sample label-md">Category</span><span class="spec">12/16 · 500 · +.50</span></div>
+  <div class="row"><span class="meta">label-sm</span><span class="sample label-sm">Required</span><span class="spec">11/16 · 500 · +.50</span></div>
+  <div class="row"><span class="meta">label-emph-lg</span><span class="sample label-emphasized-lg">Crosslist to 4</span><span class="spec">14/20 · 700 · +.10</span></div>
+  <div class="row"><span class="meta">label-emph-md</span><span class="sample label-emphasized-md">Unsaved changes</span><span class="spec">12/16 · 700 · +.50</span></div>
+  <div class="row"><span class="meta">label-emph-sm</span><span class="sample label-emphasized-sm">Draft</span><span class="spec">11/16 · 700 · +.50</span></div>
+  <div class="row" style="padding-top:14px;"><span class="meta">In use</span><span><button class="btn label-lg">Crosslist to 4</button></span></div>
+
+</div></body></html>

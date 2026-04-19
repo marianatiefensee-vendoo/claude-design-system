@@ -1,0 +1,22 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  html,body{margin:0;padding:0;background:var(--sys-surface-container-low);font-family:var(--font-sans);color:var(--sys-on-surface);}
+  .card{width:700px;padding:28px 24px;box-sizing:border-box;display:flex;gap:16px;}
+  .cell{flex:1;display:flex;flex-direction:column;align-items:center;gap:12px;}
+  .box{width:100%;height:60px;background:var(--sys-surface);border-radius:12px;}
+  .e1{box-shadow:var(--sys-shadow-level1);}
+  .e2{box-shadow:var(--sys-shadow-level2);}
+  .e3{box-shadow:var(--sys-shadow-level3);}
+  .e4{box-shadow:var(--sys-shadow-level4);}
+  .e5{box-shadow:var(--sys-shadow-level5);}
+  .lbl{font:500 11px/14px var(--font-sans);letter-spacing:.6px;color:var(--sys-on-surface-variant);text-transform:uppercase;}
+</style></head>
+<body><div class="card">
+  <div class="cell"><div class="box e1"></div><span class="lbl">Level 1</span></div>
+  <div class="cell"><div class="box e2"></div><span class="lbl">Level 2</span></div>
+  <div class="cell"><div class="box e3"></div><span class="lbl">Level 3</span></div>
+  <div class="cell"><div class="box e4"></div><span class="lbl">Level 4</span></div>
+  <div class="cell"><div class="box e5"></div><span class="lbl">Level 5</span></div>
+</div></body></html>

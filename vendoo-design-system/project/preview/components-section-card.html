@@ -1,0 +1,305 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Listing Section Card — component set</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  :root { color-scheme: light; }
+  html,body{margin:0;padding:0;background:var(--sys-surface);font-family:var(--font-sans);color:var(--sys-on-surface);}
+  .page{width:980px;padding:28px 32px 48px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px;}
+
+  /* ——— section group ——— */
+  .group{display:flex;flex-direction:column;gap:12px;}
+  .group > h2{
+    font:500 11px/14px var(--font-sans);letter-spacing:.8px;text-transform:uppercase;
+    color:var(--sys-on-surface-variant);margin:0;
+  }
+  .group > .help{
+    font:400 13px/18px var(--font-sans);color:var(--sys-on-surface-variant);
+    margin:-4px 0 4px;max-width:780px;
+  }
+
+  /* ——— variant block ——— */
+  .variant{display:flex;flex-direction:column;gap:8px;}
+  .variant .cap{
+    font:500 11px/14px var(--font-sans);letter-spacing:.4px;
+    color:var(--sys-on-surface-variant);
+  }
+  .variant .cap b{color:var(--sys-on-surface);font-weight:500;}
+
+  /* ───────── Section Card (Pattern / Listing Section Card) ───────── */
+  .sect{
+    border-radius:12px;overflow:hidden;
+    background:var(--sys-surface);
+    border:1px solid var(--sys-outline-variant);
+  }
+  /* border/header treatments per Progress */
+  .sect.current  { border-color:var(--sys-primary); }
+  .sect.complete { border-color:var(--sys-outline-variant); }
+  .sect.upcoming { border-color:var(--sys-outline-variant); }
+
+  .head{
+    padding:18px 20px;
+    display:flex;align-items:center;gap:12px;
+    border-bottom:1px solid transparent;
+  }
+  .sect.current .head{
+    background: color-mix(in srgb, var(--sys-primary) 8%, transparent);
+  }
+  .sect.expanded .head{
+    border-bottom-color:var(--sys-outline-variant);
+  }
+
+  /* Step badge inside header (sm 30×30 version) */
+  .badge{
+    width:30px;height:30px;border-radius:999px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    font:500 14px/20px var(--font-sans);letter-spacing:.1px;
+  }
+  .badge.current  { background:var(--sys-primary);    color:var(--sys-on-primary); }
+  .badge.complete { background:var(--sys-primary);    color:var(--sys-on-primary); }
+  .badge.upcoming { background:var(--sys-outline-variant); color:var(--sys-on-surface-variant); }
+  .badge.complete-unselected { background:var(--sys-outline-variant); color:var(--sys-on-primary); }
+  .badge svg{width:16px;height:16px;}
+
+  .title-stack{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .title{font:500 16px/24px var(--font-sans);letter-spacing:.15px;color:var(--sys-on-surface);}
+  .sub  {font:400 13px/18px var(--font-sans);letter-spacing:.25px;color:var(--sys-on-surface-variant);}
+
+  /* Action slot (right side) */
+  .action{
+    display:inline-flex;align-items:center;gap:6px;
+    font:500 14px/20px var(--font-sans);letter-spacing:.1px;
+    color:var(--sys-primary);cursor:pointer;
+    padding:8px 12px;border-radius:999px;border:none;background:transparent;
+    flex:none;
+  }
+  .action:hover{background:color-mix(in srgb, var(--sys-primary) 8%, transparent);}
+
+  /* Icon button (chevron) */
+  .iconbtn{
+    width:40px;height:40px;border-radius:999px;flex:none;border:none;background:transparent;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;
+    color:var(--sys-on-surface-variant);
+  }
+  .iconbtn:hover{background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent);}
+  .iconbtn svg{width:20px;height:20px;}
+
+  /* Expanded body slot */
+  .body{
+    background:var(--sys-surface-container-lowest);
+    padding:16px 20px;display:flex;flex-direction:column;gap:12px;
+  }
+  .field{
+    border:1px solid var(--sys-outline-variant);border-radius:4px;
+    padding:10px 14px;font:400 14px/20px var(--font-sans);color:var(--sys-on-surface);
+    background:var(--sys-surface);
+  }
+  .field.muted{color:var(--sys-on-surface-variant);}
+
+  /* ───────── Step Badge standalone grid ───────── */
+  .badge-grid{
+    display:grid;grid-template-columns:repeat(4, max-content);gap:20px 28px;align-items:end;
+    padding:16px 18px;border:1px dashed var(--sys-outline-variant);border-radius:12px;
+    background:var(--sys-surface-container-lowest);
+  }
+  .badge-cell{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .badge-cell .lbl{
+    font:500 10.5px/14px var(--font-sans);letter-spacing:.4px;
+    color:var(--sys-on-surface-variant);text-align:center;text-transform:uppercase;
+  }
+
+  /* ───────── Text Stack preview ───────── */
+  .textstack{
+    display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  }
+  .textstack .cell{
+    background:var(--sys-surface-container-lowest);
+    border:1px solid var(--sys-outline-variant);border-radius:12px;
+    padding:16px 18px;
+    display:flex;flex-direction:column;gap:2px;
+  }
+  .textstack .cap{
+    font:500 10.5px/14px var(--font-sans);letter-spacing:.4px;
+    color:var(--sys-on-surface-variant);text-transform:uppercase;margin-bottom:6px;
+  }
+</style></head>
+<body><div class="page">
+
+  <!-- ══════════════ 1. Pattern / Listing Section Card ══════════════ -->
+  <div class="group">
+    <h2>Pattern · Listing Section Card</h2>
+    <p class="help">
+      Component set: <b>State</b> (Collapsed / Expanded) × <b>Supporting Text</b> (True / False) × <b>Action</b> (True / False) × <b>Progress</b> (Upcoming / Current / Complete). Below: one representative of each axis pairing.
+    </p>
+
+    <!-- Collapsed, Supporting=True, Action=True, Upcoming -->
+    <div class="variant">
+      <span class="cap">State=<b>Collapsed</b> · Supporting Text=<b>True</b> · Action=<b>True</b> · Progress=<b>Upcoming</b></span>
+      <div class="sect upcoming">
+        <div class="head">
+          <span class="badge upcoming">2</span>
+          <div class="title-stack">
+            <span class="title">Title &amp; Description</span>
+            <span class="sub">Applies to all marketplaces</span>
+          </div>
+          <button class="action">Rewrite with AI</button>
+          <button class="iconbtn" aria-label="Expand">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsed, Supporting=False, Action=False, Complete -->
+    <div class="variant">
+      <span class="cap">State=<b>Collapsed</b> · Supporting Text=<b>False</b> · Action=<b>False</b> · Progress=<b>Complete</b></span>
+      <div class="sect complete">
+        <div class="head">
+          <span class="badge complete" aria-label="Complete">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#check"/></svg>
+          </span>
+          <div class="title-stack">
+            <span class="title">Photos</span>
+          </div>
+          <button class="iconbtn" aria-label="Expand">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsed, Supporting=True, Action=False, Upcoming -->
+    <div class="variant">
+      <span class="cap">State=<b>Collapsed</b> · Supporting Text=<b>True</b> · Action=<b>False</b> · Progress=<b>Upcoming</b></span>
+      <div class="sect upcoming">
+        <div class="head">
+          <span class="badge upcoming">3</span>
+          <div class="title-stack">
+            <span class="title">Category &amp; condition</span>
+            <span class="sub">Required for Poshmark and eBay</span>
+          </div>
+          <button class="iconbtn" aria-label="Expand">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsed, Supporting=False, Action=True, Upcoming -->
+    <div class="variant">
+      <span class="cap">State=<b>Collapsed</b> · Supporting Text=<b>False</b> · Action=<b>True</b> · Progress=<b>Upcoming</b></span>
+      <div class="sect upcoming">
+        <div class="head">
+          <span class="badge upcoming">4</span>
+          <div class="title-stack">
+            <span class="title">Shipping</span>
+          </div>
+          <button class="action">Autofill</button>
+          <button class="iconbtn" aria-label="Expand">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded, Supporting=True, Action=True, Current  (currently-open section) -->
+    <div class="variant">
+      <span class="cap">State=<b>Expanded</b> · Supporting Text=<b>True</b> · Action=<b>True</b> · Progress=<b>Current</b></span>
+      <div class="sect current expanded">
+        <div class="head">
+          <span class="badge current">2</span>
+          <div class="title-stack">
+            <span class="title">Title &amp; Description</span>
+            <span class="sub">Applies to all marketplaces</span>
+          </div>
+          <button class="action">Rewrite with AI</button>
+          <button class="iconbtn" aria-label="Collapse">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_up"/></svg>
+          </button>
+        </div>
+        <div class="body">
+          <div class="field">Vintage 90s Knit Sweater — Pastel Purple</div>
+          <div class="field muted" style="min-height:44px;">Soft pastel purple knit sweater with a vintage 90s look. Wool blend, great condition, size medium.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded, Supporting=False, Action=False, Upcoming -->
+    <div class="variant">
+      <span class="cap">State=<b>Expanded</b> · Supporting Text=<b>False</b> · Action=<b>False</b> · Progress=<b>Upcoming</b></span>
+      <div class="sect upcoming expanded">
+        <div class="head">
+          <span class="badge upcoming">5</span>
+          <div class="title-stack">
+            <span class="title">Pricing</span>
+          </div>
+          <button class="iconbtn" aria-label="Collapse">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_up"/></svg>
+          </button>
+        </div>
+        <div class="body">
+          <div class="field muted">$—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded, Supporting=True, Action=False, Complete -->
+    <div class="variant">
+      <span class="cap">State=<b>Expanded</b> · Supporting Text=<b>True</b> · Action=<b>False</b> · Progress=<b>Complete</b></span>
+      <div class="sect complete expanded">
+        <div class="head">
+          <span class="badge complete" aria-label="Complete">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#check"/></svg>
+          </span>
+          <div class="title-stack">
+            <span class="title">Photos</span>
+            <span class="sub">6 uploaded · primary set</span>
+          </div>
+          <button class="iconbtn" aria-label="Collapse">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#chevron_up"/></svg>
+          </button>
+        </div>
+        <div class="body">
+          <div class="field muted" style="min-height:44px;">6 photos uploaded. Drag to reorder. First photo is your cover.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 2. Step Badge nested component ══════════════ -->
+  <div class="group">
+    <h2>Nested · Step Badge</h2>
+    <p class="help">
+      <b>State</b> (Current / Complete / Upcoming) × <b>Selected</b> (True / False) · 30 × 30. Lives inside the Section Card header and the sidebar progress rail.
+    </p>
+    <div class="badge-grid">
+      <div class="badge-cell"><span class="badge current">1</span><span class="lbl">Current<br>Selected=True</span></div>
+      <div class="badge-cell"><span class="badge complete" aria-label="Complete">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#check"/></svg>
+      </span><span class="lbl">Complete<br>Selected=True</span></div>
+      <div class="badge-cell"><span class="badge complete-unselected" aria-label="Complete"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#check"/></svg>
+      </span><span class="lbl">Complete<br>Selected=False</span></div>
+      <div class="badge-cell"><span class="badge upcoming">1</span><span class="lbl">Upcoming<br>Selected=False</span></div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 3. Text Stack · Section Header ══════════════ -->
+  <div class="group">
+    <h2>Nested · Text Stack Section Header</h2>
+    <p class="help">
+      <b>Supporting Text</b> (True / False) · <b>Label</b> as free text. 2-line rhythm: <code>title-md</code> (16/24) + <code>body-sm</code> (13/18).
+    </p>
+    <div class="textstack">
+      <div class="cell">
+        <span class="cap">Supporting Text = True</span>
+        <span class="title">Title &amp; Description</span>
+        <span class="sub">Applies to all marketplaces</span>
+      </div>
+      <div class="cell">
+        <span class="cap">Supporting Text = False</span>
+        <span class="title">Photos</span>
+      </div>
+    </div>
+  </div>
+
+</div></body></html>

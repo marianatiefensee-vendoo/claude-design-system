@@ -1,0 +1,3 @@
+/* Back-compat alias. The source of truth is tokens.css — this file re-exports it
+   so older <link> hrefs keep working. */
+@import url('./tokens.css');

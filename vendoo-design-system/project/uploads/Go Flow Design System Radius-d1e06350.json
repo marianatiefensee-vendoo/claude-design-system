@@ -1,0 +1,375 @@
+{
+  "ref": {
+    "radius": {
+      "none": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-none)"
+          }
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "extra-small": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-extra-small)"
+          }
+        },
+        "$type": "number",
+        "$value": 4
+      },
+      "small": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-small)"
+          }
+        },
+        "$type": "number",
+        "$value": 8
+      },
+      "medium": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-medium)"
+          }
+        },
+        "$type": "number",
+        "$value": 12
+      },
+      "large": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-large)"
+          }
+        },
+        "$type": "number",
+        "$value": 16
+      },
+      "extra-large": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-extra-large)"
+          }
+        },
+        "$type": "number",
+        "$value": 28
+      },
+      "full": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-full)"
+          }
+        },
+        "$type": "number",
+        "$value": 999
+      },
+      "extra-large-top": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-ref-radius-extra-large-top)"
+          }
+        },
+        "$type": "number",
+        "$value": 28
+      }
+    }
+  },
+  "sys": {
+    "radius": {
+      "none": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-none)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.none}"
+      },
+      "extra-small": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-extra-small)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.extra-small}"
+      },
+      "small": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-small)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.small}"
+      },
+      "medium": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-medium)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.medium}"
+      },
+      "large": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-large)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.large}"
+      },
+      "extra-large": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-extra-large)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.extra-large}"
+      },
+      "full": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-full)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.full}"
+      },
+      "extra-large-top": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-sys-radius-extra-large-top)"
+          }
+        },
+        "$type": "number",
+        "$value": "{ref.radius.extra-large-top}"
+      }
+    }
+  },
+  "alias": {
+    "radius": {
+      "field": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-field)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.extra-small}"
+      },
+      "compact-surface": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-compact-surface)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.extra-small}"
+      },
+      "button": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-button)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.extra-small}"
+      },
+      "chip": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-chip)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.small}"
+      },
+      "card": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-card)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.medium}"
+      },
+      "dialog": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-dialog)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.medium}"
+      },
+      "fab": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-fab)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.small}"
+      },
+      "side-panel": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-side-panel)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.large}"
+      },
+      "bottom-sheet": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-bottom-sheet)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.extra-large-top}"
+      },
+      "pill": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-pill)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.full}"
+      },
+      "circular": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "CORNER_RADIUS"
+          ],
+          "com.figma.hiddenFromPublishing": false,
+          "com.figma.codeSyntax": {
+            "Web": "var(--go-flow-alias-radius-circular)"
+          }
+        },
+        "$type": "number",
+        "$value": "{sys.radius.full}"
+      },
+      "icon-button": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ],
+          "com.figma.hiddenFromPublishing": false
+        },
+        "$type": "number",
+        "$value": "{sys.radius.extra-small}"
+      }
+    }
+  }
+}

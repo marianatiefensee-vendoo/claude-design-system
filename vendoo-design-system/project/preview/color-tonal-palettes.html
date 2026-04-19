@@ -1,0 +1,115 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  html,body{margin:0;padding:0;background:var(--sys-surface);color:var(--sys-on-surface);font-family:var(--font-sans);}
+  .card{width:700px;padding:20px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px;}
+  .ramp{display:grid;grid-template-columns:80px repeat(13,1fr);gap:2px;align-items:stretch;}
+  .name{font:500 12px/16px var(--font-sans);letter-spacing:.3px;color:var(--sys-on-surface-variant);display:flex;align-items:center;}
+  .tone{height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px;font:500 9px/12px ui-monospace,Menlo,monospace;color:rgba(0,0,0,.55);border-radius:3px;}
+  .tone.dark{color:rgba(255,255,255,.75);}
+  .tone.seed{outline:2px solid var(--sys-primary);outline-offset:1px;z-index:1;}
+  .header{display:grid;grid-template-columns:80px repeat(13,1fr);gap:2px;font:500 9px/12px var(--font-sans);color:var(--sys-on-surface-variant);letter-spacing:.3px;text-transform:uppercase;padding:0 0 4px;}
+  .header div{text-align:center;}
+</style></head>
+<body><div class="card">
+  <div class="header">
+    <div></div><div>0</div><div>10</div><div>20</div><div>30</div><div>40</div><div>50</div><div>60</div><div>70</div><div>80</div><div>90</div><div>95</div><div>98</div><div>100</div>
+  </div>
+  <div class="ramp">
+    <div class="name">Primary</div>
+    <div class="tone dark" style="background:var(--ref-primary-0);">0</div>
+    <div class="tone dark" style="background:var(--ref-primary-10);">10</div>
+    <div class="tone dark" style="background:var(--ref-primary-20);">20</div>
+    <div class="tone dark seed" style="background:var(--ref-primary-30);">30★</div>
+    <div class="tone dark" style="background:var(--ref-primary-40);">40</div>
+    <div class="tone dark" style="background:var(--ref-primary-50);">50</div>
+    <div class="tone dark" style="background:var(--ref-primary-60);">60</div>
+    <div class="tone" style="background:var(--ref-primary-70);">70</div>
+    <div class="tone" style="background:var(--ref-primary-80);">80</div>
+    <div class="tone" style="background:var(--ref-primary-90);">90</div>
+    <div class="tone" style="background:var(--ref-primary-95);">95</div>
+    <div class="tone" style="background:var(--ref-primary-98);">98</div>
+    <div class="tone" style="background:var(--ref-primary-100);border:1px solid #eee;">100</div>
+  </div>
+  <div class="ramp">
+    <div class="name">Secondary</div>
+    <div class="tone dark" style="background:var(--ref-secondary-0);">0</div>
+    <div class="tone dark" style="background:var(--ref-secondary-10);">10</div>
+    <div class="tone dark" style="background:var(--ref-secondary-20);">20</div>
+    <div class="tone dark" style="background:var(--ref-secondary-30);">30</div>
+    <div class="tone dark" style="background:var(--ref-secondary-40);">40</div>
+    <div class="tone dark" style="background:var(--ref-secondary-50);">50</div>
+    <div class="tone" style="background:var(--ref-secondary-60);">60</div>
+    <div class="tone" style="background:var(--ref-secondary-70);">70</div>
+    <div class="tone" style="background:var(--ref-secondary-80);">80</div>
+    <div class="tone" style="background:var(--ref-secondary-90);">90</div>
+    <div class="tone" style="background:var(--ref-secondary-95);">95</div>
+    <div class="tone" style="background:var(--ref-secondary-98);">98</div>
+    <div class="tone" style="background:var(--ref-secondary-100);border:1px solid #eee;">100</div>
+  </div>
+  <div class="ramp">
+    <div class="name">Tertiary</div>
+    <div class="tone dark" style="background:var(--ref-tertiary-0);">0</div>
+    <div class="tone dark" style="background:var(--ref-tertiary-10);">10</div>
+    <div class="tone dark" style="background:var(--ref-tertiary-20);">20</div>
+    <div class="tone dark" style="background:var(--ref-tertiary-30);">30</div>
+    <div class="tone dark" style="background:var(--ref-tertiary-40);">40</div>
+    <div class="tone dark" style="background:var(--ref-tertiary-50);">50</div>
+    <div class="tone" style="background:var(--ref-tertiary-60);">60</div>
+    <div class="tone" style="background:var(--ref-tertiary-70);">70</div>
+    <div class="tone" style="background:var(--ref-tertiary-80);">80</div>
+    <div class="tone" style="background:var(--ref-tertiary-90);">90</div>
+    <div class="tone" style="background:var(--ref-tertiary-95);">95</div>
+    <div class="tone" style="background:var(--ref-tertiary-98);">98</div>
+    <div class="tone" style="background:var(--ref-tertiary-100);border:1px solid #eee;">100</div>
+  </div>
+  <div class="ramp">
+    <div class="name">Error</div>
+    <div class="tone dark" style="background:var(--ref-error-0);">0</div>
+    <div class="tone dark" style="background:var(--ref-error-10);">10</div>
+    <div class="tone dark" style="background:var(--ref-error-20);">20</div>
+    <div class="tone dark" style="background:var(--ref-error-30);">30</div>
+    <div class="tone dark" style="background:var(--ref-error-40);">40</div>
+    <div class="tone dark" style="background:var(--ref-error-50);">50</div>
+    <div class="tone" style="background:var(--ref-error-60);">60</div>
+    <div class="tone" style="background:var(--ref-error-70);">70</div>
+    <div class="tone" style="background:var(--ref-error-80);">80</div>
+    <div class="tone" style="background:var(--ref-error-90);">90</div>
+    <div class="tone" style="background:var(--ref-error-95);">95</div>
+    <div class="tone" style="background:var(--ref-error-98);">98</div>
+    <div class="tone" style="background:var(--ref-error-100);border:1px solid #eee;">100</div>
+  </div>
+  <div class="ramp">
+    <div class="name">Neutral</div>
+    <div class="tone dark" style="background:var(--ref-neutral-0);">0</div>
+    <div class="tone dark" style="background:var(--ref-neutral-10);">10</div>
+    <div class="tone dark" style="background:var(--ref-neutral-20);">20</div>
+    <div class="tone dark" style="background:var(--ref-neutral-30);">30</div>
+    <div class="tone dark" style="background:var(--ref-neutral-40);">40</div>
+    <div class="tone dark" style="background:var(--ref-neutral-50);">50</div>
+    <div class="tone" style="background:var(--ref-neutral-60);">60</div>
+    <div class="tone" style="background:var(--ref-neutral-70);">70</div>
+    <div class="tone" style="background:var(--ref-neutral-80);">80</div>
+    <div class="tone" style="background:var(--ref-neutral-90);">90</div>
+    <div class="tone" style="background:var(--ref-neutral-95);">95</div>
+    <div class="tone" style="background:var(--ref-neutral-98);">98</div>
+    <div class="tone" style="background:var(--ref-neutral-100);border:1px solid #eee;">100</div>
+  </div>
+  <div class="ramp">
+    <div class="name">Neutral-variant</div>
+    <div class="tone dark" style="background:var(--ref-nv-0);">0</div>
+    <div class="tone dark" style="background:var(--ref-nv-10);">10</div>
+    <div class="tone dark" style="background:var(--ref-nv-20);">20</div>
+    <div class="tone dark" style="background:var(--ref-nv-30);">30</div>
+    <div class="tone dark" style="background:var(--ref-nv-40);">40</div>
+    <div class="tone dark" style="background:var(--ref-nv-50);">50</div>
+    <div class="tone" style="background:var(--ref-nv-60);">60</div>
+    <div class="tone" style="background:var(--ref-nv-70);">70</div>
+    <div class="tone" style="background:var(--ref-nv-80);">80</div>
+    <div class="tone" style="background:var(--ref-nv-90);">90</div>
+    <div class="tone" style="background:var(--ref-nv-95);">95</div>
+    <div class="tone" style="background:var(--ref-nv-98);">98</div>
+    <div class="tone" style="background:var(--ref-nv-100);border:1px solid #eee;">100</div>
+  </div>
+</div></body></html>

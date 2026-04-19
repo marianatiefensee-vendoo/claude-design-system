@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Buttons · Vendoo DS</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  /* ──────────────────────────────────────────────
+     Maps 1:1 to Figma "Buttons" (node 3001:4214)
+     Uses design tokens exclusively:
+       --radius-alias-button       (4px)  Filled / Small / Split filled slot
+       --radius-alias-icon-button  (4px)  Standard icon button
+       --radius-sys-small          (8px)  Medium outer (unused — Figma uses 4 on content)
+     States: Available · Hovered · Focused · Disabled · Loading
+     Variants: Filled (Medium, Small) · Standard Icon · Split (Default, Open, Disabled × 2 sizes)
+     ────────────────────────────────────────────── */
+
+  html,body{
+    margin:0;padding:0;
+    background:var(--sys-surface);
+    color:var(--sys-on-surface);
+    font-family:var(--font-sans);
+  }
+
+  .page{ width:820px; padding:28px 32px 40px; box-sizing:border-box; }
+
+  /* Section scaffolding (matches the rest of the DS preview pages) */
+  .sec{ margin-bottom:32px; }
+  .sec h2{
+    font:500 11px/16px var(--font-sans);
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--sys-on-surface-variant);
+    margin:0 0 4px;
+  }
+  .sec .eyebrow{
+    font:400 12px/16px var(--font-sans);
+    color:var(--sys-on-surface-variant);
+    margin:0 0 14px;
+  }
+  .sec .eyebrow em{ color:var(--sys-on-surface); font-style:normal; font-weight:500; }
+
+  .variant-label{
+    font:500 11px/14px var(--font-sans);letter-spacing:.04em;
+    color:var(--sys-on-surface-variant);
+    padding:2px 0;
+    min-width:92px;
+  }
+
+  /* Grid: one row per State; columns for each permutation */
+  .matrix{
+    display:grid; gap:14px 24px;
+    align-items:center;
+    padding:16px 20px;
+    background:var(--sys-surface-container-lowest, #fff);
+    border:1px solid var(--sys-outline-variant);
+    border-radius:var(--radius-sys-medium);
+  }
+  .matrix .hdr{
+    font:500 11px/14px var(--font-sans);letter-spacing:.04em;
+    color:var(--sys-on-surface-variant);
+    text-transform:uppercase;
+    padding-bottom:6px;border-bottom:1px solid var(--sys-outline-variant);
+  }
+
+  /* ────────── Button-Filled (Figma: "Button-Filled") ────────── */
+  .btn svg{
+    display:block;
+    fill:currentColor;
+    fill-opacity:1;
+  }
+  .btn svg *{ fill-opacity:1; }
+  .iconbtn svg, .iconbtn svg *{ fill-opacity:1; fill:currentColor; }
+
+  .btn{
+    position:relative;
+    display:inline-flex;align-items:center;justify-content:center;
+    gap:10px;
+    border:0; background:transparent;
+    font-family:var(--font-sans);
+    cursor:pointer;
+    overflow:hidden;
+    -webkit-appearance:none;appearance:none;
+  }
+
+  /* Size = Medium · 56h · padding 16/24 · radius 4 · type 16/24 · icon 24 */
+  .btn--md{
+    height:56px;
+    padding:16px 24px;
+    border-radius:var(--radius-alias-button);        /* 4 */
+    font:500 16px/24px var(--font-sans);
+    letter-spacing:.15px;
+  }
+  .btn--md svg{ width:24px; height:24px; }
+
+  /* Size = Small · 48h outer (4px state-layer offset top/bottom in Figma);
+     we collapse that to a true 40h pill because the outer box in Figma is
+     just hit-area padding. Figma ref shows 40h inner, so match that. */
+  .btn--sm{
+    height:40px;
+    padding:10px 16px;
+    border-radius:var(--radius-alias-button);        /* 4 */
+    font:500 14px/20px var(--font-sans);
+    letter-spacing:.1px;
+  }
+  .btn--sm svg{ width:20px; height:20px; }
+
+  /* ── Style: Primary (Filled) ── */
+  .btn--filled{
+    background:var(--sys-primary);            /* rgb(74,0,191) → ref-primary-30 */
+    color:var(--sys-on-primary);
+  }
+  /* State-layer overlay for hover / focus / pressed */
+  .btn--filled::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:transparent;pointer-events:none;transition:background .12s;
+  }
+  .btn--filled:hover::after{ background:color-mix(in srgb, var(--sys-on-primary) 8%, transparent); }
+  .btn--filled:focus-visible{ outline:2px solid var(--sys-primary); outline-offset:2px; }
+  .btn--filled:focus-visible::after{ background:color-mix(in srgb, var(--sys-on-primary) 12%, transparent); }
+  .btn--filled:active::after{ background:color-mix(in srgb, var(--sys-on-primary) 16%, transparent); }
+
+  /* ── Style: Tonal (Secondary container) ── */
+  .btn--tonal{
+    background:var(--sys-secondary-container);
+    color:var(--sys-on-secondary-container);
+  }
+  .btn--tonal::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:transparent;pointer-events:none;transition:background .12s;
+  }
+  .btn--tonal:hover::after{ background:color-mix(in srgb, var(--sys-on-secondary-container) 8%, transparent); }
+
+  /* ── Style: Outlined ── */
+  .btn--outlined{
+    background:transparent;
+    color:var(--sys-on-surface-variant);
+    border:1px solid var(--sys-outline-variant);
+  }
+  .btn--outlined::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:transparent;pointer-events:none;transition:background .12s;
+  }
+  .btn--outlined:hover::after{ background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent); }
+
+  /* ── Style: Text ── */
+  .btn--text{
+    background:transparent;
+    color:var(--sys-primary);
+    padding-left:12px;padding-right:12px;
+  }
+  .btn--text::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;
+    background:transparent;pointer-events:none;transition:background .12s;
+  }
+  .btn--text:hover::after{ background:color-mix(in srgb, var(--sys-primary) 8%, transparent); }
+
+  /* ── State: Disabled (applies to any style) ── */
+  .btn.is-disabled{
+    background:color-mix(in srgb, var(--sys-on-surface) 10%, transparent);
+    color:var(--sys-on-surface);
+    border-color:transparent;
+    cursor:not-allowed;
+  }
+  .btn.is-disabled > *{ opacity:.38; }
+  .btn.is-disabled::after{ display:none; }
+
+  /* ── State: Loading (spinner instead of icons) ── */
+  .btn.is-loading > .label,
+  .btn.is-loading > svg{ visibility:hidden; }
+  .btn.is-loading::before{
+    content:"";
+    width:20px;height:20px;border-radius:50%;
+    border:2px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-top-color:currentColor;
+    animation:spin .9s linear infinite;
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  }
+  @keyframes spin{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+
+  /* Frozen demo states so the matrix can show Hovered/Focused statically */
+  .btn--filled.is-hover::after{ background:color-mix(in srgb, var(--sys-on-primary) 8%, transparent); }
+  .btn--outlined.is-hover::after{ background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent); }
+  .btn--tonal.is-hover::after{ background:color-mix(in srgb, var(--sys-on-secondary-container) 8%, transparent); }
+  .btn--text.is-hover::after{ background:color-mix(in srgb, var(--sys-primary) 8%, transparent); }
+
+  .btn.is-focus{ outline:2px solid var(--sys-primary); outline-offset:2px; }
+  .btn--filled.is-focus::after{ background:color-mix(in srgb, var(--sys-on-primary) 12%, transparent); }
+  .btn--outlined.is-focus::after{ background:color-mix(in srgb, var(--sys-on-surface) 12%, transparent); }
+  .btn--tonal.is-focus::after{ background:color-mix(in srgb, var(--sys-on-secondary-container) 12%, transparent); }
+  .btn--text.is-focus::after{ background:color-mix(in srgb, var(--sys-primary) 12%, transparent); }
+
+  /* ────────── Icon Button ────────── */
+  /* Base: Size=Standard (40×40 content inside 48×48 hit area) */
+  .iconbtn{
+    position:relative;
+    width:40px;height:40px;
+    padding:0;margin:4px;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:transparent;border:0;cursor:pointer;
+    color:var(--sys-on-surface-variant);
+    border-radius:var(--radius-alias-icon-button);
+    transition:background .12s,border-color .12s,color .12s;
+  }
+  .iconbtn svg{ width:24px; height:24px; }
+  .iconbtn:hover{ background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent); }
+  .iconbtn:focus-visible{ outline:2px solid var(--sys-primary); outline-offset:2px; }
+
+  /* Size=Large (56×56 hit area, 48×48 content) */
+  .iconbtn--lg{
+    width:48px;height:48px;margin:4px;
+  }
+  /* Size=Small (40×40 hit area, 32×32 content) */
+  .iconbtn--sm{
+    width:32px;height:32px;margin:4px;
+  }
+  .iconbtn--sm svg{ width:20px; height:20px; }
+
+  /* Type=Standard — transparent, on-surface-variant icon (base above is Standard) */
+
+  /* Type=Filled */
+  .iconbtn--filled{
+    background:var(--sys-primary);
+    color:var(--sys-on-primary);
+  }
+  .iconbtn--filled:hover{ background:var(--sys-primary); }
+  .iconbtn--filled.is-hover,
+  .iconbtn--filled:hover{
+    box-shadow:inset 0 0 0 999px color-mix(in srgb, var(--sys-on-primary) 8%, transparent);
+  }
+
+  /* Type=Tonal */
+  .iconbtn--tonal{
+    background:var(--sys-secondary-container);
+    color:var(--sys-on-secondary-container);
+  }
+  .iconbtn--tonal:hover{ background:var(--sys-secondary-container); }
+  .iconbtn--tonal.is-hover,
+  .iconbtn--tonal:hover{
+    box-shadow:inset 0 0 0 999px color-mix(in srgb, var(--sys-on-secondary-container) 8%, transparent);
+  }
+
+  /* Type=Outline */
+  .iconbtn--outline{
+    background:transparent;
+    color:var(--sys-on-surface-variant);
+    border:1px solid var(--sys-outline-variant);
+  }
+  .iconbtn--outline:hover{
+    background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent);
+  }
+
+  /* Frozen states for demo grid */
+  .iconbtn.is-hover{ background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent); }
+  .iconbtn--outline.is-hover{ background:color-mix(in srgb, var(--sys-on-surface) 8%, transparent); }
+  .iconbtn.is-focus{ outline:2px solid var(--sys-primary); outline-offset:2px; }
+
+  /* State=Loading */
+  .iconbtn.is-loading{ color:transparent; }
+  .iconbtn.is-loading::before{
+    content:"";position:absolute;inset:0;margin:auto;
+    width:18px;height:18px;border-radius:50%;
+    border:2px solid currentColor;border-top-color:transparent;
+    color:var(--sys-on-surface-variant);
+    animation:ibspin .8s linear infinite;
+  }
+  .iconbtn--filled.is-loading::before{ color:var(--sys-on-primary); }
+  .iconbtn--tonal.is-loading::before{ color:var(--sys-on-secondary-container); }
+  @keyframes ibspin{ to{ transform:rotate(360deg); } }
+
+  /* State=Disabled */
+  .iconbtn.is-disabled{
+    background:color-mix(in srgb, var(--sys-on-surface) 10%, transparent);
+    color:var(--sys-on-surface);
+    border-color:transparent;
+    opacity:1; cursor:not-allowed;
+  }
+  .iconbtn.is-disabled svg{ opacity:.38; }
+  .iconbtn--outline.is-disabled{
+    background:transparent;
+    border:1px solid color-mix(in srgb, var(--sys-on-surface) 12%, transparent);
+    color:var(--sys-on-surface);
+  }
+
+  /* ────────── Split Button ────────── */
+  .splitbtn{
+    display:inline-flex;
+    gap:2px;
+  }
+  .splitbtn > .btn{ border-radius:var(--radius-alias-button); }
+  .splitbtn > .iconbtn{
+    width:56px;height:56px;
+    margin:0;
+    border-radius:var(--radius-alias-button);
+  }
+  .splitbtn--sm > .iconbtn{ width:40px;height:40px; }
+  .splitbtn--sm > .iconbtn svg{ width:20px;height:20px; }
+
+  /* Matrices */
+  .m-filled-md{ grid-template-columns:92px repeat(4, minmax(0,1fr)); }
+  .m-filled-sm{ grid-template-columns:92px repeat(4, minmax(0,1fr)); }
+  .m-icon-type{ grid-template-columns:92px repeat(4, 72px); justify-content:start; }
+  .m-icon-size{ grid-template-columns:92px repeat(3, 72px); justify-content:start; }
+  .m-icon-state{ grid-template-columns:92px repeat(5, 72px); justify-content:start; }
+  .m-split{    grid-template-columns:92px repeat(4, minmax(0,1fr)); }
+  .m-slots{    grid-template-columns:92px repeat(4, minmax(0,1fr)); }
+
+  .note{
+    font:400 12px/18px var(--font-sans);
+    color:var(--sys-on-surface-variant);
+    margin-top:12px;
+  }
+  .note code{
+    font-family:var(--font-mono);font-size:11px;
+    background:color-mix(in srgb, var(--sys-on-surface) 6%, transparent);
+    padding:1px 5px;border-radius:3px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══════════ 1. Button (Filled) · Size=Medium ═══════════ -->
+  <section class="sec">
+    <h2>Button · Size=Medium</h2>
+    <p class="eyebrow">Component <em>Button-Filled</em> · 56h · 16×24 padding · radius <em>--radius-alias-button</em> (4) · label <em>label/large</em> (16/24)</p>
+
+    <div class="matrix m-filled-md">
+      <div class="hdr"></div>
+      <div class="hdr">Primary</div>
+      <div class="hdr">Outlined</div>
+      <div class="hdr">Tonal</div>
+      <div class="hdr">Text</div>
+
+      <div class="variant-label">Available</div>
+      <button class="btn btn--md btn--filled">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--outlined">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--tonal">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--text"><span class="label">Button</span></button>
+
+      <div class="variant-label">Hovered</div>
+      <button class="btn btn--md btn--filled is-hover">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--outlined is-hover"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--tonal is-hover"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--text is-hover"><span class="label">Button</span></button>
+
+      <div class="variant-label">Focused</div>
+      <button class="btn btn--md btn--filled is-focus"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--outlined is-focus"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--tonal is-focus"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--text is-focus"><span class="label">Button</span></button>
+
+      <div class="variant-label">Loading</div>
+      <button class="btn btn--md btn--filled is-loading"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--outlined is-loading"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--tonal is-loading"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--text is-loading"><span class="label">Button</span></button>
+
+      <div class="variant-label">Disabled</div>
+      <button class="btn btn--md btn--filled is-disabled" disabled>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--outlined is-disabled" disabled><span class="label">Button</span></button>
+      <button class="btn btn--md btn--tonal is-disabled" disabled><span class="label">Button</span></button>
+      <button class="btn btn--md btn--text is-disabled" disabled><span class="label">Button</span></button>
+    </div>
+  </section>
+
+  <!-- ═══════════ 2. Button · Size=Small ═══════════ -->
+  <section class="sec">
+    <h2>Button · Size=Small</h2>
+    <p class="eyebrow">Component <em>Button-Filled</em> · 40h · 10×16 padding · radius 4 · label <em>label/medium</em> (14/20) · icon 20</p>
+
+    <div class="matrix m-filled-sm">
+      <div class="hdr"></div>
+      <div class="hdr">Primary</div>
+      <div class="hdr">Outlined</div>
+      <div class="hdr">Tonal</div>
+      <div class="hdr">Text</div>
+
+      <div class="variant-label">Available</div>
+      <button class="btn btn--sm btn--filled">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--sm btn--outlined">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--sm btn--tonal">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--sm btn--text"><span class="label">Button</span></button>
+
+      <div class="variant-label">Loading</div>
+      <button class="btn btn--sm btn--filled is-loading"><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--outlined is-loading"><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--tonal is-loading"><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--text is-loading"><span class="label">Button</span></button>
+
+      <div class="variant-label">Disabled</div>
+      <button class="btn btn--sm btn--filled is-disabled" disabled>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--sm btn--outlined is-disabled" disabled><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--tonal is-disabled" disabled><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--text is-disabled" disabled><span class="label">Button</span></button>
+    </div>
+  </section>
+
+  <!-- ═══════════ 3. Icon slots (Leading / Trailing / Both / None) ═══════════ -->
+  <section class="sec">
+    <h2>Button · Icon slots</h2>
+    <p class="eyebrow">Every Button exposes boolean properties <em>Leading icon</em> and <em>Trailing icon</em>, independently. Icon Button is the only variant without toggles (the icon is the whole button).</p>
+
+    <div class="matrix m-slots">
+      <div class="hdr"></div>
+      <div class="hdr">None</div>
+      <div class="hdr">Leading only</div>
+      <div class="hdr">Trailing only</div>
+      <div class="hdr">Both</div>
+
+      <div class="variant-label">Primary · Md</div>
+      <button class="btn btn--md btn--filled"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--filled">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--md btn--filled">
+        <span class="label">Button</span><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--filled">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+
+      <div class="variant-label">Outlined · Md</div>
+      <button class="btn btn--md btn--outlined"><span class="label">Button</span></button>
+      <button class="btn btn--md btn--outlined">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--md btn--outlined">
+        <span class="label">Button</span><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--md btn--outlined">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+
+      <div class="variant-label">Tonal · Sm</div>
+      <button class="btn btn--sm btn--tonal"><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--tonal">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--sm btn--tonal">
+        <span class="label">Button</span><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--sm btn--tonal">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+
+      <div class="variant-label">Text · Sm</div>
+      <button class="btn btn--sm btn--text"><span class="label">Button</span></button>
+      <button class="btn btn--sm btn--text">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+      </button>
+      <button class="btn btn--sm btn--text">
+        <span class="label">Button</span><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+      <button class="btn btn--sm btn--text">
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span>
+        <svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- ═══════════ 4. Icon Button · Types ═══════════ -->
+  <section class="sec">
+    <h2>Icon Button · Types</h2>
+    <p class="eyebrow">4 types × state matrix · 48×48 hit area (Size=Standard) · 40×40 content · radius <em>--radius-alias-icon-button</em> (4) · icon 24</p>
+
+    <div class="matrix m-icon-type">
+      <div class="hdr"></div>
+      <div class="hdr">Standard</div>
+      <div class="hdr">Filled</div>
+      <div class="hdr">Tonal</div>
+      <div class="hdr">Outline</div>
+
+      <div class="variant-label">Available</div>
+      <button class="iconbtn" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--filled" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--tonal" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--outline" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Hovered</div>
+      <button class="iconbtn is-hover" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--filled is-hover" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--tonal is-hover" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--outline is-hover" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Focused</div>
+      <button class="iconbtn is-focus" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--filled is-focus" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--tonal is-focus" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--outline is-focus" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Loading</div>
+      <button class="iconbtn is-loading" aria-label="Loading"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--filled is-loading" aria-label="Loading"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--tonal is-loading" aria-label="Loading"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--outline is-loading" aria-label="Loading"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Disabled</div>
+      <button class="iconbtn is-disabled" disabled aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--filled is-disabled" disabled aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--tonal is-disabled" disabled aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--outline is-disabled" disabled aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ═══════════ 4b. Icon Button · Sizes ═══════════ -->
+  <section class="sec">
+    <h2>Icon Button · Sizes</h2>
+    <p class="eyebrow">Large 56×56 · Standard 48×48 · Small 40×40 (content scales 48 / 40 / 32; icon 24 / 24 / 20)</p>
+
+    <div class="matrix m-icon-size">
+      <div class="hdr"></div>
+      <div class="hdr">Large</div>
+      <div class="hdr">Standard</div>
+      <div class="hdr">Small</div>
+
+      <div class="variant-label">Standard</div>
+      <button class="iconbtn iconbtn--lg" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--sm" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Filled</div>
+      <button class="iconbtn iconbtn--lg iconbtn--filled" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--filled" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--sm iconbtn--filled" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Tonal</div>
+      <button class="iconbtn iconbtn--lg iconbtn--tonal" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--tonal" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--sm iconbtn--tonal" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+
+      <div class="variant-label">Outline</div>
+      <button class="iconbtn iconbtn--lg iconbtn--outline" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--outline" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+      <button class="iconbtn iconbtn--sm iconbtn--outline" aria-label="Favorite"><svg aria-hidden="true"><use href="../assets/icons.svg#star"/></svg></button>
+    </div>
+  </section>
+
+  <!-- ═══════════ 5. Split Button ═══════════ -->
+  <section class="sec">
+    <h2>Split Button · Styles × State</h2>
+    <p class="eyebrow">Left slot = Button (any style) · 2px gap · right slot = Icon Button with chevron. The right slot always mirrors the left style: Primary→Filled, Tonal→Tonal, Outlined→Outline, Text→Standard. State=Closed shows ▾, State=Open shows ▴.</p>
+
+    <div class="matrix m-split">
+      <div class="hdr"></div>
+      <div class="hdr">Primary</div>
+      <div class="hdr">Tonal</div>
+      <div class="hdr">Outlined</div>
+      <div class="hdr">Text</div>
+
+      <div class="variant-label">Closed · Md</div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--filled"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--filled" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--tonal"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--tonal" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--outlined"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--outline" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--text"><span class="label">Button</span></button>
+        <button class="iconbtn" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+
+      <div class="variant-label">Open · Md</div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--filled"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--filled" aria-label="Close menu"><svg aria-hidden="true" style="transform:rotate(180deg)"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--tonal"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--tonal" aria-label="Close menu"><svg aria-hidden="true" style="transform:rotate(180deg)"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--outlined"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--outline" aria-label="Close menu"><svg aria-hidden="true" style="transform:rotate(180deg)"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--text"><span class="label">Button</span></button>
+        <button class="iconbtn" aria-label="Close menu"><svg aria-hidden="true" style="transform:rotate(180deg)"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+
+      <div class="variant-label">Closed · Sm</div>
+      <div class="splitbtn splitbtn--sm">
+        <button class="btn btn--sm btn--filled"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--sm iconbtn--filled" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn splitbtn--sm">
+        <button class="btn btn--sm btn--tonal"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--sm iconbtn--tonal" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn splitbtn--sm">
+        <button class="btn btn--sm btn--outlined"><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--sm iconbtn--outline" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn splitbtn--sm">
+        <button class="btn btn--sm btn--text"><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--sm" aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+
+      <div class="variant-label">Disabled · Md</div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--filled is-disabled" disabled><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn is-disabled" disabled aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--tonal is-disabled" disabled><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn is-disabled" disabled aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--outlined is-disabled" disabled><svg aria-hidden="true"><use href="../assets/icons.svg#link"/></svg><span class="label">Button</span></button>
+        <button class="iconbtn iconbtn--outline is-disabled" disabled aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+      <div class="splitbtn">
+        <button class="btn btn--md btn--text is-disabled" disabled><span class="label">Button</span></button>
+        <button class="iconbtn is-disabled" disabled aria-label="Open menu"><svg aria-hidden="true"><use href="../assets/icons.svg#chevron_down"/></svg></button>
+      </div>
+    </div>
+
+    <p class="note">
+      Token map · <code>--radius-alias-button: 4px</code> · <code>--radius-alias-icon-button: 4px</code> ·
+      Primary = <code>--sys-primary</code> / <code>--sys-on-primary</code> ·
+      Tonal = <code>--sys-secondary-container</code> / <code>--sys-on-secondary-container</code> ·
+      Outlined = border <code>--sys-outline-variant</code> + label <code>--sys-on-surface-variant</code> ·
+      state layers 8 / 12 / 16 % on-color · disabled = 10% on-surface fill + 38% content.
+    </p>
+  </section>
+
+</div>
+</body>
+</html>

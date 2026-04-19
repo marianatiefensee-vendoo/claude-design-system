@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vendoo — UI kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #F2EBF9; min-height: 100vh; }
+  body {
+    font-family: var(--font-sans);
+    display: flex; align-items: center; justify-content: center;
+    padding: 40px 20px;
+    box-sizing: border-box;
+  }
+  .stage { display: flex; gap: 32px; align-items: flex-start; }
+  .meta {
+    width: 280px; padding-top: 16px;
+    color: var(--sys-on-surface);
+  }
+  .meta h1 {
+    font: 600 28px/36px var(--font-sans);
+    color: var(--sys-on-surface);
+    margin: 0 0 8px;
+  }
+  .meta p {
+    font: 400 14px/20px var(--font-sans); letter-spacing: 0.25px;
+    color: var(--sys-on-surface-variant);
+    margin: 0 0 16px;
+  }
+  .meta .kbd {
+    display: inline-block; padding: 2px 8px;
+    background: var(--sys-surface-container-high);
+    border: 1px solid var(--sys-outline-variant);
+    border-radius: 4px;
+    font: 500 11px/16px ui-monospace,Menlo,monospace;
+    color: var(--sys-on-surface);
+  }
+  @media (max-width: 900px) { .stage { flex-direction: column; } .meta { width: 100%; } }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="meta">
+      <h1>Vendoo</h1>
+      <p>Cross-marketplace listing manager. List once, crosspost to Poshmark, eBay, Mercari and more.</p>
+      <p style="margin-top:12px;">
+        Tap the <span class="kbd">+</span> FAB to start a listing, tap a listing to re-open it, or switch tabs in the bottom nav. Everything's clickable.
+      </p>
+    </div>
+    <div id="root"></div>
+  </div>
+
+<script type="text/babel" src="./Icon.jsx"></script>
+<script type="text/babel" src="./Button.jsx"></script>
+<script type="text/babel" src="./Fields.jsx"></script>
+<script type="text/babel" src="./ListingSectionCard.jsx"></script>
+<script type="text/babel" src="./AppShell.jsx"></script>
+<script src="./data.js?v=3"></script>
+<script type="text/babel" src="./Inventory.jsx"></script>
+<script type="text/babel" src="./CreateListing.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  const [view, setView] = React.useState("inventory"); // home | inventory | create | messages | profile
+  const [editing, setEditing] = React.useState(null);
+
+  const titles = {
+    home: "Home",
+    inventory: "Inventory",
+    create: editing ? "Edit listing" : "Create listing",
+    messages: "Messages",
+    profile: "Profile",
+  };
+
+  const openCreate = () => { setEditing(null); setView("create"); };
+  const openListing = (l) => { setEditing(l); setView("create"); };
+
+  const trailing = view === "inventory" ? (
+    <IconButton icon="filter" title="Filter" />
+  ) : view === "create" ? (
+    <IconButton icon="x" title="Close" onClick={() => { setEditing(null); setView("inventory"); }} />
+  ) : null;
+
+  const [draftMarkets, setDraftMarkets] = React.useState(["poshmark", "ebay", "mercari"]);
+  const footer = view === "create" ? (
+    <React.Fragment>
+      <Button variant="text" onClick={() => setView("inventory")}>Save draft</Button>
+      <Button variant="filled" style={{ marginLeft: "auto" }} disabled={draftMarkets.length === 0}>
+        Crosslist to {draftMarkets.length}
+      </Button>
+    </React.Fragment>
+  ) : null;
+
+  let content;
+  switch (view) {
+    case "inventory":
+      content = <Inventory onOpen={openListing} onCreate={openCreate} />; break;
+    case "create":
+      content = <CreateListing markets={draftMarkets} setMarkets={setDraftMarkets} />; break;
+    case "home":
+      content = <Placeholder title="Home" body="Your dashboard will show sales, views and suggested actions here." />; break;
+    case "messages":
+      content = <Placeholder title="Messages" body="No new messages across your marketplaces." />; break;
+    case "profile":
+      content = <Placeholder title="Profile" body="Account, connected marketplaces, and plan settings." />; break;
+    default:
+      content = null;
+  }
+
+  return (
+    <AppShell view={view} setView={setView} title={titles[view]} trailing={trailing} stickyFooter={footer}>
+      {content}
+    </AppShell>
+  );
+}
+
+function Placeholder({ title, body }) {
+  return (
+    <div style={{
+      padding: "40px 24px",
+      display: "flex", flexDirection: "column", gap: 12,
+      alignItems: "flex-start",
+    }}>
+      <h2 style={{ font: "400 24px/32px var(--font-sans)", color: "var(--sys-on-surface)", margin: 0 }}>{title}</h2>
+      <p style={{
+        font: "400 14px/20px var(--font-sans)", letterSpacing: "0.25px",
+        color: "var(--sys-on-surface-variant)", margin: 0,
+      }}>{body}</p>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

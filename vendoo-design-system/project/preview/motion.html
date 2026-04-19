@@ -1,0 +1,70 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  html,body{margin:0;padding:0;background:#fff;font-family:var(--font-sans);}
+  .card{width:700px;padding:22px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;}
+  .sect-label{font:500 11px/14px var(--font-sans);letter-spacing:.6px;color:#7A7486;text-transform:uppercase;}
+  .dur-row{display:flex;gap:8px;}
+  .dur{flex:1;padding:10px;border-radius:8px;background:var(--sys-surface-container);border:1px solid var(--sys-outline-variant);text-align:center;cursor:pointer;}
+  .dur-ms{font:500 14px/20px var(--font-sans);color:#1D1A24;}
+  .dur-name{font:400 11px/14px var(--font-sans);color:#7A7486;letter-spacing:.3px;margin-top:2px;}
+  .demo-box{width:36px;height:36px;border-radius:var(--radius-xs);background:var(--sys-primary);transition:transform var(--motion-dur-medium2) var(--motion-ease-standard);}
+  .demo-lane{display:flex;align-items:center;gap:16px;padding:10px 14px;border:1px solid var(--sys-outline-variant);border-radius:var(--shape-card);background:var(--sys-surface);}
+  .demo-lane:hover .demo-box{transform:translateX(260px);}
+  .lane-meta{font:400 12px/16px ui-monospace,Menlo,monospace;color:#7A7486;margin-left:auto;}
+  .easing-row{display:grid;grid-template-columns:110px 1fr 130px;gap:10px;align-items:center;}
+  .easing-label{font:500 12px/16px var(--font-sans);color:#494455;letter-spacing:.3px;}
+  .easing-curve{height:44px;border:1px solid var(--sys-outline-variant);border-radius:6px;background:var(--sys-surface-container-low);position:relative;overflow:hidden;}
+  .easing-curve svg{position:absolute;inset:0;width:100%;height:100%;}
+  .easing-code{font:400 11px/14px ui-monospace,Menlo,monospace;color:#7A7486;}
+</style></head>
+<body><div class="card">
+
+  <div>
+    <div class="sect-label" style="margin-bottom:8px;">Duration</div>
+    <div class="dur-row">
+      <div class="dur"><div class="dur-ms">50ms</div><div class="dur-name">short1</div></div>
+      <div class="dur"><div class="dur-ms">100ms</div><div class="dur-name">short2</div></div>
+      <div class="dur"><div class="dur-ms">150ms</div><div class="dur-name">short3</div></div>
+      <div class="dur"><div class="dur-ms">200ms</div><div class="dur-name">short4</div></div>
+      <div class="dur"><div class="dur-ms">250ms</div><div class="dur-name">medium1</div></div>
+      <div class="dur"><div class="dur-ms">300ms</div><div class="dur-name">medium2</div></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sect-label" style="margin-bottom:8px;">Easing · hover the lane to preview</div>
+    <div class="demo-lane">
+      <div class="demo-box"></div>
+      <span class="lane-meta">300ms · ease-standard</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="sect-label" style="margin-bottom:8px;">Curves</div>
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="easing-row">
+        <span class="easing-label">Standard</span>
+        <div class="easing-curve"><svg viewBox="0 0 100 44" preserveAspectRatio="none"><path d="M0 44 C 20 44, 20 0, 100 0" fill="none" stroke="#4A00BF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
+        <span class="easing-code">0.2, 0, 0, 1</span>
+      </div>
+      <div class="easing-row">
+        <span class="easing-label">Accelerate</span>
+        <div class="easing-curve"><svg viewBox="0 0 100 44" preserveAspectRatio="none"><path d="M0 44 C 30 44, 100 44, 100 0" fill="none" stroke="#4A00BF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
+        <span class="easing-code">0.3, 0, 1, 1</span>
+      </div>
+      <div class="easing-row">
+        <span class="easing-label">Decelerate</span>
+        <div class="easing-curve"><svg viewBox="0 0 100 44" preserveAspectRatio="none"><path d="M0 44 C 0 0, 0 0, 100 0" fill="none" stroke="#4A00BF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
+        <span class="easing-code">0, 0, 0, 1</span>
+      </div>
+      <div class="easing-row">
+        <span class="easing-label">Linear</span>
+        <div class="easing-curve"><svg viewBox="0 0 100 44" preserveAspectRatio="none"><path d="M0 44 L 100 0" fill="none" stroke="#4A00BF" stroke-width="2" vector-effect="non-scaling-stroke"/></svg></div>
+        <span class="easing-code">linear</span>
+      </div>
+    </div>
+  </div>
+
+</div></body></html>

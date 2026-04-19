@@ -1,0 +1,107 @@
+[
+  {
+    "path": "display.large.fontFamily",
+    "type": "string",
+    "value": "Lexend"
+  },
+  {
+    "path": "display.large.fontStyle",
+    "type": "string",
+    "value": "Regular"
+  },
+  {
+    "path": "display.large.fontWeight",
+    "type": "number",
+    "value": 400
+  },
+  {
+    "path": "display.large.fontSize",
+    "type": "number",
+    "value": 57
+  },
+  {
+    "path": "display.large.paragraphSpacing",
+    "type": "number",
+    "value": 0
+  },
+  {
+    "path": "display.large.letterSpacing",
+    "type": "number",
+    "value": -0.25
+  },
+  {
+    "path": "display.large.lineHeight",
+    "type": "number",
+    "value": 64
+  },
+  {
+    "path": "display.medium.fontFamily",
+    "type": "string",
+    "value": "Lexend"
+  },
+  {
+    "path": "display.medium.fontStyle",
+    "type": "string",
+    "value": "Regular"
+  },
+  {
+    "path": "display.medium.fontWeight",
+    "type": "number",
+    "value": 400
+  },
+  {
+    "path": "display.medium.fontSize",
+    "type": "number",
+    "value": 45
+  },
+  {
+    "path": "display.medium.paragraphSpacing",
+    "type": "number",
+    "value": 0
+  },
+  {
+    "path": "display.medium.letterSpacing",
+    "type": "number",
+    "value": 0
+  },
+  {
+    "path": "display.medium.lineHeight",
+    "type": "number",
+    "value": 52
+  },
+  {
+    "path": "display.small.fontFamily",
+    "type": "string",
+    "value": "Lexend"
+  },
+  {
+    "path": "display.small.fontStyle",
+    "type": "string",
+    "value": "Regular"
+  },
+  {
+    "path": "display.small.fontWeight",
+    "type": "number",
+    "value": 400
+  },
+  {
+    "path": "display.small.fontSize",
+    "type": "number",
+    "value": 36
+  },
+  {
+    "path": "display.small.paragraphSpacing",
+    "type": "number",
+    "value": 0
+  },
+  {
+    "path": "display.small.letterSpacing",
+    "type": "number",
+    "value": 0
+  },
+  {
+    "path": "display.small.lineHeight",
+    "type": "number",
+    "value": 44
+  }
+]

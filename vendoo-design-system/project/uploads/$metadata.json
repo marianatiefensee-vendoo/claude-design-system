@@ -1,0 +1,17 @@
+{
+  "tokenSetOrder": [
+    "global",
+    "Colors (primitives do not erase)/Default",
+    "Go Flow Design System Colors/Mode 1",
+    "Go Flow Design System Elevation/Mode 1",
+    "Navigation Selection/Mode 1",
+    "Go Flow Design System Typography/Mode 1",
+    "Go Flow Design System Typography Primitives/Mode 1",
+    "Go Flow Design System Motion/Mode 1",
+    "Go Flow Design System Radius/Mode 1",
+    "Go Flow Design System Spacing/Mode 1",
+    "Go Flow Design System Size/Mode 1",
+    "Go Flow Design System Border/Mode 1",
+    "Go Flow Design System Opacity/Mode 1"
+  ]
+}

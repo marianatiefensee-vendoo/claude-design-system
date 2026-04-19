@@ -1,0 +1,195 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Chips — component set</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  :root { color-scheme: light; }
+  html,body{margin:0;padding:0;background:var(--sys-surface);font-family:var(--font-sans);color:var(--sys-on-surface);}
+  .page{width:760px;padding:28px 32px 40px;box-sizing:border-box;display:flex;flex-direction:column;gap:28px;}
+
+  /* group heading */
+  .group{display:flex;flex-direction:column;gap:10px;}
+  .group > h2{
+    font:500 11px/14px var(--font-sans);letter-spacing:.8px;text-transform:uppercase;
+    color:var(--sys-on-surface-variant);margin:0;
+  }
+  .group > .help{
+    font:400 13px/18px var(--font-sans);color:var(--sys-on-surface-variant);
+    margin:-2px 0 4px;max-width:680px;
+  }
+
+  /* variant row */
+  .row{
+    display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:center;
+    padding:14px 18px;
+    background:var(--sys-surface-container-lowest);
+    border:1px solid var(--sys-outline-variant);
+    border-radius:12px;
+  }
+  .row + .row{margin-top:-1px;}
+  .row .cap{
+    font:500 10.5px/14px var(--font-sans);letter-spacing:.4px;
+    color:var(--sys-on-surface-variant);text-transform:uppercase;
+  }
+  .row .cap b{color:var(--sys-on-surface);font-weight:500;text-transform:none;letter-spacing:.15px;font-size:12px;display:block;margin-top:2px;}
+
+  /* ───────── 1. Assistive chip ─────────
+     32h · 8px radius · outline border, primary icon + label, leading icon */
+  .achip{
+    display:inline-flex;align-items:center;gap:8px;
+    height:32px;padding:6px 8px;box-sizing:border-box;
+    border-radius:8px;
+    background:transparent;
+    border:0;
+    color:var(--sys-primary);
+    font:500 12px/16px var(--font-sans);letter-spacing:.5px;
+    cursor:pointer;
+  }
+  .achip:hover{ background:color-mix(in srgb, var(--sys-primary) 8%, transparent); }
+  .achip svg{width:18px;height:18px;}
+
+  /* ───────── 2. Tag ─────────
+     20h · 8px radius · leading sparkle · 11/14 Lexend */
+  .tag{
+    display:inline-flex;align-items:center;gap:4px;
+    height:20px;padding:0 8px;box-sizing:border-box;
+    border-radius:8px;
+    font:400 11px/14px var(--font-sans);
+  }
+  .tag svg{width:12px;height:12px;flex:none;}
+  .tag.default{ background:var(--sys-outline);         color:var(--sys-on-primary); }
+  .tag.ai     { background:var(--sys-primary-container); color:var(--sys-on-primary-container); }
+  .tag.ai svg { color:var(--sys-on-primary); }
+
+  /* ───────── 3. Chip / Style Tag ─────────
+     22h · 8px radius · 11/14 Lexend · removable variant adds trailing × */
+  .styletag{
+    display:inline-flex;align-items:center;gap:4px;
+    height:22px;padding:4px 8px;box-sizing:border-box;
+    border-radius:8px;
+    font:400 11px/14px var(--font-sans);
+    background:var(--sys-primary-container);
+    color:var(--sys-on-primary-container);
+  }
+  .styletag .x{
+    width:12px;height:12px;display:inline-flex;align-items:center;justify-content:center;
+    cursor:pointer;color:inherit;position:relative;
+    /* reset default button styling */
+    background:transparent;border:0;padding:0;margin:0;
+    -webkit-appearance:none;appearance:none;
+    font:inherit;
+  }
+  /* CSS-drawn X — sprite's fill-opacity defaults made inline <use> render translucent against primary-container */
+  .styletag .x::before,
+  .styletag .x::after{
+    content:"";position:absolute;left:50%;top:50%;
+    width:10px;height:1.5px;border-radius:1px;background:currentColor;
+  }
+  .styletag .x::before{ transform:translate(-50%,-50%) rotate(45deg); }
+  .styletag .x::after { transform:translate(-50%,-50%) rotate(-45deg); }
+  .styletag.disabled{
+    background: color-mix(in srgb, var(--sys-on-surface) 12%, transparent);
+    color: color-mix(in srgb, var(--sys-on-surface) 38%, transparent);
+    cursor:not-allowed;
+  }
+  .styletag.disabled .x{ color: color-mix(in srgb, var(--sys-on-surface) 38%, transparent); }
+
+  /* cluster used for the "applied group" demo */
+  .cluster{display:inline-flex;flex-wrap:wrap;gap:6px;align-items:center;}
+</style></head>
+<body><div class="page">
+
+  <!-- ══════════════ 1. Assistive Chip ══════════════ -->
+  <div class="group">
+    <h2>Assistive Chip</h2>
+    <p class="help">
+      Single-action chip. 32 · primary-tinted label and leading icon, no background or border at rest (hover shows a subtle primary tint). Used for AI-assist actions like <em>“Improve”</em> that sit alongside editable content.
+    </p>
+    <div class="row">
+      <span class="cap">Default<b>Leading icon + label</b></span>
+      <div>
+        <button class="achip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#regenerate_ai"/></svg>
+          Improve
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 2. Tag ══════════════ -->
+  <div class="group">
+    <h2>Tag · <span style="font-weight:400;text-transform:none;letter-spacing:0;">Type</span></h2>
+    <p class="help">
+      Static status indicator. 20 · 8px radius · leading <code>sparkle</code> icon. Two types.
+    </p>
+    <div class="row">
+      <span class="cap">Type = Default<b>Neutral fill</b></span>
+      <div>
+        <span class="tag default">
+          <svg viewBox="0 0 24 24" aria-hidden="true" style="color:var(--sys-on-primary);"><use href="../assets/icons.svg#sparkle"/></svg>
+          Status
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <span class="cap">Type = AI<b>Primary-container fill</b></span>
+      <div>
+        <span class="tag ai">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#sparkle"/></svg>
+          Status
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ 3. Chip / Style Tag ══════════════ -->
+  <div class="group">
+    <h2>Chip · Style Tag</h2>
+    <p class="help">
+      Applied style/attribute chips used inside the Title &amp; Description field. 22 · 8px radius · primary-container fill. Component set: <b>State</b> (Default / Disabled) × <b>Removable</b> (Yes / No).
+    </p>
+
+    <div class="row">
+      <span class="cap">State=Default · Removable=No<b>Read-only chip</b></span>
+      <div><span class="styletag">Vintage</span></div>
+    </div>
+
+    <div class="row">
+      <span class="cap">State=Default · Removable=Yes<b>With trailing ×</b></span>
+      <div>
+        <span class="styletag">
+          Vintage
+          <button class="x" aria-label="Remove Vintage"></button>
+        </span>
+      </div>
+    </div>
+
+    <div class="row">
+      <span class="cap">State=Disabled · Removable=No<b>Inactive chip</b></span>
+      <div><span class="styletag disabled">Vintage</span></div>
+    </div>
+
+    <div class="row">
+      <span class="cap">State=Disabled · Removable=Yes<b>Inactive + ×</b></span>
+      <div>
+        <span class="styletag disabled">
+          Vintage
+          <span class="x" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="row">
+      <span class="cap">Cluster<b>Applied-tags group</b></span>
+      <div class="cluster">
+        <span class="styletag">Vintage<button class="x" aria-label="Remove Vintage"></button></span>
+        <span class="styletag">Knit<button class="x" aria-label="Remove Knit"></button></span>
+        <span class="styletag">Pastel<button class="x" aria-label="Remove Pastel"></button></span>
+        <span class="styletag">Cottagecore<button class="x" aria-label="Remove Cottagecore"></button></span>
+        <span class="styletag">90s<button class="x" aria-label="Remove 90s"></button></span>
+        <span class="styletag">Soft-grunge<button class="x" aria-label="Remove Soft-grunge"></button></span>
+      </div>
+    </div>
+  </div>
+
+</div></body></html>

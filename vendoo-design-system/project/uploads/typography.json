@@ -1,0 +1,345 @@
+{
+  "display": {
+    "large": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "57",
+        "lineHeight": "64",
+        "letterSpacing": "-0.25",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "medium": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "45",
+        "lineHeight": "52",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "small": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "36",
+        "lineHeight": "44",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    }
+  },
+  "headline": {
+    "large": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "32",
+        "lineHeight": "40",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "medium": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "28",
+        "lineHeight": "36",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "small": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "24",
+        "lineHeight": "32",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    }
+  },
+  "title": {
+    "large": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "22",
+        "lineHeight": "28",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "medium": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "500",
+        "fontSize": "16",
+        "lineHeight": "24",
+        "letterSpacing": "0.15",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "small": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "500",
+        "fontSize": "14",
+        "lineHeight": "20",
+        "letterSpacing": "0.1",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "emphasized": {
+      "medium": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "16",
+          "lineHeight": "24",
+          "letterSpacing": "0.15",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      },
+      "small": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "14",
+          "lineHeight": "20",
+          "letterSpacing": "0.1",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      }
+    }
+  },
+  "body": {
+    "large": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "16",
+        "lineHeight": "24",
+        "letterSpacing": "0.5",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "medium": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "14",
+        "lineHeight": "20",
+        "letterSpacing": "0.25",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "small": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "12",
+        "lineHeight": "16",
+        "letterSpacing": "0.4",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "emphasized": {
+      "large": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "16",
+          "lineHeight": "24",
+          "letterSpacing": "0.5",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      },
+      "medium": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "14",
+          "lineHeight": "20",
+          "letterSpacing": "0.25",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      },
+      "small": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "12",
+          "lineHeight": "16",
+          "letterSpacing": "0.4",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      }
+    }
+  },
+  "label": {
+    "large": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "500",
+        "fontSize": "14",
+        "lineHeight": "20",
+        "letterSpacing": "0.1",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "medium": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "500",
+        "fontSize": "12",
+        "lineHeight": "16",
+        "letterSpacing": "0.5",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "small": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "500",
+        "fontSize": "11",
+        "lineHeight": "16",
+        "letterSpacing": "0.5",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "emphasized": {
+      "large": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "14",
+          "lineHeight": "20",
+          "letterSpacing": "0.1",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      },
+      "medium": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "12",
+          "lineHeight": "16",
+          "letterSpacing": "0.5",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      },
+      "small": {
+        "value": {
+          "fontFamily": "Lexend",
+          "fontWeight": "700",
+          "fontSize": "11",
+          "lineHeight": "16",
+          "letterSpacing": "0.5",
+          "paragraphSpacing": "0",
+          "textCase": "none",
+          "textDecoration": "none"
+        },
+        "type": "typography"
+      }
+    }
+  },
+  "utility": {
+    "mediumCaps": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "12",
+        "lineHeight": "16",
+        "letterSpacing": "0.2",
+        "paragraphSpacing": "0",
+        "textCase": "uppercase",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    },
+    "smallCompact": {
+      "value": {
+        "fontFamily": "Lexend",
+        "fontWeight": "400",
+        "fontSize": "11",
+        "lineHeight": "14",
+        "letterSpacing": "0",
+        "paragraphSpacing": "0",
+        "textCase": "none",
+        "textDecoration": "none"
+      },
+      "type": "typography"
+    }
+  }
+}

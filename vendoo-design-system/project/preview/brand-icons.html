@@ -1,0 +1,39 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  html,body{margin:0;padding:0;background:#fff;font-family:var(--font-sans);color:var(--sys-on-surface);}
+  .card{width:700px;padding:20px 24px;box-sizing:border-box;}
+  .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px 8px;}
+  .cell{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px;border-radius:8px;}
+  .cell:hover{background:var(--sys-surface-container-low);}
+  .cell svg{width:24px;height:24px;color:var(--sys-on-surface);}
+  .cell span{font:400 9px/12px var(--font-sans);letter-spacing:.2px;text-align:center;color:var(--sys-on-surface-variant);word-break:break-all;}
+  .head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
+  .head h3{font:500 14px/20px var(--font-sans);margin:0;}
+  .head small{font:400 11px/14px var(--font-sans);color:var(--sys-on-surface-variant);letter-spacing:.3px;}
+  .swatch-row{display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--sys-outline-variant);align-items:center;}
+  .swatch-row svg{width:20px;height:20px;}
+  .swatch-row .lbl{font:400 11px/14px var(--font-sans);color:var(--sys-on-surface-variant);margin-right:8px;letter-spacing:.3px;}
+</style></head>
+<body><div class="card">
+  <div class="head">
+    <h3>Go Flow icons · 116</h3>
+    <small>24×24 · single weight · two-tone via <code>currentColor</code></small>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="swatch-row">
+    <span class="lbl">color inheritance</span>
+    <svg style="color:var(--sys-on-surface)"><use href="../assets/icons.svg#sparkle"/></svg>
+    <svg style="color:var(--sys-primary)"><use href="../assets/icons.svg#sparkle"/></svg>
+    <svg style="color:var(--sys-error)"><use href="../assets/icons.svg#sparkle"/></svg>
+    <svg style="color:var(--sys-on-surface-variant)"><use href="../assets/icons.svg#sparkle"/></svg>
+    <svg style="color:#47CDAE"><use href="../assets/icons.svg#sparkle"/></svg>
+  </div>
+</div>
+<script>
+const ICONS = ["add_link","add_price","add_video","alert","alert_circle","analytics","arrow_down","arrow_down_to_line","arrow_downwards_left","arrow_left","arrow_left_to_line","arrow_right","arrow_right_filled","arrow_right_outline","arrow_right_to_line","arrow_square_right","arrow_square_right_filled","arrow_triangle_down","arrow_triangle_up","arrow_up","arrow_up_to_line","arrow_upwards_right","asterisk_circle","auto_arrange","bell","bulk_actions","bulk_actions_alt","bulk_add_photos","camera","cap","check","check_alert","chevron_down","chevron_down_square","chevron_down_square_filled","chevron_left","chevron_right","chevron_up","circle_check","clipboard","controls","copy","discount","dotted_check","download","download_alt","edit","expand","external_link","filter","hanger","heart","help_circle","image","info","jacket","lightbulb_ai_tip","link","list_ai","list_ai_alt","listing_alt","live_megaphone","lock","logout","menu","menu_open","minus_circle","more_vertical","not_linked","package","package_fair","package_good","package_like_new","package_new","package_seal","package_verygood","plus","plus_circle","progress","publish","refresh_cw","regenerate_ai","repeat","rewrite_ai","rewrite_ai_alt","search","settings","share","share_2","shield_alert","shoes","shopping_bag","sidebar_left","sidebar_right","sparkle","star","store","subscription","sync","tag","template","thumbs_down","thumbs_up","trash_2","tray_draft","triangle_down_circle_filled","triangle_down_square_filled","tshirt","upload","user","users","video","video_alt","x","x_circle","zap"];
+const grid = document.getElementById('grid');
+grid.innerHTML = ICONS.map(n => `<div class="cell" title="${n}"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#${n}"/></svg><span>${n}</span></div>`).join('');
+</script>
+</body></html>

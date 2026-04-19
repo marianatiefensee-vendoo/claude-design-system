@@ -1,0 +1,66 @@
+// Mock data for the prototype
+window.MARKETPLACES = [
+  { id: "poshmark",  name: "Poshmark",  logo: "../../assets/marketplaces/poshmark.svg",  bg: "#F5E9EC" },
+  { id: "ebay",      name: "eBay",      logo: "../../assets/marketplaces/ebay.svg",      bg: "#FFF7E3" },
+  { id: "mercari",   name: "Mercari",   logo: "../../assets/marketplaces/mercari.svg",   bg: "#EEF0FF" },
+  { id: "depop",     name: "Depop",     logo: "../../assets/marketplaces/depop.svg",     bg: "#FFEBE5" },
+  { id: "etsy",      name: "Etsy",      logo: "../../assets/marketplaces/etsy.svg",      bg: "#FFF0E4" },
+  { id: "grailed",   name: "Grailed",   logo: "../../assets/marketplaces/grailed.svg",   bg: "#F1F1F1" },
+  { id: "facebook",  name: "Facebook",  logo: "../../assets/marketplaces/facebook.svg",  bg: "#E8F0FE" },
+  { id: "shopify",   name: "Shopify",   logo: "../../assets/marketplaces/shopify.svg",   bg: "#EDF7E7" },
+  { id: "vinted",    name: "Vinted",    logo: "../../assets/marketplaces/vinted.svg",    bg: "#E4F6F5" },
+  { id: "whatnot",   name: "Whatnot",   logo: "../../assets/marketplaces/whatnot.svg",   bg: "#FFF9D6" },
+  { id: "vestiaire", name: "Vestiaire", logo: "../../assets/marketplaces/vestiaire.svg", bg: "#EEEFF0" },
+];
+
+window.SAMPLE_LISTINGS = [
+  {
+    id: "L-1842",
+    title: "Vintage 90s Knit Sweater — Pastel Purple",
+    price: 48,
+    photo: "linear-gradient(135deg,#E8DDFF 0%,#C3B0FF 100%)",
+    status: "Active",
+    markets: ["poshmark", "ebay", "mercari"],
+    aiGenerated: true,
+  },
+  {
+    id: "L-1841",
+    title: "Levi's 501 Dark Wash — 30x32",
+    price: 62,
+    photo: "linear-gradient(135deg,#1D1A24 0%,#494455 100%)",
+    status: "Active",
+    markets: ["poshmark", "ebay", "depop", "grailed"],
+  },
+  {
+    id: "L-1839",
+    title: "Stanley Adventure Quencher — 40oz Tidepool",
+    price: 35,
+    photo: "linear-gradient(135deg,#47CDAE 0%,#4852E8 100%)",
+    status: "Draft",
+    markets: [],
+  },
+  {
+    id: "L-1836",
+    title: "Nike Dunk Low Panda — Size 9",
+    price: 140,
+    photo: "linear-gradient(135deg,#ECE6F3 0%,#D6CFE8 100%)",
+    status: "Active",
+    markets: ["ebay", "grailed", "depop", "vinted"],
+  },
+  {
+    id: "L-1834",
+    title: "Le Creuset Dutch Oven 5.5qt — Cerise",
+    price: 180,
+    photo: "linear-gradient(135deg,#F7507C 0%,#BA1A1A 100%)",
+    status: "Active",
+    markets: ["ebay", "facebook", "mercari", "shopify"],
+  },
+  {
+    id: "L-1830",
+    title: "Polaroid OneStep 2 — Works Perfectly",
+    price: 55,
+    photo: "linear-gradient(135deg,#FECB40 0%,#F7507C 100%)",
+    status: "Draft",
+    markets: [],
+  },
+];

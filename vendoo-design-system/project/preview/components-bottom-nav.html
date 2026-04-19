@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Bottom navigation — Navigation Bar</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  /* Bound 1:1 to Figma component "Navigation Bar"
+     node 555:30780 in /03-Components/components/NavigationBar/NavigationBar.jsx
+     Component: 412 × 64, surface-container fill rgb(242,235,249)
+     4 nav items at x=0/89/234/323, FAB at x=178 y=4 (56×56)
+     Nav item: SYMBOL "State=Enabled, Selected=True/False, Badge=None"
+       - 167 frame absolute-laid-out at 89 wide; icon container 56×32 at left:55.5 top:6
+       - selected: white pill (rgb 255,255,255), border-radius 5
+       - unselected: transparent, border-radius 16
+       - icon 24×24 inside, fill rgb(29,26,36) — sys/light/on-surface
+       - label: Lexend 500/12/16/0.5px, color rgb(73,68,85) — sys/light/on-surface-variant
+     FAB: SYMBOL "Size=Default, Style=Primary, State=Available" (550:26273)
+       - 56×56, border-radius 8, fill rgb(74,0,191) — sys/light/primary
+       - state-layer 56×40 at top:8, icon 24×24 at left:16 top:8 inside state-layer
+       - icon: PlusCircle, fill on-primary (#fff)
+  */
+  :root { color-scheme: light; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--sys-surface);
+    font-family: 'Lexend', system-ui, sans-serif;
+    color: var(--sys-on-surface);
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .stage {
+    padding: 32px 24px 12px;
+    width: 100%; max-width: 520px; box-sizing: border-box;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .meta {
+    font-size: 11px; line-height: 16px; letter-spacing: 0.4px;
+    color: var(--sys-on-surface-variant);
+    display: flex; justify-content: space-between; gap: 12px;
+    text-transform: uppercase; font-weight: 500;
+  }
+  .meta .name { color: var(--sys-on-surface); letter-spacing: 0.6px; }
+
+  /* ── Navigation Bar component ── 412×64 ── */
+  .nav-bar {
+    position: relative;
+    width: 412px; height: 64px;
+    background-color: var(--sys-surface-container);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    position: absolute;
+    top: 0; width: 89px; height: 64px;
+    padding: 6px 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 4px;
+    background: transparent; border: 0; cursor: pointer;
+    font-family: inherit;
+  }
+  .nav-item .icon-container {
+    position: absolute;
+    left: calc(50% - 28px); top: 6px;
+    width: 56px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    border-radius: 16px; /* unselected */
+    transition: background-color 120ms cubic-bezier(.2,0,0,1), border-radius 120ms cubic-bezier(.2,0,0,1);
+  }
+  .nav-item.selected .icon-container {
+    background-color: var(--sys-surface-container-lowest); /* M3 selected-indicator: lowest container tier */
+    border-radius: 5px;
+  }
+  .nav-item .icon {
+    width: 24px; height: 24px;
+    color: var(--sys-on-surface);
+    display: block;
+  }
+  .nav-item .label {
+    position: absolute;
+    left: 0; top: 42px; width: 100%; height: 16px;
+    font-family: 'Lexend', sans-serif; font-weight: 500;
+    font-size: 12px; line-height: 16px; letter-spacing: 0.5px;
+    text-align: center;
+    color: var(--sys-on-surface-variant);
+  }
+
+  /* ── FAB Button (nested instance) ── Size=Default, Style=Primary, State=Available ── */
+  .fab {
+    position: absolute;
+    left: 178px; top: 4px;
+    width: 56px; height: 56px;
+    border: 0; padding: 0; cursor: pointer;
+    border-radius: 8px;
+    background: transparent;
+  }
+  .fab .fab-content {
+    position: absolute; inset: 0;
+    border-radius: 8px;
+    background-color: var(--sys-primary);
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fab .state-layer {
+    position: absolute;
+    left: 0; top: 8px;
+    width: 56px; height: 40px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .fab .fab-icon {
+    position: absolute;
+    left: 16px; top: 8px;
+    width: 24px; height: 24px;
+    color: var(--sys-on-primary);
+  }
+
+  /* press / hover state-layer overlays — alias-state-layer-opacity tokens */
+  .nav-item:hover .icon-container::after,
+  .fab:hover .state-layer::after {
+    content: ""; position: absolute; inset: 0;
+    background: currentColor; opacity: 0.08;
+    border-radius: inherit; pointer-events: none;
+  }
+  .nav-item:active .icon-container::after,
+  .fab:active .state-layer::after {
+    opacity: 0.16;
+  }
+  .nav-item:hover .icon-container,
+  .nav-item:active .icon-container { color: var(--sys-on-surface); }
+  .fab:hover .state-layer,
+  .fab:active .state-layer { color: var(--sys-on-primary); }
+
+  /* — second specimen: dark surface-container variant (placement preview) — */
+  .surface-frame {
+    width: 412px; padding: 24px 0 0;
+    background: var(--sys-surface);
+    border: 1px solid var(--sys-outline-variant);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .surface-frame .body {
+    height: 220px;
+    background: linear-gradient(180deg, var(--sys-surface) 0%, var(--sys-surface-container-low) 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sys-on-surface-variant);
+    font-size: 12px; letter-spacing: 0.4px; text-transform: uppercase;
+  }
+
+  .specs {
+    display: grid; grid-template-columns: max-content 1fr; column-gap: 16px; row-gap: 4px;
+    font-size: 11px; line-height: 16px;
+    color: var(--sys-on-surface-variant);
+    padding: 12px 14px;
+    background: var(--sys-surface-container-low);
+    border-radius: 8px;
+  }
+  .specs dt { color: var(--sys-on-surface); font-weight: 500; }
+  .specs code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="meta">
+    <span class="name">Navigation Bar · 555:30780</span>
+    <span>412 × 64 · sys/light/surface-container</span>
+  </div>
+
+  <!-- Standalone component, exact Figma dimensions -->
+  <nav class="nav-bar" aria-label="Primary">
+
+    <!-- Nav item 01 — State=Enabled, Selected=True, Badge=None (555:30510) -->
+    <button class="nav-item selected" style="left:0" aria-current="page">
+      <span class="icon-container">
+        <svg class="icon" viewBox="0 0 15.893 20.199" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M 12.896 0 C 13.875 0 14.629 0.25 15.138 0.764 C 15.646 1.278 15.893 2.04 15.893 3.027 L 15.893 17.172 C 15.893 18.165 15.646 18.927 15.138 19.439 C 14.629 19.952 13.875 20.199 12.896 20.199 L 2.987 20.199 C 2.009 20.199 1.257 19.953 0.75 19.439 C 0.244 18.927 0 18.164 0 17.172 L 0 3.027 C 0 2.04 0.244 1.278 0.75 0.764 C 1.256 0.249 2.009 0 2.987 0 L 12.896 0 Z M 3.07 1.7 C 2.602 1.7 2.264 1.825 2.042 2.047 C 1.82 2.268 1.7 2.601 1.7 3.05 L 1.7 17.148 C 1.7 17.597 1.82 17.931 2.042 18.152 C 2.264 18.374 2.602 18.499 3.07 18.499 L 12.821 18.499 C 13.284 18.499 13.621 18.374 13.842 18.152 C 14.063 17.931 14.184 17.597 14.184 17.148 L 14.184 3.05 C 14.183 2.601 14.063 2.268 13.842 2.047 C 13.621 1.825 13.285 1.7 12.821 1.7 L 3.07 1.7 Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="label">Listings</span>
+    </button>
+
+    <!-- Nav item 02 — State=Enabled, Selected=False, Badge=None (555:30507) -->
+    <button class="nav-item" style="left:89px">
+      <span class="icon-container">
+        <svg class="icon" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M 19.443 0.545 L 19.444 0.547 C 19.445 0.548 19.445 0.55 19.445 0.551 L 19.451 0.563 L 19.474 0.606 L 19.555 0.77 L 19.84 1.362 L 20.703 3.33 C 21.017 4.102 21.336 4.968 21.578 5.809 C 21.816 6.635 22 7.503 22 8.259 C 22 9.307 21.673 10.221 21.07 10.895 C 20.843 11.149 20.583 11.36 20.301 11.527 C 20.315 13.315 20.393 15.404 20.436 17.179 C 20.459 18.143 20.471 19.02 20.453 19.682 C 20.444 20.009 20.427 20.312 20.395 20.556 C 20.379 20.675 20.355 20.813 20.315 20.944 C 20.292 21.022 20.206 21.319 19.94 21.543 C 19.793 21.668 19.643 21.72 19.601 21.735 L 19.435 21.781 C 19.35 21.8 19.261 21.814 19.182 21.823 C 19.019 21.843 18.811 21.859 18.576 21.873 C 18.101 21.902 17.453 21.926 16.695 21.944 C 15.178 21.982 13.185 22 11.187 22 C 9.187 22 7.173 21.982 5.612 21.944 C 4.833 21.926 4.159 21.903 3.653 21.874 C 3.402 21.86 3.181 21.843 3.006 21.824 C 2.919 21.815 2.831 21.804 2.751 21.79 C 2.693 21.78 2.56 21.756 2.426 21.699 C 2.156 21.585 2.002 21.392 1.928 21.28 C 1.848 21.161 1.8 21.043 1.77 20.957 C 1.709 20.785 1.672 20.597 1.647 20.43 C 1.596 20.086 1.568 19.646 1.553 19.17 C 1.522 18.208 1.543 16.969 1.582 15.758 C 1.621 14.542 1.681 13.337 1.729 12.437 C 1.748 12.102 1.764 11.809 1.778 11.573 C 1.465 11.399 1.178 11.172 0.93 10.895 C 0.327 10.221 0 9.307 0 8.259 C 0 7.503 0.184 6.635 0.422 5.809 C 0.664 4.968 0.983 4.102 1.297 3.33 L 2.16 1.362 L 2.445 0.77 L 2.526 0.606 L 2.549 0.563 L 2.555 0.551 L 2.557 0.546 L 2.835 0 L 19.165 0 L 19.443 0.545 Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="label">Store</span>
+    </button>
+
+    <!-- FAB Button — Size=Default, Style=Primary, State=Available (550:26273) -->
+    <button class="fab" aria-label="Create listing">
+      <span class="fab-content">
+        <span class="state-layer">
+          <svg class="fab-icon" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M 11 6 C 11.552 6 12 6.448 12 7 L 12 10 L 15 10 C 15.552 10 16 10.448 16 11 C 16 11.552 15.552 12 15 12 L 12 12 L 12 15 C 12 15.552 11.552 16 11 16 C 10.448 16 10 15.552 10 15 L 10 12 L 7 12 C 6.448 12 6 11.552 6 11 C 6 10.448 6.448 10 7 10 L 10 10 L 10 7 C 10 6.448 10.448 6 11 6 Z" fill="currentColor"/>
+            <path d="M 11 0 C 17.075 0 22 4.925 22 11 C 22 17.075 17.075 22 11 22 C 4.925 22 0 17.075 0 11 C 0 4.925 4.925 0 11 0 Z M 11 2 C 6.029 2 2 6.029 2 11 C 2 15.971 6.029 20 11 20 C 15.971 20 20 15.971 20 11 C 20 6.029 15.971 2 11 2 Z" fill="currentColor" fill-rule="evenodd"/>
+          </svg>
+        </span>
+      </span>
+    </button>
+
+    <!-- Nav item 03 — Selected=False -->
+    <button class="nav-item" style="left:234px">
+      <span class="icon-container">
+        <svg class="icon" viewBox="0 0 20 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M 14 8 C 14.552 8 15 8.448 15 9 C 15 10.326 14.473 11.597 13.535 12.535 C 12.656 13.414 11.484 13.933 10.248 13.994 L 10 14 C 8.674 14 7.403 13.473 6.465 12.535 C 5.527 11.597 5 10.326 5 9 C 5 8.448 5.448 8 6 8 C 6.552 8 7 8.448 7 9 C 7 9.796 7.316 10.558 7.879 11.121 C 8.442 11.684 9.204 12 10 12 L 10.297 11.985 C 10.984 11.917 11.629 11.613 12.121 11.121 C 12.684 10.558 13 9.796 13 9 C 13 8.448 13.448 8 14 8 Z" fill="currentColor"/>
+          <path d="M 16 0 C 16.315 0 16.611 0.149 16.8 0.4 L 19.8 4.4 C 19.893 4.529 19.956 4.67 19.983 4.825 C 19.995 4.903 20 4.951 20 5 L 20 19 C 20 19.796 19.684 20.558 19.121 21.121 C 18.558 21.684 17.796 22 17 22 L 3 22 C 2.204 22 1.442 21.684 0.879 21.121 C 0.316 20.558 0 19.796 0 19 L 0 5 C 0 4.951 0.004 4.903 0.011 4.856 C 0.043 4.671 0.106 4.529 0.195 4.407 L 0.2 4.4 L 3.2 0.4 C 3.463 0.113 3.725 0 4 0 L 16 0 Z M 2 19 C 2 19.265 2.105 19.519 2.293 19.707 C 2.481 19.895 2.735 20 3 20 L 17 20 C 17.265 20 17.519 19.895 17.707 19.707 C 17.895 19.519 18 19.265 18 19 L 18 6 L 2 6 L 2 19 Z M 2.999 4 L 17.001 4 L 15.501 2 L 4.499 2 L 2.999 4 Z" fill="currentColor" fill-rule="evenodd"/>
+        </svg>
+      </span>
+      <span class="label">Sales</span>
+    </button>
+
+    <!-- Nav item 04 — Selected=False -->
+    <button class="nav-item" style="left:323px">
+      <span class="icon-container">
+        <svg class="icon" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M 4 14 L 6 14 L 6 7 L 4 7 L 4 14 Z M 8 14 L 10 14 L 10 4 L 8 4 L 8 14 Z M 12 14 L 14 14 L 14 10 L 12 10 L 12 14 Z M 2 18 C 1.45 18 0.979 17.804 0.588 17.413 C 0.196 17.021 0 16.55 0 16 L 0 2 C 0 1.45 0.196 0.979 0.588 0.588 C 0.979 0.196 1.45 0 2 0 L 16 0 C 16.55 0 17.021 0.196 17.413 0.588 C 17.804 0.979 18 1.45 18 2 L 18 16 C 18 16.55 17.804 17.021 17.413 17.413 C 17.021 17.804 16.55 18 16 18 L 2 18 Z M 2 16 L 16 16 L 16 2 L 2 2 L 2 16 Z" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="label">Insights</span>
+    </button>
+  </nav>
+
+  <!-- placement preview against a surface frame -->
+  <div class="meta"><span class="name">In context · Surface placement</span><span>FAB centered, anchored to surface-container</span></div>
+  <div class="surface-frame">
+    <div class="body">Page content</div>
+    <nav class="nav-bar" aria-label="Primary (preview)">
+      <button class="nav-item selected" style="left:0">
+        <span class="icon-container">
+          <svg class="icon" viewBox="0 0 15.893 20.199" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M 12.896 0 C 13.875 0 14.629 0.25 15.138 0.764 C 15.646 1.278 15.893 2.04 15.893 3.027 L 15.893 17.172 C 15.893 18.165 15.646 18.927 15.138 19.439 C 14.629 19.952 13.875 20.199 12.896 20.199 L 2.987 20.199 C 2.009 20.199 1.257 19.953 0.75 19.439 C 0.244 18.927 0 18.164 0 17.172 L 0 3.027 C 0 2.04 0.244 1.278 0.75 0.764 C 1.256 0.249 2.009 0 2.987 0 L 12.896 0 Z M 3.07 1.7 C 2.602 1.7 2.264 1.825 2.042 2.047 C 1.82 2.268 1.7 2.601 1.7 3.05 L 1.7 17.148 C 1.7 17.597 1.82 17.931 2.042 18.152 C 2.264 18.374 2.602 18.499 3.07 18.499 L 12.821 18.499 C 13.284 18.499 13.621 18.374 13.842 18.152 C 14.063 17.931 14.184 17.597 14.184 17.148 L 14.184 3.05 C 14.183 2.601 14.063 2.268 13.842 2.047 C 13.621 1.825 13.285 1.7 12.821 1.7 L 3.07 1.7 Z" fill="currentColor"/></svg>
+        </span>
+        <span class="label">Listings</span>
+      </button>
+      <button class="nav-item" style="left:89px">
+        <span class="icon-container">
+          <svg class="icon" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M 19.443 0.545 L 19.84 1.362 L 20.703 3.33 C 21.336 4.968 22 6.635 22 8.259 C 22 9.307 21.673 10.221 21.07 10.895 C 20.843 11.149 20.583 11.36 20.301 11.527 C 20.315 13.315 20.436 17.179 20.453 19.682 C 20.444 20.009 20.395 20.556 20.315 20.944 C 20.292 21.022 20.206 21.319 19.94 21.543 C 19.793 21.668 19.601 21.735 19.435 21.781 C 19.182 21.823 18.576 21.873 16.695 21.944 C 13.185 22 7.173 21.982 5.612 21.944 C 3.653 21.874 3.006 21.824 2.751 21.79 C 2.426 21.699 2.156 21.585 1.928 21.28 C 1.77 20.957 1.647 20.43 1.553 19.17 C 1.522 18.208 1.582 15.758 1.778 11.573 C 1.465 11.399 0.93 10.895 0 9.307 0 8.259 C 0 6.635 0.664 4.968 1.297 3.33 L 2.445 0.77 L 2.835 0 L 19.165 0 L 19.443 0.545 Z" fill="currentColor"/></svg>
+        </span>
+        <span class="label">Store</span>
+      </button>
+      <button class="fab" aria-label="Create listing">
+        <span class="fab-content">
+          <span class="state-layer">
+            <svg class="fab-icon" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M 11 6 C 11.552 6 12 6.448 12 7 L 12 10 L 15 10 C 15.552 10 16 10.448 16 11 C 16 11.552 15.552 12 15 12 L 12 12 L 12 15 C 12 15.552 11.552 16 11 16 C 10.448 16 10 15.552 10 15 L 10 12 L 7 12 C 6.448 12 6 11.552 6 11 C 6 10.448 6.448 10 7 10 L 10 10 L 10 7 C 10 6.448 10.448 6 11 6 Z" fill="currentColor"/>
+              <path d="M 11 0 C 17.075 0 22 4.925 22 11 C 22 17.075 17.075 22 11 22 C 4.925 22 0 17.075 0 11 C 0 4.925 4.925 0 11 0 Z M 11 2 C 6.029 2 2 6.029 2 11 C 2 15.971 6.029 20 11 20 C 15.971 20 20 15.971 20 11 C 20 6.029 15.971 2 11 2 Z" fill="currentColor" fill-rule="evenodd"/>
+            </svg>
+          </span>
+        </span>
+      </button>
+      <button class="nav-item" style="left:234px">
+        <span class="icon-container">
+          <svg class="icon" viewBox="0 0 20 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M 14 8 C 14.552 8 15 8.448 15 9 C 15 10.326 14.473 11.597 13.535 12.535 C 12.656 13.414 11.484 13.933 10.248 13.994 L 10 14 C 8.674 14 7.403 13.473 6.465 12.535 C 5.527 11.597 5 10.326 5 9 C 5 8.448 5.448 8 6 8 C 6.552 8 7 8.448 7 9 C 7 9.796 7.316 10.558 7.879 11.121 C 8.442 11.684 9.204 12 10 12 L 10.297 11.985 C 10.984 11.917 11.629 11.613 12.121 11.121 C 12.684 10.558 13 9.796 13 9 C 13 8.448 13.448 8 14 8 Z" fill="currentColor"/><path d="M 16 0 C 16.315 0 16.611 0.149 16.8 0.4 L 19.8 4.4 C 19.956 4.67 20 4.951 20 5 L 20 19 C 20 19.796 19.684 20.558 19.121 21.121 C 18.558 21.684 17.796 22 17 22 L 3 22 C 2.204 22 1.442 21.684 0.879 21.121 C 0.316 20.558 0 19.796 0 19 L 0 5 C 0.043 4.671 0.195 4.407 L 3.2 0.4 C 3.463 0.113 3.725 0 4 0 L 16 0 Z M 2 19 C 2 19.265 2.105 19.519 2.293 19.707 C 2.481 19.895 2.735 20 3 20 L 17 20 C 17.265 20 17.519 19.895 17.707 19.707 C 17.895 19.519 18 19.265 18 19 L 18 6 L 2 6 L 2 19 Z M 2.999 4 L 17.001 4 L 15.501 2 L 4.499 2 L 2.999 4 Z" fill="currentColor" fill-rule="evenodd"/></svg>
+        </span>
+        <span class="label">Sales</span>
+      </button>
+      <button class="nav-item" style="left:323px">
+        <span class="icon-container">
+          <svg class="icon" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M 4 14 L 6 14 L 6 7 L 4 7 L 4 14 Z M 8 14 L 10 14 L 10 4 L 8 4 L 8 14 Z M 12 14 L 14 14 L 14 10 L 12 10 L 12 14 Z M 2 18 C 1.45 18 0.979 17.804 0.588 17.413 C 0.196 17.021 0 16.55 0 16 L 0 2 C 0 1.45 0.196 0.979 0.588 0.588 C 0.979 0.196 1.45 0 2 0 L 16 0 C 16.55 0 17.021 0.196 17.413 0.588 C 17.804 0.979 18 1.45 18 2 L 18 16 C 18 16.55 17.804 17.021 17.413 17.413 C 17.021 17.804 16.55 18 16 18 L 2 18 Z M 2 16 L 16 16 L 16 2 L 2 2 L 2 16 Z" fill="currentColor"/></svg>
+        </span>
+        <span class="label">Insights</span>
+      </button>
+    </nav>
+  </div>
+
+  <dl class="specs">
+    <dt>Container</dt><dd><code>412 × 64</code> · fill <code>sys/light/surface-container</code> · <code>rgb(242,235,249)</code></dd>
+    <dt>Nav item</dt><dd><code>89 × 64</code> at x = 0 / 89 / 234 / 323 · icon container <code>56 × 32</code> at top:6, centered</dd>
+    <dt>Selected pill</dt><dd>radius <code>5</code>, fill white · unselected radius <code>16</code>, transparent</dd>
+    <dt>Icon</dt><dd><code>24 × 24</code> · fill <code>sys/light/on-surface</code> <code>rgb(29,26,36)</code></dd>
+    <dt>Label</dt><dd>Lexend 500 / 12 / 16 / 0.5px · <code>sys/light/on-surface-variant</code> <code>rgb(73,68,85)</code></dd>
+    <dt>FAB Button</dt><dd><code>56 × 56</code> at x:178 y:4 · radius <code>8</code> · fill <code>sys/light/primary</code> <code>rgb(74,0,191)</code></dd>
+    <dt>FAB icon</dt><dd>PlusCircle <code>24 × 24</code> at left:16 top:8 · fill <code>sys/light/on-primary</code></dd>
+    <dt>Source</dt><dd><code>03-Components/Navigation-Bar</code> · node <code>3005:3721</code> → symbol <code>555:30780</code></dd>
+  </dl>
+
+</div>
+</body>
+</html>
