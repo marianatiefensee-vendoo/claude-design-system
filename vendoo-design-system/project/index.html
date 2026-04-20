@@ -5,49 +5,226 @@
 <title>Vendoo — Go Flow Design System</title>
 <link rel="stylesheet" href="./colors_and_type.css">
 <style>
-  body { margin: 0; padding: 40px; background: #F2EBF9; font-family: var(--font-sans); }
-  h1 { font: 600 28px/36px var(--font-sans); color: var(--sys-on-surface); margin: 0 0 8px; }
-  p { font: 400 14px/20px var(--font-sans); color: var(--sys-on-surface-variant); margin: 0 0 40px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; max-width: 900px; }
-  a.card {
-    display: block; padding: 24px; border-radius: 12px; text-decoration: none;
-    background: white; border: 1px solid var(--sys-outline-variant);
-    transition: border-color 120ms linear;
+  body { margin: 0; padding: 40px 40px 80px; background: var(--sys-surface-container); font-family: var(--font-sans); }
+  .header { margin-bottom: 48px; }
+  .header h1 { font: 600 28px/36px var(--font-sans); color: var(--sys-on-surface); margin: 0 0 6px; }
+  .header p { font: 400 14px/20px var(--font-sans); color: var(--sys-on-surface-variant); margin: 0; }
+
+  .section { margin-bottom: 40px; }
+  .section-label {
+    font: 500 11px/16px var(--font-sans); letter-spacing: .8px; text-transform: uppercase;
+    color: var(--sys-on-surface-variant); margin: 0 0 14px;
   }
-  a.card:hover { border-color: var(--sys-primary); }
-  a.card h2 { font: 500 16px/24px var(--font-sans); color: var(--sys-on-surface); margin: 0 0 4px; }
-  a.card p { font: 400 13px/18px var(--font-sans); color: var(--sys-on-surface-variant); margin: 0; }
-  .tag {
-    display: inline-block; font: 500 11px/16px var(--font-sans);
-    padding: 2px 8px; border-radius: 999px; margin-bottom: 12px;
-    background: var(--sys-primary-container); color: var(--sys-primary);
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; max-width: 1100px; }
+
+  a.card {
+    display: block; padding: 20px; border-radius: 12px; text-decoration: none;
+    background: var(--sys-surface-container-lowest);
+    border: 1px solid var(--sys-outline-variant);
+    transition: border-color 120ms linear, background 120ms linear;
+  }
+  a.card:hover { border-color: var(--sys-primary); background: var(--sys-surface-container-low); }
+  a.card.featured { border-color: var(--sys-outline-variant); }
+  a.card h2 { font: 500 15px/22px var(--font-sans); color: var(--sys-on-surface); margin: 0 0 3px; }
+  a.card p { font: 400 12px/17px var(--font-sans); color: var(--sys-on-surface-variant); margin: 0; }
+
+  .pill {
+    display: inline-block; font: 500 10px/14px var(--font-sans); letter-spacing: .4px;
+    padding: 2px 8px; border-radius: 999px; margin-bottom: 10px;
+  }
+  .pill.app      { background: var(--sys-primary-container); color: var(--sys-primary); }
+  .pill.comp     { background: var(--sys-secondary-container); color: var(--sys-on-secondary-container); }
+  .pill.found    { background: var(--sys-surface-container-high); color: var(--sys-on-surface-variant); }
+
+  a.card.app-card {
+    grid-column: span 2;
+    background: var(--sys-primary-container);
+    border-color: var(--sys-primary);
+    padding: 24px;
+  }
+  a.card.app-card h2 { font-size: 18px; line-height: 26px; color: var(--sys-primary); }
+  a.card.app-card p  { color: var(--sys-on-secondary-container); font-size: 13px; }
+  a.card.app-card:hover { background: var(--sys-secondary-container); }
+
+  @media (max-width: 600px) {
+    body { padding: 24px 20px 60px; }
+    a.card.app-card { grid-column: span 1; }
   }
 </style>
 </head>
 <body>
-  <h1>Go Flow Design System</h1>
-  <p>Vendoo · Component library and app prototype</p>
-  <div class="grid">
-    <a class="card" href="./ui_kits/vendoo-app/index.html">
-      <span class="tag">App</span>
-      <h2>Vendoo App</h2>
-      <p>Full prototype — Inventory, Create Listing, crosslist flow</p>
-    </a>
-    <a class="card" href="./preview/components-buttons.html">
-      <span class="tag">Components</span>
-      <h2>Buttons</h2>
-      <p>Filled, tonal, outline, text, icon button variants</p>
-    </a>
-    <a class="card" href="./preview/components-fields.html">
-      <span class="tag">Components</span>
-      <h2>Fields</h2>
-      <p>Input, textarea, select, price field states</p>
-    </a>
-    <a class="card" href="./preview/components-selection-controls.html">
-      <span class="tag">Components</span>
-      <h2>Selection controls</h2>
-      <p>Checkbox, radio, switch — all states</p>
-    </a>
+
+  <div class="header">
+    <h1>Go Flow Design System</h1>
+    <p>Vendoo · Component library, app prototype, and design foundations</p>
   </div>
+
+  <!-- App -->
+  <div class="section">
+    <div class="section-label">Prototype</div>
+    <div class="grid">
+      <a class="card app-card" href="./ui_kits/vendoo-app/index.html">
+        <span class="pill app">App</span>
+        <h2>Vendoo App</h2>
+        <p>Full clickable prototype — Inventory, Create Listing, crosslist flow, bottom nav</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Components -->
+  <div class="section">
+    <div class="section-label">Components</div>
+    <div class="grid">
+      <a class="card" href="./preview/components-buttons.html">
+        <span class="pill comp">Component</span>
+        <h2>Button</h2>
+        <p>Filled, tonal, outline, text, danger + icon button</p>
+      </a>
+      <a class="card" href="./preview/components-fields.html">
+        <span class="pill comp">Component</span>
+        <h2>Fields</h2>
+        <p>Input, textarea, select — all states</p>
+      </a>
+      <a class="card" href="./preview/components-selection-controls.html">
+        <span class="pill comp">Component</span>
+        <h2>Selection controls</h2>
+        <p>Checkbox, radio, switch — enabled, disabled, selected</p>
+      </a>
+      <a class="card" href="./preview/components-chips.html">
+        <span class="pill comp">Component</span>
+        <h2>Chips &amp; tags</h2>
+        <p>Assistive chip, tag (default + AI), style tag</p>
+      </a>
+      <a class="card" href="./preview/components-bottom-nav.html">
+        <span class="pill comp">Component</span>
+        <h2>Navigation bar</h2>
+        <p>Bottom nav with FAB — selected and unselected states</p>
+      </a>
+      <a class="card" href="./preview/components-section-card.html">
+        <span class="pill comp">Component</span>
+        <h2>Section card</h2>
+        <p>Expandable numbered section card — expanded, done, todo</p>
+      </a>
+      <a class="card" href="./preview/components-ask-ai.html">
+        <span class="pill comp">Component</span>
+        <h2>Ask AI bar</h2>
+        <p>Collapsed chip trigger and open input states</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Foundations — Color -->
+  <div class="section">
+    <div class="section-label">Foundations · Color</div>
+    <div class="grid">
+      <a class="card" href="./preview/color-primary.html">
+        <span class="pill found">Color</span>
+        <h2>Primary</h2>
+        <p>Primary tonal palette and role mapping</p>
+      </a>
+      <a class="card" href="./preview/color-secondary.html">
+        <span class="pill found">Color</span>
+        <h2>Secondary</h2>
+        <p>Secondary palette and roles</p>
+      </a>
+      <a class="card" href="./preview/color-tertiary.html">
+        <span class="pill found">Color</span>
+        <h2>Tertiary</h2>
+        <p>Tertiary palette and roles</p>
+      </a>
+      <a class="card" href="./preview/color-error.html">
+        <span class="pill found">Color</span>
+        <h2>Error</h2>
+        <p>Error palette and roles</p>
+      </a>
+      <a class="card" href="./preview/color-surface.html">
+        <span class="pill found">Color</span>
+        <h2>Surface</h2>
+        <p>Surface container tiers and backgrounds</p>
+      </a>
+      <a class="card" href="./preview/color-outline-inverse.html">
+        <span class="pill found">Color</span>
+        <h2>Outline &amp; inverse</h2>
+        <p>Outline, inverse surface, scrim roles</p>
+      </a>
+      <a class="card" href="./preview/color-tonal-palettes.html">
+        <span class="pill found">Color</span>
+        <h2>Tonal palettes</h2>
+        <p>Full M3 tonal palette reference</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Foundations — Typography -->
+  <div class="section">
+    <div class="section-label">Foundations · Typography</div>
+    <div class="grid">
+      <a class="card" href="./preview/type-display.html">
+        <span class="pill found">Type</span>
+        <h2>Display</h2>
+        <p>Display large, medium, small</p>
+      </a>
+      <a class="card" href="./preview/type-text.html">
+        <span class="pill found">Type</span>
+        <h2>Headline &amp; body</h2>
+        <p>Headline, title, body scales</p>
+      </a>
+      <a class="card" href="./preview/type-labels.html">
+        <span class="pill found">Type</span>
+        <h2>Labels</h2>
+        <p>Label scale — large, medium, small</p>
+      </a>
+      <a class="card" href="./preview/type-utility.html">
+        <span class="pill found">Type</span>
+        <h2>Utility</h2>
+        <p>Utility type styles and overline</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Foundations — Spatial -->
+  <div class="section">
+    <div class="section-label">Foundations · Spatial &amp; Motion</div>
+    <div class="grid">
+      <a class="card" href="./preview/spacing-scale.html">
+        <span class="pill found">Spatial</span>
+        <h2>Spacing</h2>
+        <p>4px base grid — full scale</p>
+      </a>
+      <a class="card" href="./preview/radii.html">
+        <span class="pill found">Spatial</span>
+        <h2>Radius</h2>
+        <p>Corner radius tokens and usage</p>
+      </a>
+      <a class="card" href="./preview/elevation.html">
+        <span class="pill found">Spatial</span>
+        <h2>Elevation</h2>
+        <p>5 elevation levels — shadow specs</p>
+      </a>
+      <a class="card" href="./preview/motion.html">
+        <span class="pill found">Motion</span>
+        <h2>Motion</h2>
+        <p>Easing curves and duration tokens</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- Foundations — Assets -->
+  <div class="section">
+    <div class="section-label">Foundations · Assets</div>
+    <div class="grid">
+      <a class="card" href="./preview/brand-icons.html">
+        <span class="pill found">Assets</span>
+        <h2>Icons</h2>
+        <p>116 custom outline icons — full sprite reference</p>
+      </a>
+      <a class="card" href="./preview/brand-logo.html">
+        <span class="pill found">Assets</span>
+        <h2>Brand</h2>
+        <p>Vendoo mark, lockup, and horizontal logo</p>
+      </a>
+    </div>
+  </div>
+
 </body>
 </html>
