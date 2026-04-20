@@ -10,3 +10,4 @@ export { default as ListingSectionCard } from './ListingSectionCard.jsx';
 export { default as AppShell }           from './AppShell.jsx';
 export { default as Inventory }          from './Inventory.jsx';
 export { default as CreateListing }      from './CreateListing.jsx';
+export { Tag, StyleTag, AssistiveChip }  from './Tag.jsx';
