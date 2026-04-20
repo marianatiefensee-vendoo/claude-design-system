@@ -21,7 +21,7 @@ function Inventory({ onOpen, onCreate }) {
           font: "300 15px/22px var(--font-sans)", letterSpacing: "0.5px",
           color: "var(--sys-on-surface-variant)",
         }}>Ask AI about your inventory</span>
-        <IconButton icon="search" size={36} />
+        <IconButton icon="search" />
       </div>
 
       {/* Tabs */}

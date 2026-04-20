@@ -1,4 +1,4 @@
-// Button — Filled / Tonal / Outline / Text + IconButton
+// Button — Filled / Tonal / Outline / Text (standalone IconButton → IconButton.jsx)
 // Radius 4px, padding scale matching Go Flow Fields frame
 function Button({
   variant = "filled",
@@ -54,25 +54,4 @@ function Button({
   );
 }
 
-function IconButton({ icon, size = 40, onClick, title, style = {} }) {
-  return (
-    <button
-      onClick={onClick}
-      title={title}
-      style={{
-        width: size, height: size, borderRadius: 999, border: "none",
-        background: "transparent", color: "var(--sys-on-surface-variant)",
-        cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center",
-        transition: "background-color 120ms linear",
-        ...style,
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.background = "rgba(74,0,191,0.08)"}
-      onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
-    >
-      <Icon name={icon} size={20} />
-    </button>
-  );
-}
-
 window.Button = Button;
-window.IconButton = IconButton;

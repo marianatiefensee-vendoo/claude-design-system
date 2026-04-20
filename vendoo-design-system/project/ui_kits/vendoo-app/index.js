@@ -1,4 +1,5 @@
 export { default as Button }             from './Button.jsx';
+export { default as IconButton }         from './IconButton.jsx';
 export { default as SelectionControl }   from './SelectionControl.jsx';
 export { default as Icon }               from './Icon.jsx';
 export { Input, Textarea, PriceField,
