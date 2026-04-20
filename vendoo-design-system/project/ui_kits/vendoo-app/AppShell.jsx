@@ -53,18 +53,18 @@ function AppShell({ view, setView, title, trailing, children, stickyFooter }) {
         display: "grid", gridTemplateColumns: "repeat(5, 1fr)", alignItems: "center",
         position: "relative",
       }}>
-        <NavItem icon="store"   label="Home"      active={view === "home"}      onClick={() => setView("home")} />
-        <NavItem icon="package" label="Inventory" active={view === "inventory"} onClick={() => setView("inventory")} />
+        <NavItem icon="listing_alt" label="Listings" active={view === "listings"}  onClick={() => setView("listings")} />
+        <NavItem icon="store"       label="Store"    active={view === "store"}     onClick={() => setView("store")} />
         <div style={{
           width: 56, height: 56, borderRadius: 4, justifySelf: "center",
           background: "var(--sys-primary)", color: "#fff",
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "var(--elev-3)", cursor: "pointer",
         }} onClick={() => setView("create")} title="Create listing">
-          <Icon name="plus" size={28} color="#fff" />
+          <Icon name="plus_circle" size={28} color="#fff" />
         </div>
-        <NavItem icon="live_megaphone" label="Messages" active={view === "messages"} onClick={() => setView("messages")} />
-        <NavItem icon="user"    label="Profile"   active={view === "profile"}   onClick={() => setView("profile")} />
+        <NavItem icon="shopping_bag" label="Sales"    active={view === "sales"}    onClick={() => setView("sales")} />
+        <NavItem icon="Analytics"    label="Insights" active={view === "insights"} onClick={() => setView("insights")} />
       </div>
     </div>
   );
@@ -75,12 +75,13 @@ function NavItem({ icon, label, active, onClick }) {
     <button onClick={onClick} style={{
       border: "none", background: "transparent", cursor: "pointer",
       display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
-      color: active ? "var(--sys-secondary)" : "var(--sys-on-surface-variant)",
+      color: "var(--sys-on-surface-variant)",
       font: "500 12px/16px var(--font-sans)", letterSpacing: "0.5px",
     }}>
       <span style={{
-        width: 64, height: 32, borderRadius: 16,
-        background: active ? "var(--sys-secondary-container)" : "transparent",
+        width: 56, height: 32,
+        borderRadius: active ? 5 : 16,
+        background: active ? "#ffffff" : "transparent",
         display: "inline-flex", alignItems: "center", justifyContent: "center",
       }}>
         <Icon name={icon} size={24} color="var(--sys-on-surface)" />
