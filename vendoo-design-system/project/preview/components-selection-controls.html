@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Selection Controls · Vendoo DS</title>
+<link rel="stylesheet" href="../tokens.css">
+<style>
+  /* ──────────────────────────────────────────────
+     Maps 1:1 to Figma "Selection Control" (node 3001:4216)
+     Uses design tokens exclusively
+     Components: Checkbox · Radio · Switch
+     Variants: Type × State (Enabled / Disabled) × Selected (True / False)
+     ────────────────────────────────────────────── */
+
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--sys-surface);
+    color: var(--sys-on-surface);
+    font-family: var(--font-sans);
+  }
+
+  .page { padding: 48px 56px 80px; max-width: 900px; box-sizing: border-box; }
+
+  /* ── doc header ──────────────────────────────────── */
+  .doc-h1 { font: var(--type-headline-lg); margin: 0 0 8px; color: var(--sys-on-surface); }
+  .doc-sub { font: var(--type-body-lg); color: var(--sys-on-surface-variant); margin: 0 0 48px; max-width: 72ch; }
+
+  /* ── section ─────────────────────────────────────── */
+  .section { margin-bottom: 56px; }
+  .section-h2 { font: var(--type-title-lg); margin: 0 0 4px; color: var(--sys-on-surface); }
+  .section-sub { font: var(--type-body-md); color: var(--sys-on-surface-variant); margin: 0 0 24px; max-width: 72ch; }
+
+  /* ── variant matrix ──────────────────────────────── */
+  .matrix {
+    display: grid;
+    grid-template-columns: 120px repeat(4, 80px);
+    column-gap: 0;
+    row-gap: 0;
+    border: 1px solid var(--sys-outline-variant);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .matrix .cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--sys-outline-variant);
+    border-right: 1px solid var(--sys-outline-variant);
+  }
+  .matrix .cell:nth-child(5n) { border-right: none; }
+  .matrix .cell:nth-last-child(-n+5) { border-bottom: none; }
+
+  .matrix .col-head {
+    font: 500 11px/14px var(--font-sans);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--sys-on-surface-variant);
+    background: var(--sys-surface-container);
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .matrix .row-label {
+    font: var(--type-label-lg);
+    color: var(--sys-on-surface-variant);
+    justify-content: flex-start;
+    padding-left: 16px;
+    background: var(--sys-surface-container-low);
+  }
+  .matrix .col-head.row-label { background: var(--sys-surface-container); }
+
+  /* ── usage row ───────────────────────────────────── */
+  .usage-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 24px;
+    border: 1px solid var(--sys-outline-variant);
+    border-radius: 8px;
+    flex-wrap: wrap;
+  }
+  .usage-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font: var(--type-body-md);
+    color: var(--sys-on-surface);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* ────────────── Checkbox ────────────────────────── */
+  .ctrl-checkbox {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 2px;
+    box-sizing: border-box;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 120ms linear;
+  }
+  .ctrl-checkbox:disabled { opacity: .38; cursor: not-allowed; }
+
+  .ctrl-checkbox__box {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1.25px solid var(--sys-outline);
+    background: transparent;
+    transition: background 150ms ease, border-color 150ms ease;
+  }
+  .ctrl-checkbox.is-checked .ctrl-checkbox__box {
+    background: var(--sys-primary);
+    border-color: var(--sys-primary);
+  }
+  .ctrl-checkbox__check { display: none; }
+  .ctrl-checkbox.is-checked .ctrl-checkbox__check { display: block; }
+
+  /* ────────────── Radio ───────────────────────────── */
+  .ctrl-radio {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 1px;
+    box-sizing: border-box;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 120ms linear;
+  }
+  .ctrl-radio:disabled { opacity: .38; cursor: not-allowed; }
+
+  .ctrl-radio__circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1.5px solid var(--sys-on-surface-variant);
+    background: transparent;
+    transition: background 150ms ease, border-color 150ms ease;
+  }
+  .ctrl-radio.is-checked .ctrl-radio__circle {
+    background: var(--sys-primary);
+    border-color: var(--sys-primary);
+  }
+  .ctrl-radio__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--sys-on-primary);
+    display: none;
+    flex-shrink: 0;
+  }
+  .ctrl-radio.is-checked .ctrl-radio__dot { display: block; }
+
+  /* ────────────── Switch ──────────────────────────── */
+  .ctrl-switch {
+    display: inline-flex;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 120ms linear;
+  }
+  .ctrl-switch:disabled { opacity: .38; cursor: not-allowed; }
+
+  .ctrl-switch__track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 52px;
+    height: 32px;
+    border-radius: 999px;
+    box-sizing: border-box;
+    transition: background 150ms ease, border-color 150ms ease, padding 150ms ease;
+    /* OFF default */
+    background: var(--sys-surface-container-highest);
+    border: 2px solid var(--sys-outline);
+    padding: 4px;
+    justify-content: flex-start;
+  }
+  .ctrl-switch.is-checked .ctrl-switch__track {
+    background: var(--sys-primary);
+    border-color: transparent;
+    padding: 2px 4px;
+    justify-content: flex-end;
+  }
+  .ctrl-switch:disabled .ctrl-switch__track {
+    background: rgba(231,223,244,0.10);
+    border-color: rgba(29,26,36,0.10);
+  }
+  .ctrl-switch.is-checked:disabled .ctrl-switch__track {
+    background: rgba(29,26,36,0.10);
+    border-color: transparent;
+  }
+
+  .ctrl-switch__thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--sys-outline);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: width 150ms ease, height 150ms ease, background 150ms ease;
+  }
+  .ctrl-switch.is-checked .ctrl-switch__thumb {
+    width: 24px;
+    height: 24px;
+    background: var(--sys-on-primary);
+  }
+  .ctrl-switch:disabled .ctrl-switch__thumb {
+    background: var(--sys-on-surface-variant);
+  }
+  .ctrl-switch.is-checked:disabled .ctrl-switch__thumb {
+    background: var(--sys-surface);
+  }
+  .ctrl-switch__icon { display: none; }
+  .ctrl-switch.is-checked .ctrl-switch__icon { display: block; }
+
+  /* ── hover state layers ──────────────────────────── */
+  .ctrl-checkbox:not(:disabled):hover .ctrl-checkbox__box {
+    box-shadow: 0 0 0 10px var(--state-primary-08, rgba(74,0,191,0.08));
+  }
+  .ctrl-radio:not(:disabled):hover .ctrl-radio__circle {
+    box-shadow: 0 0 0 10px var(--state-primary-08, rgba(74,0,191,0.08));
+  }
+  .ctrl-switch:not(:disabled):hover .ctrl-switch__track {
+    filter: brightness(0.96);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1 class="doc-h1">Selection Controls</h1>
+  <p class="doc-sub">Checkboxes, radio buttons, and switches for toggling states. Maps 1:1 to Figma node 3001:4216 — Go Flow Design System.</p>
+
+  <!-- ── Checkbox ─────────────────────────────────── -->
+  <section class="section">
+    <h2 class="section-h2">Checkbox</h2>
+    <p class="section-sub">24 × 24 hit area · 20 × 20 visual box · radius 5 · border 1.25px outline</p>
+
+    <div class="matrix">
+      <!-- header row -->
+      <div class="cell col-head row-label">State</div>
+      <div class="cell col-head">Enabled<br>Unselected</div>
+      <div class="cell col-head">Enabled<br>Selected</div>
+      <div class="cell col-head">Disabled<br>Unselected</div>
+      <div class="cell col-head">Disabled<br>Selected</div>
+
+      <!-- row -->
+      <div class="cell row-label">Checkbox</div>
+
+      <!-- Enabled / Unselected -->
+      <div class="cell">
+        <button class="ctrl-checkbox" onclick="this.classList.toggle('is-checked')">
+          <div class="ctrl-checkbox__box">
+            <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Enabled / Selected -->
+      <div class="cell">
+        <button class="ctrl-checkbox is-checked" onclick="this.classList.toggle('is-checked')">
+          <div class="ctrl-checkbox__box">
+            <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Disabled / Unselected -->
+      <div class="cell">
+        <button class="ctrl-checkbox" disabled>
+          <div class="ctrl-checkbox__box"></div>
+        </button>
+      </div>
+
+      <!-- Disabled / Selected -->
+      <div class="cell">
+        <button class="ctrl-checkbox is-checked" disabled>
+          <div class="ctrl-checkbox__box">
+            <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Radio ────────────────────────────────────── -->
+  <section class="section">
+    <h2 class="section-h2">Radio</h2>
+    <p class="section-sub">24 × 24 hit area · 22 × 22 visual circle · radius circular · border 1.5px on-surface-variant</p>
+
+    <div class="matrix">
+      <!-- header row -->
+      <div class="cell col-head row-label">State</div>
+      <div class="cell col-head">Enabled<br>Unselected</div>
+      <div class="cell col-head">Enabled<br>Selected</div>
+      <div class="cell col-head">Disabled<br>Unselected</div>
+      <div class="cell col-head">Disabled<br>Selected</div>
+
+      <!-- row -->
+      <div class="cell row-label">Radio</div>
+
+      <!-- Enabled / Unselected -->
+      <div class="cell">
+        <button class="ctrl-radio" onclick="this.classList.toggle('is-checked')">
+          <div class="ctrl-radio__circle">
+            <div class="ctrl-radio__dot"></div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Enabled / Selected -->
+      <div class="cell">
+        <button class="ctrl-radio is-checked" onclick="this.classList.toggle('is-checked')">
+          <div class="ctrl-radio__circle">
+            <div class="ctrl-radio__dot"></div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Disabled / Unselected -->
+      <div class="cell">
+        <button class="ctrl-radio" disabled>
+          <div class="ctrl-radio__circle">
+            <div class="ctrl-radio__dot"></div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Disabled / Selected -->
+      <div class="cell">
+        <button class="ctrl-radio is-checked" disabled>
+          <div class="ctrl-radio__circle">
+            <div class="ctrl-radio__dot"></div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Switch ───────────────────────────────────── -->
+  <section class="section">
+    <h2 class="section-h2">Switch</h2>
+    <p class="section-sub">52 × 32 pill track · thumb 16px (off) → 24px (on) · border 2px outline when off</p>
+
+    <div class="matrix">
+      <!-- header row -->
+      <div class="cell col-head row-label">State</div>
+      <div class="cell col-head">Enabled<br>Off</div>
+      <div class="cell col-head">Enabled<br>On</div>
+      <div class="cell col-head">Disabled<br>Off</div>
+      <div class="cell col-head">Disabled<br>On</div>
+
+      <!-- row -->
+      <div class="cell row-label">Switch</div>
+
+      <!-- Enabled / Off -->
+      <div class="cell">
+        <button class="ctrl-switch" onclick="this.classList.toggle('is-checked')">
+          <div class="ctrl-switch__track">
+            <div class="ctrl-switch__thumb">
+              <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Enabled / On -->
+      <div class="cell">
+        <button class="ctrl-switch is-checked" onclick="this.classList.toggle('is-checked')">
+          <div class="ctrl-switch__track">
+            <div class="ctrl-switch__thumb">
+              <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Disabled / Off -->
+      <div class="cell">
+        <button class="ctrl-switch" disabled>
+          <div class="ctrl-switch__track">
+            <div class="ctrl-switch__thumb"></div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Disabled / On -->
+      <div class="cell">
+        <button class="ctrl-switch is-checked" disabled>
+          <div class="ctrl-switch__track">
+            <div class="ctrl-switch__thumb">
+              <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6L4.5 8.5L10 3" stroke="rgba(29,26,36,0.38)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Interactive usage examples ───────────────── -->
+  <section class="section">
+    <h2 class="section-h2">Usage examples</h2>
+    <p class="section-sub">Click to toggle. All variants are interactive.</p>
+
+    <div style="display:flex;flex-direction:column;gap:24px;">
+
+      <!-- Checkbox group -->
+      <div>
+        <p style="font:var(--type-label-lg);color:var(--sys-on-surface-variant);margin:0 0 12px;text-transform:uppercase;letter-spacing:.06em;font-size:11px;">Checkboxes</p>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <label class="usage-item">
+            <button class="ctrl-checkbox is-checked" onclick="this.classList.toggle('is-checked')">
+              <div class="ctrl-checkbox__box">
+                <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            Etsy
+          </label>
+          <label class="usage-item">
+            <button class="ctrl-checkbox" onclick="this.classList.toggle('is-checked')">
+              <div class="ctrl-checkbox__box">
+                <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            eBay
+          </label>
+          <label class="usage-item">
+            <button class="ctrl-checkbox is-checked" onclick="this.classList.toggle('is-checked')">
+              <div class="ctrl-checkbox__box">
+                <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </button>
+            Poshmark
+          </label>
+        </div>
+      </div>
+
+      <!-- Radio group -->
+      <div>
+        <p style="font:var(--type-label-lg);color:var(--sys-on-surface-variant);margin:0 0 12px;text-transform:uppercase;letter-spacing:.06em;font-size:11px;">Radio</p>
+        <div style="display:flex;flex-direction:column;gap:4px;" id="radio-group">
+          <label class="usage-item">
+            <button class="ctrl-radio is-checked" data-radio-group="plan" onclick="selectRadio(this)">
+              <div class="ctrl-radio__circle"><div class="ctrl-radio__dot"></div></div>
+            </button>
+            Basic plan
+          </label>
+          <label class="usage-item">
+            <button class="ctrl-radio" data-radio-group="plan" onclick="selectRadio(this)">
+              <div class="ctrl-radio__circle"><div class="ctrl-radio__dot"></div></div>
+            </button>
+            Pro plan
+          </label>
+          <label class="usage-item">
+            <button class="ctrl-radio" data-radio-group="plan" onclick="selectRadio(this)">
+              <div class="ctrl-radio__circle"><div class="ctrl-radio__dot"></div></div>
+            </button>
+            Enterprise plan
+          </label>
+        </div>
+      </div>
+
+      <!-- Switch group -->
+      <div>
+        <p style="font:var(--type-label-lg);color:var(--sys-on-surface-variant);margin:0 0 12px;text-transform:uppercase;letter-spacing:.06em;font-size:11px;">Switches</p>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <label class="usage-item">
+            <button class="ctrl-switch is-checked" onclick="this.classList.toggle('is-checked')">
+              <div class="ctrl-switch__track">
+                <div class="ctrl-switch__thumb">
+                  <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            Auto-sync listings
+          </label>
+          <label class="usage-item">
+            <button class="ctrl-switch" onclick="this.classList.toggle('is-checked')">
+              <div class="ctrl-switch__track">
+                <div class="ctrl-switch__thumb">
+                  <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            Email notifications
+          </label>
+          <label class="usage-item">
+            <button class="ctrl-switch is-checked" onclick="this.classList.toggle('is-checked')">
+              <div class="ctrl-switch__track">
+                <div class="ctrl-switch__thumb">
+                  <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            Price recommendations
+          </label>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+
+<script>
+  function selectRadio(clicked) {
+    const group = clicked.dataset.radioGroup;
+    document.querySelectorAll(`[data-radio-group="${group}"]`).forEach(btn => {
+      btn.classList.remove('is-checked');
+    });
+    clicked.classList.add('is-checked');
+  }
+</script>
+</body>
+</html>

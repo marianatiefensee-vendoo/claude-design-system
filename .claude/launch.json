@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "design-system",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "7890", "--directory", "vendoo-design-system/project"],
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "vendoo-design-system/project", "-p", "7890", "--no-clipboard"],
       "port": 7890
     }
   ]
