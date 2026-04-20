@@ -11,3 +11,4 @@ export { default as AppShell }           from './AppShell.jsx';
 export { default as Inventory }          from './Inventory.jsx';
 export { default as CreateListing }      from './CreateListing.jsx';
 export { Tag, StyleTag, AssistiveChip }  from './Tag.jsx';
+export { NavigationBar, NavBarItem, NavBarFAB } from './NavigationBar.jsx';
