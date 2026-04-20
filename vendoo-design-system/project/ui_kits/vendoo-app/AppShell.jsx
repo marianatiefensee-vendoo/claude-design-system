@@ -74,16 +74,16 @@ function NavItem({ icon, label, active, onClick }) {
   return (
     <button onClick={onClick} style={{
       border: "none", background: "transparent", cursor: "pointer",
-      display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
-      color: active ? "var(--sys-primary)" : "var(--sys-on-surface-variant)",
-      font: "500 11px/14px var(--font-sans)", letterSpacing: "0.4px",
+      display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+      color: active ? "var(--sys-secondary)" : "var(--sys-on-surface-variant)",
+      font: "500 12px/16px var(--font-sans)", letterSpacing: "0.5px",
     }}>
       <span style={{
-        width: 56, height: 28, borderRadius: 999,
-        background: active ? "var(--sys-primary-container)" : "transparent",
+        width: 64, height: 32, borderRadius: 16,
+        background: active ? "var(--sys-secondary-container)" : "transparent",
         display: "inline-flex", alignItems: "center", justifyContent: "center",
       }}>
-        <Icon name={icon} size={20} />
+        <Icon name={icon} size={24} color="var(--sys-on-surface)" />
       </span>
       {label}
     </button>
