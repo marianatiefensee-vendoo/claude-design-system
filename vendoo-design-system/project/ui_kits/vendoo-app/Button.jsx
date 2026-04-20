@@ -32,7 +32,7 @@ function Button({
   };
   const variants = {
     filled: { background: "var(--sys-primary)", color: "#fff" },
-    tonal:  { background: "var(--sys-primary-container)", color: "var(--sys-on-primary-container)" },
+    tonal:  { background: "var(--sys-secondary-container)", color: "var(--sys-on-secondary-container)" },
     outline:{ background: "transparent", color: "var(--sys-primary)", border: "1px solid var(--sys-outline)" },
     text:   { background: "transparent", color: "var(--sys-primary)" },
     danger: { background: "var(--sys-error)", color: "#fff" },
