@@ -16,16 +16,37 @@ Key: Qsnityd6jwT6R6iuL8lRPi
 Always pass: clientFrameworks=react, clientLanguages=javascript,css
 
 ## Component checklist
-When building a new component from Figma:
-1. get_design_context for the parent node only
+## When building a new component:
+1. get_design_context for the parent Figma node
 2. get_variable_defs once for token mapping
 3. Create ComponentName.jsx in ui_kits/vendoo-app/
-4. Add JSDoc comment with Figma node ID and prop types
+4. Add JSDoc with Figma node ID and prop types
 5. Export from ui_kits/vendoo-app/index.js
-6. add_code_connect_map (link Figma node to component file + props)
-7. Take ONE screenshot at scroll 0 to verify
+6. Take ONE screenshot to verify
+7. Commit
+
+## When building a screen:
+1. get_design_context for the screen Figma node
+2. Check CLAUDE.md component registry to resolve 
+   which React component maps to each Figma instance
+3. Create screens/ScreenName.jsx importing from index.js
+4. One screenshot to verify
+5. Commit
 
 ## Existing components
-- Button.jsx (node 1237:xxxx) — complete
-- SelectionControl.jsx (node 3001:4216) — complete
+- Icon.jsx — Icon sprite wrapper (`<Icon name="..." size={24} />`)
+- Button.jsx — Button (variant: filled/tonal/outline/text/danger, size: sm/md/lg), IconButton
+- Fields.jsx — Input, Textarea, PriceField, MarketplaceChip, MarketplaceLogo, Label, Helper
+- ListingSectionCard.jsx — expandable numbered section card (state: expanded/done/todo)
+- AppShell.jsx — AppShell (top bar + bottom nav frame), NavItem
+- Inventory.jsx — Inventory grid, ListingRow, StatusPill
+- CreateListing.jsx — multi-step listing flow (uses Fields + ListingSectionCard)
+- SelectionControl.jsx (node 3001:4216) — Checkbox, Radio, Switch
+
+## Screens built
+- Inventory view (via Inventory.jsx)
+- Create listing flow (via CreateListing.jsx)
+
+## Data
+- data.js — MARKETPLACES array (11 platforms), SAMPLE_LISTINGS array (6 listings)
     
