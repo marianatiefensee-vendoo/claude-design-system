@@ -116,3 +116,9 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 6. Extended FAB      → 668:1709
 7. Menu Item         → 758:4215
 8. Menu List Base    → 918:2598
+
+---
+
+## Deployment
+Live: https://claude-design-system.pages.dev/
+Local: http://localhost:7890/ui_kits/vendoo-app/index.html
