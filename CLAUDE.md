@@ -52,7 +52,7 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 6. Add JSDoc: Figma node ID, prop names + types, variant values
 7. Export from `ui_kits/vendoo-app/index.js`
 8. Add a card in `vendoo-design-system/project/index.html`
-9. Navigate preview server to `http://localhost:7890/ui_kits/vendoo-app/index.html`
+9. Create preview/components-{name}.html that loads the component via React+Babel
 10. Take ONE screenshot to verify
 11. Commit
 
