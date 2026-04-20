@@ -17,11 +17,13 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 
 ## Component checklist
 When building a new component from Figma:
-1. get_design_context for the parent node only (children are fetched as needed)
+1. get_design_context for the parent node only
 2. get_variable_defs once for token mapping
 3. Create ComponentName.jsx in ui_kits/vendoo-app/
-4. Create components-{name}.html in preview/ (copy structure from components-buttons.html)
-5. Take ONE screenshot at scroll 0 to verify, not three
+4. Add JSDoc comment with Figma node ID and prop types
+5. Export from ui_kits/vendoo-app/index.js
+6. add_code_connect_map (link Figma node to component file + props)
+7. Take ONE screenshot at scroll 0 to verify
 
 ## Existing components
 - Button.jsx (node 1237:xxxx) — complete
