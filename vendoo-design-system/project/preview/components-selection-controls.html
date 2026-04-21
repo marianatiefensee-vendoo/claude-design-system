@@ -6,10 +6,19 @@
 <link rel="stylesheet" href="../tokens.css">
 <style>
   /* ──────────────────────────────────────────────
-     Maps 1:1 to Figma "Selection Control" (node 3001:4216)
+     Maps 1:1 to Figma "Selection Control" (node 1237:5457)
      Uses design tokens exclusively
      Components: Checkbox · Radio · Switch
      Variants: Type × State (Enabled / Disabled) × Selected (True / False)
+
+     Change log vs previous version:
+       - Node ID updated (3001:4216 → 1237:5457, new Go Flow Design System file)
+       - Radio selected: dot → checkmark SVG (matches Figma)
+       - Switch disabled track: raw rgba → --state-surfaceVariant-10 / --state-onSurface-10
+       - Switch disabled/unchecked thumb: kept --sys-outline (was --sys-on-surface-variant)
+       - Switch disabled opacity: moved from outer button to thumb only (Figma pattern)
+       - Switch unchecked thumb: now shows small "x" icon (matches Figma node 550:23467)
+       - Checkbox checkmark stroke: hardcoded "white" → var(--sys-on-primary) (dark-mode safe)
      ────────────────────────────────────────────── */
 
   html, body {
@@ -99,6 +108,8 @@
     height: 24px;
     padding: 2px;
     box-sizing: border-box;
+    background: transparent;
+    border: none;
     cursor: pointer;
     flex-shrink: 0;
     transition: opacity 120ms linear;
@@ -134,6 +145,8 @@
     height: 24px;
     padding: 1px;
     box-sizing: border-box;
+    background: transparent;
+    border: none;
     cursor: pointer;
     flex-shrink: 0;
     transition: opacity 120ms linear;
@@ -157,15 +170,9 @@
     background: var(--sys-primary);
     border-color: var(--sys-primary);
   }
-  .ctrl-radio__dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: var(--sys-on-primary);
-    display: none;
-    flex-shrink: 0;
-  }
-  .ctrl-radio.is-checked .ctrl-radio__dot { display: block; }
+  /* Radio checked → checkmark SVG (matches Figma, replaces former dot) */
+  .ctrl-radio__check { display: none; }
+  .ctrl-radio.is-checked .ctrl-radio__check { display: block; }
 
   /* ────────────── Switch ──────────────────────────── */
   .ctrl-switch {
@@ -176,9 +183,8 @@
     padding: 0;
     cursor: pointer;
     flex-shrink: 0;
-    transition: opacity 120ms linear;
   }
-  .ctrl-switch:disabled { opacity: .38; cursor: not-allowed; }
+  .ctrl-switch:disabled { cursor: not-allowed; }
 
   .ctrl-switch__track {
     position: relative;
@@ -202,11 +208,11 @@
     justify-content: flex-end;
   }
   .ctrl-switch:disabled .ctrl-switch__track {
-    background: rgba(231,223,244,0.10);
-    border-color: rgba(29,26,36,0.10);
+    background: var(--state-surfaceVariant-10);
+    border-color: var(--state-onSurface-10);
   }
   .ctrl-switch.is-checked:disabled .ctrl-switch__track {
-    background: rgba(29,26,36,0.10);
+    background: var(--state-onSurface-10);
     border-color: transparent;
   }
 
@@ -219,23 +225,25 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: width 150ms ease, height 150ms ease, background 150ms ease;
+    transition: width 150ms ease, height 150ms ease, background 150ms ease, opacity 120ms linear;
   }
   .ctrl-switch.is-checked .ctrl-switch__thumb {
     width: 24px;
     height: 24px;
     background: var(--sys-on-primary);
   }
-  .ctrl-switch:disabled .ctrl-switch__thumb {
-    background: var(--sys-on-surface-variant);
-  }
+  /* Disabled: opacity on thumb only (Figma pattern) — track uses explicit disabled tokens */
+  .ctrl-switch:disabled .ctrl-switch__thumb { opacity: .38; }
   .ctrl-switch.is-checked:disabled .ctrl-switch__thumb {
     background: var(--sys-surface);
   }
-  .ctrl-switch__icon { display: none; }
-  .ctrl-switch.is-checked .ctrl-switch__icon { display: block; }
+  /* Thumb icons: "x" when off, checkmark when on */
+  .ctrl-switch__icon-on { display: none; }
+  .ctrl-switch__icon-off { display: inline-flex; align-items: center; justify-content: center; }
+  .ctrl-switch.is-checked .ctrl-switch__icon-off { display: none; }
+  .ctrl-switch.is-checked .ctrl-switch__icon-on { display: inline-flex; align-items: center; justify-content: center; }
 
-  /* ── hover state layers ──────────────────────────── */
+  /* ── hover state layers (preview-only demonstration) ──────────── */
   .ctrl-checkbox:not(:disabled):hover .ctrl-checkbox__box {
     box-shadow: 0 0 0 10px var(--state-primary-08, rgba(74,0,191,0.08));
   }
@@ -251,7 +259,7 @@
 <div class="page">
 
   <h1 class="doc-h1">Selection Controls</h1>
-  <p class="doc-sub">Checkboxes, radio buttons, and switches for toggling states. Maps 1:1 to Figma node 3001:4216 — Go Flow Design System.</p>
+  <p class="doc-sub">Checkboxes, radio buttons, and switches for toggling states. Maps 1:1 to Figma node 1237:5457 — Go Flow Design System.</p>
 
   <!-- ── Checkbox ─────────────────────────────────── -->
   <section class="section">
@@ -259,51 +267,45 @@
     <p class="section-sub">24 × 24 hit area · 20 × 20 visual box · radius 5 · border 1.25px outline</p>
 
     <div class="matrix">
-      <!-- header row -->
       <div class="cell col-head row-label">State</div>
       <div class="cell col-head">Enabled<br>Unselected</div>
       <div class="cell col-head">Enabled<br>Selected</div>
       <div class="cell col-head">Disabled<br>Unselected</div>
       <div class="cell col-head">Disabled<br>Selected</div>
 
-      <!-- row -->
       <div class="cell row-label">Checkbox</div>
 
-      <!-- Enabled / Unselected -->
       <div class="cell">
         <button class="ctrl-checkbox" onclick="this.classList.toggle('is-checked')">
           <div class="ctrl-checkbox__box">
             <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
-              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </button>
       </div>
 
-      <!-- Enabled / Selected -->
       <div class="cell">
         <button class="ctrl-checkbox is-checked" onclick="this.classList.toggle('is-checked')">
           <div class="ctrl-checkbox__box">
             <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
-              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </button>
       </div>
 
-      <!-- Disabled / Unselected -->
       <div class="cell">
         <button class="ctrl-checkbox" disabled>
           <div class="ctrl-checkbox__box"></div>
         </button>
       </div>
 
-      <!-- Disabled / Selected -->
       <div class="cell">
         <button class="ctrl-checkbox is-checked" disabled>
           <div class="ctrl-checkbox__box">
             <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
-              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         </button>
@@ -314,51 +316,53 @@
   <!-- ── Radio ────────────────────────────────────── -->
   <section class="section">
     <h2 class="section-h2">Radio</h2>
-    <p class="section-sub">24 × 24 hit area · 22 × 22 visual circle · radius circular · border 1.5px on-surface-variant</p>
+    <p class="section-sub">24 × 24 hit area · 22 × 22 visual circle · radius circular · border 1.5px on-surface-variant · selected = checkmark (not a dot)</p>
 
     <div class="matrix">
-      <!-- header row -->
       <div class="cell col-head row-label">State</div>
       <div class="cell col-head">Enabled<br>Unselected</div>
       <div class="cell col-head">Enabled<br>Selected</div>
       <div class="cell col-head">Disabled<br>Unselected</div>
       <div class="cell col-head">Disabled<br>Selected</div>
 
-      <!-- row -->
       <div class="cell row-label">Radio</div>
 
-      <!-- Enabled / Unselected -->
       <div class="cell">
         <button class="ctrl-radio" onclick="this.classList.toggle('is-checked')">
           <div class="ctrl-radio__circle">
-            <div class="ctrl-radio__dot"></div>
+            <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </button>
       </div>
 
-      <!-- Enabled / Selected -->
       <div class="cell">
         <button class="ctrl-radio is-checked" onclick="this.classList.toggle('is-checked')">
           <div class="ctrl-radio__circle">
-            <div class="ctrl-radio__dot"></div>
+            <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </button>
       </div>
 
-      <!-- Disabled / Unselected -->
       <div class="cell">
         <button class="ctrl-radio" disabled>
           <div class="ctrl-radio__circle">
-            <div class="ctrl-radio__dot"></div>
+            <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </button>
       </div>
 
-      <!-- Disabled / Selected -->
       <div class="cell">
         <button class="ctrl-radio is-checked" disabled>
           <div class="ctrl-radio__circle">
-            <div class="ctrl-radio__dot"></div>
+            <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+              <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
         </button>
       </div>
@@ -368,61 +372,71 @@
   <!-- ── Switch ───────────────────────────────────── -->
   <section class="section">
     <h2 class="section-h2">Switch</h2>
-    <p class="section-sub">52 × 32 pill track · thumb 16px (off) → 24px (on) · border 2px outline when off</p>
+    <p class="section-sub">52 × 32 pill track · thumb 16px (off) → 24px (on) · "x" icon when off, checkmark when on · border 2px outline when off</p>
 
     <div class="matrix">
-      <!-- header row -->
       <div class="cell col-head row-label">State</div>
       <div class="cell col-head">Enabled<br>Off</div>
       <div class="cell col-head">Enabled<br>On</div>
       <div class="cell col-head">Disabled<br>Off</div>
       <div class="cell col-head">Disabled<br>On</div>
 
-      <!-- row -->
       <div class="cell row-label">Switch</div>
 
-      <!-- Enabled / Off -->
       <div class="cell">
         <button class="ctrl-switch" onclick="this.classList.toggle('is-checked')">
           <div class="ctrl-switch__track">
             <div class="ctrl-switch__thumb">
-              <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                <use href="../assets/icons.svg#x"/>
+              </svg>
+              <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
         </button>
       </div>
 
-      <!-- Enabled / On -->
       <div class="cell">
         <button class="ctrl-switch is-checked" onclick="this.classList.toggle('is-checked')">
           <div class="ctrl-switch__track">
             <div class="ctrl-switch__thumb">
-              <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                <use href="../assets/icons.svg#x"/>
+              </svg>
+              <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
         </button>
       </div>
 
-      <!-- Disabled / Off -->
       <div class="cell">
         <button class="ctrl-switch" disabled>
           <div class="ctrl-switch__track">
-            <div class="ctrl-switch__thumb"></div>
+            <div class="ctrl-switch__thumb">
+              <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                <use href="../assets/icons.svg#x"/>
+              </svg>
+              <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
           </div>
         </button>
       </div>
 
-      <!-- Disabled / On -->
       <div class="cell">
         <button class="ctrl-switch is-checked" disabled>
           <div class="ctrl-switch__track">
             <div class="ctrl-switch__thumb">
-              <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M2 6L4.5 8.5L10 3" stroke="rgba(29,26,36,0.38)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                <use href="../assets/icons.svg#x"/>
+              </svg>
+              <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
           </div>
@@ -446,7 +460,7 @@
             <button class="ctrl-checkbox is-checked" onclick="this.classList.toggle('is-checked')">
               <div class="ctrl-checkbox__box">
                 <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
-                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
             </button>
@@ -456,7 +470,7 @@
             <button class="ctrl-checkbox" onclick="this.classList.toggle('is-checked')">
               <div class="ctrl-checkbox__box">
                 <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
-                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
             </button>
@@ -466,7 +480,7 @@
             <button class="ctrl-checkbox is-checked" onclick="this.classList.toggle('is-checked')">
               <div class="ctrl-checkbox__box">
                 <svg class="ctrl-checkbox__check" width="13" height="10" viewBox="0 0 13 10" fill="none">
-                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="white" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </div>
             </button>
@@ -481,19 +495,31 @@
         <div style="display:flex;flex-direction:column;gap:4px;" id="radio-group">
           <label class="usage-item">
             <button class="ctrl-radio is-checked" data-radio-group="plan" onclick="selectRadio(this)">
-              <div class="ctrl-radio__circle"><div class="ctrl-radio__dot"></div></div>
+              <div class="ctrl-radio__circle">
+                <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </button>
             Basic plan
           </label>
           <label class="usage-item">
             <button class="ctrl-radio" data-radio-group="plan" onclick="selectRadio(this)">
-              <div class="ctrl-radio__circle"><div class="ctrl-radio__dot"></div></div>
+              <div class="ctrl-radio__circle">
+                <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </button>
             Pro plan
           </label>
           <label class="usage-item">
             <button class="ctrl-radio" data-radio-group="plan" onclick="selectRadio(this)">
-              <div class="ctrl-radio__circle"><div class="ctrl-radio__dot"></div></div>
+              <div class="ctrl-radio__circle">
+                <svg class="ctrl-radio__check" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                  <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-on-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
             </button>
             Enterprise plan
           </label>
@@ -508,8 +534,11 @@
             <button class="ctrl-switch is-checked" onclick="this.classList.toggle('is-checked')">
               <div class="ctrl-switch__track">
                 <div class="ctrl-switch__thumb">
-                  <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                    <use href="../assets/icons.svg#x"/>
+                  </svg>
+                  <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                    <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
               </div>
@@ -520,8 +549,11 @@
             <button class="ctrl-switch" onclick="this.classList.toggle('is-checked')">
               <div class="ctrl-switch__track">
                 <div class="ctrl-switch__thumb">
-                  <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                    <use href="../assets/icons.svg#x"/>
+                  </svg>
+                  <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                    <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
               </div>
@@ -532,8 +564,11 @@
             <button class="ctrl-switch is-checked" onclick="this.classList.toggle('is-checked')">
               <div class="ctrl-switch__track">
                 <div class="ctrl-switch__thumb">
-                  <svg class="ctrl-switch__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M2 6L4.5 8.5L10 3" stroke="var(--sys-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <svg class="ctrl-switch__icon-off" width="10" height="10" viewBox="0 0 24 24" style="color:var(--sys-on-surface); fill:currentColor;">
+                    <use href="../assets/icons.svg#x"/>
+                  </svg>
+                  <svg class="ctrl-switch__icon-on" width="14" height="11" viewBox="0 0 13 10" fill="none">
+                    <path d="M1.5 5L4.5 8.5L11.5 1.5" stroke="var(--sys-primary)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </div>
               </div>
