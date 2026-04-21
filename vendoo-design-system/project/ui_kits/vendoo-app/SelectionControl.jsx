@@ -1,6 +1,6 @@
 // SelectionControl — Checkbox / Radio / Switch
-// Maps to Figma "Selection Control" (node 3001:4216)
-// Variants: type × state × selected
+// Figma: Go Flow Design System → node 1237:5457 ("Selection Control")
+// Variants: type × state × selected (12 total — no hover/focus/loading defined)
 
 // ─── Checkbox ────────────────────────────────────────────────────────────────
 function Checkbox({ checked = false, disabled = false, onChange, style = {}, ...rest }) {
@@ -11,20 +11,20 @@ function Checkbox({ checked = false, disabled = false, onChange, style = {}, ...
       disabled={disabled}
       onClick={disabled ? undefined : onChange}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: 24,
         height: 24,
         padding: 2,
-        background: "transparent",
-        border: "none",
+        background: 'transparent',
+        border: 'none',
         borderRadius: 0,
-        boxSizing: "border-box",
-        cursor: disabled ? "not-allowed" : "pointer",
+        boxSizing: 'border-box',
+        cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.38 : 1,
         flexShrink: 0,
-        transition: "opacity 120ms linear",
+        transition: 'opacity 120ms linear',
         ...style,
       }}
       {...rest}
@@ -34,22 +34,22 @@ function Checkbox({ checked = false, disabled = false, onChange, style = {}, ...
           width: 20,
           height: 20,
           borderRadius: 5,
-          boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          boxSizing: 'border-box',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           flexShrink: 0,
-          transition: "background 150ms ease, border-color 150ms ease",
+          transition: 'background 150ms ease, border-color 150ms ease',
           ...(checked
-            ? { background: "var(--sys-primary)", border: "none" }
-            : { border: "1.25px solid var(--sys-outline)", background: "transparent" }),
+            ? { background: 'var(--sys-primary)', border: 'none' }
+            : { border: '1.25px solid var(--sys-outline)', background: 'transparent' }),
         }}
       >
         {checked && (
           <svg width="13" height="10" viewBox="0 0 13 10" fill="none">
             <path
               d="M1.5 5L4.5 8.5L11.5 1.5"
-              stroke="white"
+              stroke="var(--sys-on-primary)"
               strokeWidth="1.75"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -70,19 +70,19 @@ function Radio({ checked = false, disabled = false, onChange, style = {}, ...res
       disabled={disabled}
       onClick={disabled ? undefined : onChange}
       style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         width: 24,
         height: 24,
         padding: 1,
-        background: "transparent",
-        border: "none",
-        boxSizing: "border-box",
-        cursor: disabled ? "not-allowed" : "pointer",
+        background: 'transparent',
+        border: 'none',
+        boxSizing: 'border-box',
+        cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.38 : 1,
         flexShrink: 0,
-        transition: "opacity 120ms linear",
+        transition: 'opacity 120ms linear',
         ...style,
       }}
       {...rest}
@@ -92,27 +92,27 @@ function Radio({ checked = false, disabled = false, onChange, style = {}, ...res
           width: 22,
           height: 22,
           borderRadius: 999,
-          boxSizing: "border-box",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          boxSizing: 'border-box',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           flexShrink: 0,
-          transition: "background 150ms ease, border-color 150ms ease",
+          transition: 'background 150ms ease, border-color 150ms ease',
           ...(checked
-            ? { background: "var(--sys-primary)", border: "none" }
-            : { border: "1.5px solid var(--sys-on-surface-variant)", background: "transparent" }),
+            ? { background: 'var(--sys-primary)', border: 'none' }
+            : { border: '1.5px solid var(--sys-on-surface-variant)', background: 'transparent' }),
         }}
       >
         {checked && (
-          <div
-            style={{
-              width: 10,
-              height: 10,
-              borderRadius: 999,
-              background: "var(--sys-on-primary)",
-              flexShrink: 0,
-            }}
-          />
+          <svg width="14" height="11" viewBox="0 0 13 10" fill="none">
+            <path
+              d="M1.5 5L4.5 8.5L11.5 1.5"
+              stroke="var(--sys-on-primary)"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         )}
       </div>
     </button>
@@ -122,38 +122,73 @@ function Radio({ checked = false, disabled = false, onChange, style = {}, ...res
 // ─── Switch ──────────────────────────────────────────────────────────────────
 function Switch({ checked = false, disabled = false, onChange, style = {}, ...rest }) {
   const trackBase = {
-    position: "relative",
-    display: "inline-flex",
-    alignItems: "center",
+    position: 'relative',
+    display: 'inline-flex',
+    alignItems: 'center',
     width: 52,
     height: 32,
     borderRadius: 999,
-    boxSizing: "border-box",
+    boxSizing: 'border-box',
     flexShrink: 0,
-    transition: "background 150ms ease, border-color 150ms ease",
+    transition: 'background 150ms ease, border-color 150ms ease',
   };
 
-  const trackStyles = disabled
-    ? checked
-      ? { ...trackBase, background: "rgba(29,26,36,0.10)", border: "2px solid transparent", justifyContent: "flex-end", padding: "2px 4px" }
-      : { ...trackBase, background: "rgba(231,223,244,0.10)", border: "2px solid rgba(29,26,36,0.10)", justifyContent: "flex-start", padding: 4 }
-    : checked
-      ? { ...trackBase, background: "var(--sys-primary)", border: "2px solid transparent", justifyContent: "flex-end", padding: "2px 4px" }
-      : { ...trackBase, background: "var(--sys-surface-container-highest)", border: "2px solid var(--sys-outline)", justifyContent: "flex-start", padding: 4 };
+  // Track color per state — all from tokens (replaces old raw rgba)
+  let trackStyle;
+  if (disabled && checked) {
+    trackStyle = {
+      ...trackBase,
+      background: 'var(--state-onSurface-10)',
+      border: '2px solid transparent',
+      justifyContent: 'flex-end',
+      padding: '2px 4px',
+    };
+  } else if (disabled && !checked) {
+    trackStyle = {
+      ...trackBase,
+      background: 'var(--state-surfaceVariant-10)',
+      border: '2px solid var(--state-onSurface-10)',
+      justifyContent: 'flex-start',
+      padding: 4,
+    };
+  } else if (checked) {
+    trackStyle = {
+      ...trackBase,
+      background: 'var(--sys-primary)',
+      border: '2px solid transparent',
+      justifyContent: 'flex-end',
+      padding: '2px 4px',
+    };
+  } else {
+    trackStyle = {
+      ...trackBase,
+      background: 'var(--sys-surface-container-highest)',
+      border: '2px solid var(--sys-outline)',
+      justifyContent: 'flex-start',
+      padding: 4,
+    };
+  }
 
+  // Thumb: 24 when on, 16 when off; color depends on checked × disabled.
+  // Opacity 0.38 applies to the thumb only (Figma pattern), not the outer button.
   const thumbSize = checked ? 24 : 16;
+  let thumbBg;
+  if (disabled && checked) thumbBg = 'var(--sys-surface)';
+  else if (disabled && !checked) thumbBg = 'var(--sys-outline)';
+  else if (checked) thumbBg = 'var(--sys-on-primary)';
+  else thumbBg = 'var(--sys-outline)';
+
   const thumbStyle = {
     width: thumbSize,
     height: thumbSize,
     borderRadius: 999,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     flexShrink: 0,
-    transition: "width 150ms ease, height 150ms ease, background 150ms ease",
-    background: disabled
-      ? checked ? "var(--sys-surface)" : "var(--sys-on-surface-variant)"
-      : checked ? "var(--sys-on-primary)" : "var(--sys-outline)",
+    background: thumbBg,
+    opacity: disabled ? 0.38 : 1,
+    transition: 'width 150ms ease, height 150ms ease, background 150ms ease, opacity 120ms linear',
   };
 
   return (
@@ -163,28 +198,30 @@ function Switch({ checked = false, disabled = false, onChange, style = {}, ...re
       disabled={disabled}
       onClick={disabled ? undefined : onChange}
       style={{
-        background: "transparent",
-        border: "none",
+        background: 'transparent',
+        border: 'none',
         padding: 0,
-        cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.38 : 1,
-        transition: "opacity 120ms linear",
+        cursor: disabled ? 'not-allowed' : 'pointer',
         ...style,
       }}
       {...rest}
     >
-      <div style={trackStyles}>
+      <div style={trackStyle}>
         <div style={thumbStyle}>
-          {checked && (
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          {checked ? (
+            // Check mark (primary on white thumb when enabled; inherits thumb opacity when disabled)
+            <svg width="14" height="11" viewBox="0 0 13 10" fill="none">
               <path
-                d="M2 6L4.5 8.5L10 3"
-                stroke={disabled ? "rgba(29,26,36,0.38)" : "var(--sys-primary)"}
-                strokeWidth="1.5"
+                d="M1.5 5L4.5 8.5L11.5 1.5"
+                stroke="var(--sys-primary)"
+                strokeWidth="1.75"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
+          ) : (
+            // "x" icon (on-surface) per Figma node 550:23467
+            <Icon name="x" size={10} color="var(--sys-on-surface)" />
           )}
         </div>
       </div>
