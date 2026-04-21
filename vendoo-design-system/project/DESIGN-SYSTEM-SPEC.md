@@ -265,19 +265,33 @@ For surfaces, use on-surface (#1d1a24) as the state layer color.
 ## 10. Component-specific specs
 
 ### Button
+Figma: Go Flow Design System → node 1219:5473
+
 ```
-Filled:   bg=--sys-primary, text=--sys-on-primary, radius=4px
-Tonal:    bg=--sys-secondary-container, text=--sys-on-secondary-container, radius=4px
-Outline:  bg=transparent, border=1px --sys-outline, text=--sys-primary, radius=4px
-Text:     bg=transparent, text=--sys-primary, radius=4px
-Danger:   bg=--sys-error, text=--sys-on-error, radius=4px
+Variants (4):
+  Filled:   bg=--sys-primary, text=--sys-on-primary
+  Tonal:    bg=--sys-secondary-container, text=--sys-on-secondary-container
+  Outline:  bg=transparent, stroke=1px --sys-outline-variant (inside), text=--sys-on-surface-variant
+  Text:     bg=transparent, text=--sys-primary
 
-Size md:  padding=12px 20px, font=--type-label-lg (14px/20px 0.1px)
-Size sm:  padding=8px 14px, font=--type-label-md (12px/16px 0.5px)
-Size lg:  padding=16px 24px, font=16px/24px 500 0.1px
+Sizes (2):
+  md: padding=16px 24px, font=label-large (14/20 0.1px Lexend Medium)
+  sm: padding=10px 16px, font=label-large (14/20 0.1px Lexend Medium)
 
-Icon size: sm=16px, md/lg=18px
-Gap between icon and label: 8px
+Shared:
+  border-radius: --radius-alias-button (4px)
+  gap (icon↔label): 10px
+  label wrapper inline padding: 4px
+  icons: always 20×20, currentColor
+
+States:
+  Hover:    state-layer overlay at 0.08 on the variant's "on" color
+            (filled→onPrimary, tonal→onSecondaryContainer,
+             outline→onSurface, text→primary)
+  Focus:    same overlay at 0.10 (replaces hover when both active)
+  Loading:  spinner (currentColor) replaces content; variant bg/border preserved
+  Disabled: outer bg=--state-onSurface-10, fg=--sys-on-surface,
+            inner content opacity=0.38; outline variant keeps its stroke
 ```
 
 ### IconButton
