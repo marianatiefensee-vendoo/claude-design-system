@@ -86,7 +86,7 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 | `IconButton.jsx` | `IconButton` (standalone) | `1227:5422` | complete |
 | `SelectionControl.jsx` | `SelectionControl` | `1237:5457` | complete |
 | `Fields.jsx` | `Input`, `Textarea`, `PriceField`, `MarketplaceChip`, `MarketplaceLogo`, `Label`, `Helper` | `3001:4217` | complete |
-| `Field.jsx` | `Field` | `1243:5664` | complete |
+| `Field.jsx` | `Field`, `FieldSelect` | `1243:5664` (Field), `1243:5824` (Select) | complete |
 | `ListingSectionCard.jsx` | `ListingSectionCard` | — | complete |
 | `AppShell.jsx` | `AppShell`, `NavItem` | `555:32859` | complete |
 | `Inventory.jsx` | `Inventory`, `ListingRow`, `StatusPill` | — | complete |
@@ -95,7 +95,8 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 **Prop reference — Button:** `variant` filled/tonal/outline/text/danger · `size` sm/md/lg · `icon` `trailingIcon` · `disabled`
 **Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` (string name or ReactNode) · `disabled` · `title` (tooltip + aria-label) · `onClick`
 **Prop reference — Checkbox/Radio/Switch:** `checked` · `disabled` · `onChange` · `style`
-**Prop reference — Field:** `state` enabled/focused/filled/error/disabled · `label` `helper` `error`
+**Prop reference — Field:** `state` enabled/focused/filled/validated/long-text/disabled/error · `label` · `value` · `placeholder` · `supportingText` · `showTag` · `tag` {icon, label} · `showAssistiveChip` · `assistiveChip` {icon, label, onClick} · `showSupportingText` · `clearIcon` · `onChange` · `onClear`
+**Prop reference — FieldSelect:** `state` enabled/focused/filled/disabled · `label` · `value` · `placeholder` · `supportingText` · `showTag` · `tag` · `showAssistiveChip` · `assistiveChip` · `showSupportingText` · `onClick`
 
 ---
 

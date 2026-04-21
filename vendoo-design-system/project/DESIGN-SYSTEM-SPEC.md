@@ -322,19 +322,58 @@ States:
 
 No Loading state (IconButton is atomic — no label to swap with a spinner).
 
-### Field / Input
+### Field
+Figma: Go Flow Design System → node 1243:5664
+
 ```
-Height:          56px (md), 48px (sm)
-Border rest:     1px solid var(--sys-outline)
-Border focused:  2px solid var(--sys-primary) — padding shrinks by 1px
-Border error:    2px solid var(--sys-error)
-Background:      var(--sys-surface)
-Text:            var(--sys-on-surface), --type-body-lg (16px/24px 0.5px)
-Label:           var(--sys-on-surface-variant), --type-label-md (12px 0.5px)
-Helper:          var(--sys-on-surface-variant), --type-body-sm (12px/16px 0.4px)
-Error helper:    var(--sys-error), same size
-Radius:          4px
-Padding:         14px 16px (rest), 13px 15px (focused/error, -1px for border)
+Height:          56px (fixed)
+Border rest:     1px solid --sys-outline
+Border focused:  1px solid --sys-primary
+Border filled:   1px solid --sys-primary   (just-entered emphasis)
+Border validated: 1px solid --sys-outline  (settled with value)
+Border long-text: 1px solid --sys-outline  (value overflows / wraps)
+Border error:    1px solid --sys-error
+Background:      transparent
+Radius:          --radius-alias-field (4px)
+Padding:         left 16, right 4 (with trailing icon) / 16 (without)
+Input text:      body/large — Lexend 16/24 0.5px, --sys-on-surface
+Placeholder:     body/large, --sys-outline
+Label:           title/medium — Lexend 500 16/24 0.15px
+                 Color --sys-on-surface-variant (or --sys-error in error state)
+Disabled:        opacity 0.38 on the whole component
+
+Optional Title row slots:
+  Tag chip:         inline after label. bg --sys-primary-fixed / text --sys-on-primary-fixed
+                    (bg --sys-surface-dim / text --sys-on-surface-variant in error).
+                    11/14 Lexend, 12px leading icon, 8px radius (--radius-alias-chip),
+                    4px horizontal padding, 20px min-height. Hidden in Disabled.
+  AssistiveChip:    right-aligned. 32h, 18px icon + 12/16 Lexend Medium 0.5px,
+                    --sys-primary color, hover --state-primary-08. 8px radius.
+                    Hidden in Disabled + Error.
+
+Supporting text (optional, below the box):
+  utility/label/small-compact — Lexend 11/14 regular
+  Color: --sys-on-surface-variant, or --sys-error in error state (accessibility override;
+         Figma shows neutral but we keep red for clarity).
+  Padding: 4 top / 16 horizontal.
+
+Trailing clear icon (Filled + Error only):
+  40×40 circular hit area. Icon 24px, sprite name via `clearIcon` prop (default "x").
+  Icon color --sys-on-surface-variant (or --sys-error in error state).
+  Hover bg: --state-onSurface-08.
+```
+
+### FieldSelect
+Figma: Go Flow Design System → node 1243:5824
+
+```
+Same anatomy as Field with these differences:
+  States:          enabled / focused / filled / disabled (no validated/long-text/error)
+  Trailing:        fixed chevron_down icon, rotates 180° when focused or filled
+  Border focused:  1px --sys-primary
+  Border filled:   1px --sys-primary  (same as focused — treated as "open" state)
+  Border disabled: 1px --sys-outline + opacity 0.38
+  Interaction:     whole box is a <button> — onClick opens dropdown (caller wires list).
 ```
 
 ### Selection control (checkbox, radio, switch)
