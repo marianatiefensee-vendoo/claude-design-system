@@ -131,5 +131,6 @@ Live: https://claude-design-system.pages.dev/
 Local: http://localhost:7890/ui_kits/vendoo-app/index.html
 
 ## Git workflow
-- Commit directly to main. Do NOT create pull requests. Do NOT create branches.
-- After committing, run: git push origin main
+- Create a feature branch for each task (e.g. `git checkout -b feat/component-name`).
+- Commit to the branch, then open a pull request against main.
+- After pushing the branch, run: `gh pr create` to open the PR.
