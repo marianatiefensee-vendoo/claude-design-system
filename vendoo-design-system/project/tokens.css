@@ -138,7 +138,7 @@
      ═════════════════════════════════════════════════════════ */
 
   --sys-background: #fdf7ff;
-  --sys-error: #ba1a1a;
+  --sys-error: #BA2644;  /* aligned with Figma Go Flow Design System error/600 */
   --sys-error-container: #ffdad6;
   --sys-inverse-on-surface: #f5eefc;
   --sys-inverse-primary: #cebdff;
