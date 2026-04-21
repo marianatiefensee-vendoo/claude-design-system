@@ -93,7 +93,7 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 | `CreateListing.jsx` | `CreateListing` | — | complete |
 
 **Prop reference — Button:** `variant` filled/tonal/outline/text/danger · `size` sm/md/lg · `icon` `trailingIcon` · `disabled`
-**Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` · `disabled`
+**Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` (string name or ReactNode) · `disabled` · `title` (tooltip + aria-label) · `onClick`
 **Prop reference — SelectionControl:** `type` checkbox/radio/switch · `state` enabled/disabled · `selected`
 **Prop reference — Field:** `state` enabled/focused/filled/error/disabled · `label` `helper` `error`
 
