@@ -507,3 +507,33 @@ export { default as ComponentName } from './ComponentName.jsx';
 // or for named exports:
 export { ComponentA, ComponentB } from './File.jsx';
 ```
+
+---
+
+## 14. Selection Controls (Checkbox, Radio, Switch)
+Figma: Go Flow Design System → node 1237:5457
+
+Shared API: `checked` · `disabled` · `onChange` · `style`
+No hover / focus / loading states defined.
+
+**Checkbox** (24×24 hit / 20×20 visual)
+- radius: 5px
+- unchecked: 1.25px `--sys-outline` stroke, transparent bg
+- checked: `--sys-primary` bg, `--sys-on-primary` checkmark (13×10 SVG)
+- disabled: opacity 0.38 on outer button
+
+**Radio** (24×24 hit / 22×22 visual)
+- radius: circular
+- unchecked: 1.5px `--sys-on-surface-variant` stroke, transparent bg
+- checked: `--sys-primary` bg, `--sys-on-primary` checkmark (14×11 SVG)
+- Note: Figma uses a checkmark, not a dot
+- disabled: opacity 0.38 on outer button
+
+**Switch** (52×32 track)
+- radius: circular track and thumb
+- Enabled/unchecked:  track=`--sys-surface-container-highest` + 2px `--sys-outline` border; thumb=16×16 `--sys-outline`, `x` icon (`--sys-on-surface`, size 10)
+- Enabled/checked:    track=`--sys-primary`, no border; thumb=24×24 `--sys-on-primary`, checkmark (`--sys-primary`, 14×11)
+- Disabled/unchecked: track=`--state-surfaceVariant-10` + 2px `--state-onSurface-10` border; thumb same as enabled/unchecked, opacity 0.38 on thumb only
+- Disabled/checked:   track=`--state-onSurface-10`, no border; thumb=24×24 `--sys-surface` + checkmark, opacity 0.38 on thumb only
+
+Opacity 0.38 applied to **thumb only** on Switch (not outer button), so the track retains its explicit disabled background per Figma.
