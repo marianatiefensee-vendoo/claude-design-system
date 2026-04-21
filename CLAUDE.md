@@ -81,7 +81,7 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 
 | File | Exports | Figma node | Status |
 |---|---|---|---|
-| `Icon.jsx` | `Icon` | — | complete |
+| `Icon.jsx` | `Icon` | `1188:3323` (Icons frame) | complete |
 | `Button.jsx` | `Button`, `IconButton` | `1219:5473` | complete |
 | `IconButton.jsx` | `IconButton` (standalone) | `1227:5422` | complete |
 | `SelectionControl.jsx` | `SelectionControl` | `1237:5457` | complete |
@@ -91,6 +91,10 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 | `AppShell.jsx` | `AppShell`, `NavItem` | `555:32859` | complete |
 | `Inventory.jsx` | `Inventory`, `ListingRow`, `StatusPill` | — | complete |
 | `CreateListing.jsx` | `CreateListing` | — | complete |
+
+**Prop reference — Icon:** `name` · `size` (default 24) · `color` (default currentColor) · `title` · `aria-label` · `spritePath` (override per-instance, or use `window.VENDOO_ICON_SPRITE` globally)
+
+Canonical icon list: `window.VENDOO_ICON_NAMES` (loaded from `assets/icons-manifest.js`; also accessible as `Icon.names`). 116 icons mirrored from Figma node 1188:3323 and `assets/icons.svg`.
 
 **Prop reference — Button:** `variant` filled/tonal/outline/text/danger · `size` sm/md/lg · `icon` `trailingIcon` · `disabled`
 **Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` (string name or ReactNode) · `disabled` · `title` (tooltip + aria-label) · `onClick`
