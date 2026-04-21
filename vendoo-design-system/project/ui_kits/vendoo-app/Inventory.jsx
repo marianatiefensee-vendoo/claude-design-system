@@ -60,7 +60,7 @@ function Inventory({ onOpen, onCreate }) {
           }}>
             No drafts yet. Start a listing to see it here.
             <div style={{ marginTop: 12 }}>
-              <Button variant="tonal" size="sm" icon="plus" onClick={onCreate}>Create a listing</Button>
+              <Button variant="tonal" size="sm" leadingIcon="plus" onClick={onCreate}>Create a listing</Button>
             </div>
           </div>
         )}
