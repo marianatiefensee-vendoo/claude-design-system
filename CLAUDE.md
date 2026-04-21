@@ -92,8 +92,8 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 | `Inventory.jsx` | `Inventory`, `ListingRow`, `StatusPill` | — | complete |
 | `CreateListing.jsx` | `CreateListing` | — | complete |
 
-**Prop reference — Button:** `variant` filled/tonal/outline/text · `size` sm/md · `leadingIcon` `trailingIcon` · `showLeadingIcon` `showTrailingIcon` · `loading` · `disabled`
-**Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` · `disabled`
+**Prop reference — Button:** `variant` filled/tonal/outline/text/danger · `size` sm/md/lg · `icon` `trailingIcon` · `disabled`
+**Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` (string name or ReactNode) · `disabled` · `title` (tooltip + aria-label) · `onClick`
 **Prop reference — SelectionControl:** `type` checkbox/radio/switch · `state` enabled/disabled · `selected`
 **Prop reference — Field:** `state` enabled/focused/filled/error/disabled · `label` `helper` `error`
 

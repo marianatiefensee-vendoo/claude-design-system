@@ -295,14 +295,32 @@ States:
 ```
 
 ### IconButton
-```
-Size standard: 48×48px, icon=24px
-Size large:    56×56px, icon=24px
-Border-radius: 999px (circular)
-Types: standard (transparent bg), tonal (secondary-container bg),
-       primary (primary bg), outline (1px outline border)
-Icon color: always explicit, matches on-color for filled types
-```
+Figma: Go Flow Design System → node 1227:5422
+
+Types (4):
+  Standard: bg=transparent, fg=--sys-on-surface-variant (transparent until hovered)
+  Tonal:    bg=--sys-secondary-container, fg=--sys-on-secondary-container
+  Primary:  bg=--sys-primary, fg=--sys-on-primary
+  Outline:  bg=transparent, stroke=1px --sys-outline-variant, fg=--sys-on-surface-variant
+
+Sizes (2):
+  Standard: 48×48 hit target, 40×40 visual chrome (M3 touch target pattern)
+  Large:    56×56 (no hit/visual split)
+
+Shared:
+  border-radius: --radius-alias-icon-button (4px)
+  icon size:     24×24, currentColor
+
+States:
+  Hover:    state-layer overlay at 0.08 on the type's "on" color
+            (standard/outline→onSurface, tonal→onSecondaryContainer,
+             primary→onPrimary)
+  Focus:    same overlay at 0.10 (replaces hover when both active)
+  Disabled: inner bg=--state-onSurface-10, fg=--sys-on-surface,
+            opacity 0.38 on the inner chrome;
+            Outline type keeps its 1px stroke when disabled
+
+No Loading state (IconButton is atomic — no label to swap with a spinner).
 
 ### Field / Input
 ```

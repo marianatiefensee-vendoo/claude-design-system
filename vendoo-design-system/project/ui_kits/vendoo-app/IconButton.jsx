@@ -1,84 +1,118 @@
-// IconButton — Standard / Tonal / Primary / Outline  ×  Standard (48px) / Large (56px)
-// Figma node: 1227:5422 (Icon Button frame, inside Buttons section 3001:4214)
-//
-// @prop icon     {string}                          Icon sprite name
-// @prop type     {"standard"|"tonal"|"primary"|"outline"}  default "standard"
-// @prop size     {"standard"|"large"}              default "standard" (48px hit, 40px visual)
-// @prop disabled {boolean}
-// @prop onClick  {function}
-// @prop title    {string}                          Tooltip / aria label
-// @prop style    {object}                          Outer button overrides
+const { useState } = React;
 
+/**
+ * IconButton — Figma node 1227:5422 (Go Flow Design System)
+ *
+ * Types: standard | tonal | primary | outline
+ * Sizes: standard (48px hit / 40px visual) | large (56×56)
+ * States: available (default) · hover · focus · disabled
+ *
+ * Icon accepts a sprite name string or a ReactNode; rendered at 24×24 (matches Figma).
+ *
+ * Deviations from Figma (intentional, documented):
+ *   - Hover defined for all 4 types (Figma defines it only for Standard)
+ *   - Focus (0.10 state layer) defined for all 4 types (absent in Figma)
+ *   - Disabled bg is uniform onSurface/0.10 across all types including Outline
+ *     (Figma's Outline/Disabled skips the fill; we match Button for consistency)
+ *   - No Loading state (intentional — IconButton is atomic, no label to replace)
+ */
 function IconButton({
   icon,
-  type = "standard",
-  size = "standard",
+  type = 'standard',
+  size = 'standard',
   disabled = false,
   onClick,
   title,
   style = {},
   ...rest
 }) {
-  const isLarge = size === "large";
-  // Standard: 48px touch target, 40px visual; Large: 56px both
-  const outerDim = isLarge ? 56 : 48;
-  const innerDim = isLarge ? 56 : 40;
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
 
-  const typeMap = {
+  const isInteractive = !disabled;
+  const showFocus = focused && isInteractive;
+  const showHover = hovered && isInteractive && !showFocus;
+
+  const isLarge = size === 'large';
+  const outerDim = isLarge ? 56 : 48; // touch target
+  const innerDim = isLarge ? 56 : 40; // visual chrome
+
+  // Per-type tokens: base fill/text + state-layer overlay for hover (08) and focus (10)
+  const variants = {
     standard: {
-      bg: "transparent",
-      color: "var(--sys-on-surface-variant)",
-      border: "none",
-      hoverBg: "rgba(29,26,36,0.08)",
+      bg:    'transparent',
+      fg:    'var(--sys-on-surface-variant)',
+      hover: 'var(--state-onSurface-08)',
+      focus: 'var(--state-onSurface-10)',
     },
     tonal: {
-      bg: "var(--sys-secondary-container)",
-      color: "var(--sys-on-secondary-container)",
-      border: "none",
-      hoverBg: null,
+      bg:    'var(--sys-secondary-container)',
+      fg:    'var(--sys-on-secondary-container)',
+      hover: 'var(--state-onSecondaryContainer-08)',
+      focus: 'var(--state-onSecondaryContainer-10)',
     },
     primary: {
-      bg: "var(--sys-primary)",
-      color: "#fff",
-      border: "none",
-      hoverBg: null,
+      bg:    'var(--sys-primary)',
+      fg:    'var(--sys-on-primary)',
+      hover: 'var(--state-onPrimary-08)',
+      focus: 'var(--state-onPrimary-10)',
     },
     outline: {
-      bg: "transparent",
-      color: "var(--sys-on-surface-variant)",
-      border: "1px solid var(--sys-outline-variant)",
-      hoverBg: "rgba(29,26,36,0.08)",
+      bg:    'transparent',
+      fg:    'var(--sys-on-surface-variant)',
+      hover: 'var(--state-onSurface-08)',
+      focus: 'var(--state-onSurface-10)',
     },
   };
 
-  const t = typeMap[type] ?? typeMap.standard;
+  const v = variants[type] || variants.standard;
+
+  // Inner chrome fill: disabled wins, then focus, then hover, else base
+  const innerBg = disabled
+    ? 'var(--state-onSurface-10)'
+    : showFocus
+      ? v.focus
+      : showHover
+        ? v.hover
+        : v.bg;
+
+  const innerBorder = type === 'outline' ? '1px solid var(--sys-outline-variant)' : 'none';
+
+  // Icon renderer: accept string sprite name or ReactNode
+  const renderIcon = () => {
+    if (!icon) return null;
+    if (typeof icon === 'string') return <Icon name={icon} size={24} color="currentColor" />;
+    return icon;
+  };
 
   return (
     <button
-      onClick={disabled ? undefined : onClick}
+      type="button"
+      onClick={isInteractive ? onClick : undefined}
+      onMouseEnter={() => { if (isInteractive) setHovered(true); }}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => { if (isInteractive) setFocused(true); }}
+      onBlur={() => setFocused(false)}
+      disabled={disabled}
       title={title}
+      aria-label={title}
       style={{
         width: outerDim,
         height: outerDim,
-        background: "transparent",
-        border: "none",
         padding: 0,
-        cursor: disabled ? "not-allowed" : "pointer",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
+        margin: 0,
+        background: 'transparent',
+        border: 'none',
+        outline: 'none',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         flexShrink: 0,
+        appearance: 'none',
+        WebkitAppearance: 'none',
+        boxSizing: 'border-box',
         ...style,
-      }}
-      onMouseEnter={(e) => {
-        if (!disabled && t.hoverBg) {
-          e.currentTarget.firstChild.style.background = t.hoverBg;
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!disabled && t.hoverBg) {
-          e.currentTarget.firstChild.style.background = t.bg;
-        }
       }}
       {...rest}
     >
@@ -86,20 +120,20 @@ function IconButton({
         style={{
           width: innerDim,
           height: innerDim,
-          borderRadius: 4,
-          background: t.bg,
-          color: t.color,
-          border: t.border,
-          boxSizing: "border-box",
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
+          borderRadius: 'var(--radius-alias-icon-button, 4px)',
+          background: innerBg,
+          color: disabled ? 'var(--sys-on-surface)' : v.fg,
+          border: innerBorder,
+          boxSizing: 'border-box',
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           opacity: disabled ? 0.38 : 1,
-          transition: "background-color 120ms linear",
-          pointerEvents: "none",
+          transition: 'background 120ms linear',
+          pointerEvents: 'none',
         }}
       >
-        <Icon name={icon} size={24} />
+        {renderIcon()}
       </span>
     </button>
   );
