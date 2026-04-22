@@ -88,6 +88,7 @@ Always pass: clientFrameworks=react, clientLanguages=javascript,css
 | `Fields.jsx` | `Input`, `Textarea`, `PriceField`, `MarketplaceChip`, `MarketplaceLogo`, `Label`, `Helper` | `3001:4217` | complete |
 | `Field.jsx` | `Field`, `FieldSelect` | `1243:5664` (Field), `1243:5824` (Select) | complete |
 | `ListingSectionCard.jsx` | `ListingSectionCard` | — | complete |
+| `NavigationBar.jsx` | `NavigationBar`, `NavBarItem`, `NavBarFAB` | `555:30780` (bar), `555:30509` (item), `550:26273` (FAB) | complete |
 | `AppShell.jsx` | `AppShell`, `NavItem` | `555:32859` | complete |
 | `Inventory.jsx` | `Inventory`, `ListingRow`, `StatusPill` | — | complete |
 | `CreateListing.jsx` | `CreateListing` | — | complete |
@@ -99,6 +100,7 @@ Canonical icon list: `window.VENDOO_ICON_NAMES` (loaded from `assets/icons-manif
 **Prop reference — Button:** `variant` filled/tonal/outline/text/danger · `size` sm/md/lg · `icon` `trailingIcon` · `disabled`
 **Prop reference — IconButton:** `type` standard/tonal/primary/outline · `size` standard/large · `icon` (string name or ReactNode) · `disabled` · `title` (tooltip + aria-label) · `onClick`
 **Prop reference — Checkbox/Radio/Switch:** `checked` · `disabled` · `onChange` · `style`
+**Prop reference — NavigationBar:** `items` [{id, icon, label}] (up to 4) · `activeItem` (id) · `onItemChange` · `onFabPress`
 **Prop reference — Field:** `state` enabled/focused/filled/validated/long-text/disabled/error · `label` · `value` · `placeholder` · `supportingText` · `showTag` · `tag` {icon, label} · `showAssistiveChip` · `assistiveChip` {icon, label, onClick} · `showSupportingText` · `clearIcon` · `onChange` · `onClear`
 **Prop reference — FieldSelect:** `state` enabled/focused/filled/disabled · `label` · `value` · `placeholder` · `supportingText` · `showTag` · `tag` · `showAssistiveChip` · `assistiveChip` · `showSupportingText` · `onClick`
 

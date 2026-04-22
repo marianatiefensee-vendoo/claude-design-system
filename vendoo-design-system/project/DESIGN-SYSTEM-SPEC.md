@@ -576,3 +576,52 @@ No hover / focus / loading states defined.
 - Disabled/checked:   track=`--state-onSurface-10`, no border; thumb=24×24 `--sys-surface` + checkmark, opacity 0.38 on thumb only
 
 Opacity 0.38 applied to **thumb only** on Switch (not outer button), so the track retains its explicit disabled background per Figma.
+
+---
+
+## 15. NavigationBar
+Figma: Go Flow Design System → nodes 555:30780 (bar), 555:30509 (nav item), 550:26273 (FAB)
+
+Container
+  Width:           412px
+  Height:          auto (content-sized, ~68px)
+  Padding:         8px 0 (top/bottom)
+  Background:      --sys-surface-container
+
+Layout
+  Flex row with [item 0] [item 1] [FAB] [item 2] [item 3].
+  Each nav item: flex: 1 0 0. FAB: fixed 56×56. Up to 4 items.
+
+Nav item
+  Content stack: icon-container (56×32) + 4px gap + label
+  Padding:       0 (container owns vertical padding)
+  Icon:          24×24, currentColor
+
+  Selected state
+    Pill bg:     --sys-secondary-container
+    Pill radius: --radius-ref-extra-small (4px)
+    Icon color:  --sys-on-secondary-container
+    Label color: --sys-secondary
+    Label type:  Lexend Medium 12/16 0.5px tracking
+
+  Unselected state
+    Pill:        none (transparent, no radius)
+    Icon color:  --sys-on-surface-variant
+    Label color: --sys-on-surface-variant
+
+  Hover / Focus
+    State-layer overlay inside the icon container:
+      Selected   hover 8% / focus 10% of --state-onSecondaryContainer
+      Unselected hover 8% / focus 10% of --state-onSurface
+    No separate Hovered variant — same visual mechanism for both.
+
+FAB
+  Size:      56×56
+  Radius:    --radius-alias-fab (8px)
+  Bg:        --sys-primary
+  Icon:      plus_circle 24px, --sys-on-primary
+  Shadow:    --sys-shadow-level3
+  State layer: hover 8% / focus 10% of --state-onPrimary
+
+Badge support is deferred — Figma defines Small (dot) and Large (numeric) variants in
+node 555:30509 but this implementation does not expose them.

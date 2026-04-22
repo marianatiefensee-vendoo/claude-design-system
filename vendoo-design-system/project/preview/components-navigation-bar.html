@@ -68,7 +68,7 @@ const NAV_ITEMS = [
   { id: "listings", icon: "listing_alt", label: "Listings" },
   { id: "store",    icon: "store",       label: "Store"    },
   { id: "sales",    icon: "shopping_bag",label: "Sales"    },
-  { id: "insights", icon: "Analytics",   label: "Insights" },
+  { id: "insights", icon: "analytics",   label: "Insights" },
 ];
 
 function Demo() {
@@ -100,15 +100,16 @@ function Demo() {
       </div>
 
       <dl className="specs">
-        <dt>Container</dt><dd><code>412 × 64</code> · <code>--sys-surface-container</code></dd>
-        <dt>Nav item</dt><dd><code>89 × 64</code> at x = 0 / 89 / 234 / 323</dd>
-        <dt>Active pill</dt><dd>radius <code>5px</code> · fill <code>#ffffff</code></dd>
-        <dt>Inactive pill</dt><dd>radius <code>16px</code> · transparent</dd>
-        <dt>Icon</dt><dd><code>24 × 24</code> · <code>--sys-on-surface</code> (always)</dd>
-        <dt>Label</dt><dd>Lexend 500 / 12px / 16px / 0.5px · <code>--sys-on-surface-variant</code> (always)</dd>
-        <dt>FAB</dt><dd><code>56 × 56</code> at x:178 y:4 · radius <code>8px</code> · <code>--sys-primary</code></dd>
+        <dt>Container</dt><dd><code>412px</code> wide, auto-height (~68px) · padding <code>8px 0</code> · bg <code>--sys-surface-container</code></dd>
+        <dt>Layout</dt><dd>Flex row: 4 nav items (<code>flex: 1 0 0</code>) around a 56×56 FAB in the center</dd>
+        <dt>Active pill</dt><dd>radius <code>--radius-ref-extra-small</code> (4px) · fill <code>--sys-secondary-container</code></dd>
+        <dt>Inactive pill</dt><dd>no visible pill (transparent, no radius)</dd>
+        <dt>Icon</dt><dd><code>24 × 24</code> · selected <code>--sys-on-secondary-container</code> · unselected <code>--sys-on-surface-variant</code></dd>
+        <dt>Label</dt><dd>Lexend 500 / 12px / 16px / 0.5px · selected <code>--sys-secondary</code> · unselected <code>--sys-on-surface-variant</code></dd>
+        <dt>State layer</dt><dd>hover 8% · focus 10% · paired with the active bg's on-color (onSecondaryContainer when selected, onSurface when not, onPrimary on FAB)</dd>
+        <dt>FAB</dt><dd><code>56 × 56</code> · radius <code>--radius-alias-fab</code> (8px) · bg <code>--sys-primary</code> · shadow <code>--sys-shadow-level3</code></dd>
         <dt>FAB icon</dt><dd><code>plus_circle 24px</code> · <code>--sys-on-primary</code></dd>
-        <dt>Figma node</dt><dd><code>555:30780</code></dd>
+        <dt>Figma nodes</dt><dd><code>555:30780</code> (Nav Bar) · <code>555:30509</code> (Nav Item) · <code>550:26273</code> (FAB)</dd>
       </dl>
     </div>
   );
