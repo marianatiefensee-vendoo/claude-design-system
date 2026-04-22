@@ -6,11 +6,12 @@
 <style>
   /* ──────────────────────────────────────────────
      Maps 1:1 to Figma Go Flow Design System:
-       Field        — node 1243:5664
-       FieldSelect  — node 1243:5824
-     Uses design tokens exclusively.
-     States (Field):       Enabled · Focused · Filled · Validated · Long Text · Error · Disabled
-     States (FieldSelect): Enabled · Focused · Filled · Disabled
+       Field          — node 1243:5664
+       FieldSelect    — node 1243:5824
+       FieldTextArea  — node 1559:12825
+       FieldStyleTags — node 1545:13032
+     Inline chips use --sys-secondary-container / --sys-on-secondary-container
+     (deliberate override of Figma's primary-fixed for system-wide consistency).
      ────────────────────────────────────────────── */
   html,body{margin:0;padding:0;background:var(--sys-surface);color:var(--sys-on-surface);font-family:var(--font-sans);}
   .page{padding:48px 56px 80px;max-width:1400px;box-sizing:border-box;}
@@ -31,9 +32,9 @@
     column-gap:20px;row-gap:32px;
     align-items:start;
   }
-  .matrix--select{
-    grid-template-columns: 140px repeat(3, minmax(220px, 1fr));
-  }
+  .matrix--select{grid-template-columns: 140px repeat(3, minmax(220px, 1fr));}
+  .matrix--textarea{grid-template-columns: 140px repeat(4, minmax(240px, 1fr));}
+  .matrix--styletags{grid-template-columns: 140px repeat(4, minmax(240px, 1fr));}
   .matrix > .col-head{
     font:var(--type-label-lg);letter-spacing:var(--type-label-lg-tracking);
     color:var(--sys-on-surface);
@@ -44,8 +45,7 @@
     display:block;
     font:var(--type-body-sm);letter-spacing:var(--type-body-sm-tracking);
     color:var(--sys-on-surface-variant);
-    font-weight:400;margin-top:2px;
-    text-transform:none;
+    font-weight:400;margin-top:2px;text-transform:none;
   }
   .matrix > .row-head{
     font:var(--type-label-lg);letter-spacing:var(--type-label-lg-tracking);
@@ -61,11 +61,11 @@
   }
 
   /* ────────────────────────────────────────────────── */
-  /* Field component (shared base for Field + FieldSelect) */
+  /* Field component — shared base                      */
   /* ────────────────────────────────────────────────── */
-  .field{display:flex;flex-direction:column;gap:8px;width:100%;}
+  .field{display:flex;flex-direction:column;gap:8px;width:100%;position:relative;}
 
-  /* Title row: label + optional Tag + optional AssistiveChip */
+  /* Title row */
   .field__title{
     display:flex;align-items:center;gap:8px;min-height:24px;width:100%;
   }
@@ -76,24 +76,23 @@
   }
   .field--error .field__label{color:var(--sys-error);}
 
-  /* Tag chip — Figma Go Flow Design System Tag */
+  /* Tag chip — secondary-container tone (overrides Figma's primary-fixed) */
   .field__tag{
     display:inline-flex;align-items:center;gap:4px;
     min-height:20px;padding:0 4px;
     border-radius:var(--radius-alias-chip, 8px);
-    background:var(--sys-primary-fixed);
-    color:var(--sys-on-primary-fixed);
+    background:var(--sys-secondary-container);
+    color:var(--sys-on-secondary-container);
     font:400 11px/14px var(--font-sans);
     white-space:nowrap;flex-shrink:0;
   }
   .field__tag svg{width:12px;height:12px;}
-  /* Error variant — neutral tones */
   .field--error .field__tag{
     background:var(--sys-surface-dim);
     color:var(--sys-on-surface-variant);
   }
 
-  /* AssistiveChip — right-aligned primary-colored action */
+  /* AssistiveChip — primary-toned action */
   .field__assistive-chip{
     display:inline-flex;align-items:center;justify-content:center;gap:8px;
     height:32px;padding:6px 8px;margin-left:auto;
@@ -107,10 +106,9 @@
   .field__assistive-chip:hover{background:var(--state-primary-08);}
   .field__assistive-chip svg{width:18px;height:18px;}
 
-  /* Input box */
+  /* Input box (single line) */
   .field__box{
-    position:relative;
-    height:56px;
+    position:relative;height:56px;
     border-radius:var(--radius-alias-field, 4px);
     border:1px solid var(--sys-outline);
     background:var(--sys-surface);
@@ -119,13 +117,10 @@
     transition:border-color 150ms ease;
     box-sizing:border-box;
   }
-  /* Leading prefix */
   .field__prefix{
     font:var(--type-body-lg);letter-spacing:var(--type-body-lg-tracking);
-    color:var(--sys-on-surface-variant);
-    flex:0 0 auto;
+    color:var(--sys-on-surface-variant);flex:0 0 auto;
   }
-  /* Input text */
   .field__input{
     flex:1 1 auto;
     font:var(--type-body-lg);letter-spacing:var(--type-body-lg-tracking);
@@ -133,7 +128,7 @@
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   }
   .field__input.is-placeholder{color:var(--sys-on-surface-variant);}
-  /* Caret (focused) */
+
   .field__caret{
     display:inline-block;width:2px;height:20px;background:var(--sys-primary);
     vertical-align:-3px;margin-left:1px;
@@ -141,42 +136,125 @@
   }
   @keyframes blink{50%{opacity:0;}}
 
-  /* Trailing icon (clear / chevron) */
   .field__trail{
     flex:0 0 40px;width:40px;height:40px;border-radius:999px;
     display:inline-flex;align-items:center;justify-content:center;
     color:var(--sys-on-surface-variant);
-    cursor:pointer;
-    margin-right:-8px;  /* pull into 16 padding so icon is 8px from edge */
+    cursor:pointer;margin-right:-8px;
     transition:background 120ms linear, transform 150ms ease;
   }
   .field__trail:hover{background:var(--state-onSurface-08);}
   .field__trail svg{width:24px;height:24px;}
   .field--error .field__trail{color:var(--sys-error);}
-  /* Select variant: chevron rotates when open (focused or filled) */
   .field--select.field--focused .field__trail,
   .field--select.field--filled .field__trail{transform:rotate(180deg);}
 
-  /* State modifiers — all 1px borders per Figma */
+  /* State modifiers (shared across Field / FieldSelect / FieldTextArea / FieldStyleTags) */
   .field--focused .field__box,
-  .field--filled  .field__box{border-color:var(--sys-primary);}
+  .field--filled  .field__box,
+  .field--focused .field__textarea-box,
+  .field--filled  .field__textarea-box,
+  .field--focused .field__tagflow-box{border-color:var(--sys-primary);}
   .field--validated .field__box,
   .field--long-text .field__box{border-color:var(--sys-outline);}
-  .field--error   .field__box{border-color:var(--sys-error);}
+  .field--error   .field__box,
+  .field--error   .field__textarea-box,
+  .field--error   .field__tagflow-box{border-color:var(--sys-error);}
   .field--disabled{opacity:.38;pointer-events:none;}
-  .field--disabled .field__box{background:transparent;}
-
-  /* Long-text: allow horizontal truncation only (no wrap) */
+  .field--disabled .field__box,
+  .field--disabled .field__textarea-box,
+  .field--disabled .field__tagflow-box{background:transparent;}
   .field--long-text .field__input{overflow:hidden;text-overflow:ellipsis;}
 
   /* Supporting text */
   .field__help{
     font:var(--type-body-sm);letter-spacing:var(--type-body-sm-tracking);
-    color:var(--sys-on-surface-variant);
-    padding:0 16px;
+    color:var(--sys-on-surface-variant);padding:0 16px;
   }
-  /* Error helper is red per our accessibility override (Figma shows neutral) */
   .field--error .field__help{color:var(--sys-error);}
+
+  /* ────────────────────────────────────────────────── */
+  /* FieldTextArea                                      */
+  /* ────────────────────────────────────────────────── */
+  .field__textarea-box{
+    min-height:var(--size-alias-field-height-text-area, 112px);
+    border-radius:var(--radius-alias-field, 4px);
+    border:1px solid var(--sys-outline);
+    background:var(--sys-surface);
+    padding:12px 16px;
+    box-sizing:border-box;
+    display:flex;align-items:flex-start;
+    transition:border-color 150ms ease;
+  }
+  .field__textarea-content{
+    flex:1 1 auto;min-width:0;
+    font:var(--type-body-lg);letter-spacing:var(--type-body-lg-tracking);
+    color:var(--sys-on-surface);
+    white-space:pre-wrap;word-break:break-word;
+    min-height:calc(var(--size-alias-field-height-text-area, 112px) - 24px);
+  }
+  .field__textarea-content.is-placeholder{color:var(--sys-on-surface-variant);}
+
+  /* ────────────────────────────────────────────────── */
+  /* FieldStyleTags                                     */
+  /* ────────────────────────────────────────────────── */
+  .field__tagflow-box{
+    min-height:56px;
+    border-radius:var(--radius-alias-field, 4px);
+    border:1px solid var(--sys-outline);
+    background:var(--sys-surface);
+    padding:8px 16px;
+    box-sizing:border-box;
+    display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+    transition:border-color 150ms ease;
+  }
+  .field__styletag{
+    display:inline-flex;align-items:center;gap:4px;
+    height:22px;padding:4px 8px;
+    border-radius:var(--radius-alias-chip, 8px);
+    background:var(--sys-secondary-container);
+    color:var(--sys-on-secondary-container);
+    font:400 11px/14px var(--font-sans);
+    white-space:nowrap;flex-shrink:0;
+  }
+  .field__styletag__x{
+    position:relative;display:inline-flex;align-items:center;justify-content:center;
+    width:12px;height:12px;background:transparent;border:0;padding:0;margin:0;
+    cursor:pointer;color:inherit;
+  }
+  .field__styletag__x::before,
+  .field__styletag__x::after{
+    content:"";position:absolute;left:50%;top:50%;
+    width:10px;height:1.5px;border-radius:1px;background:currentColor;
+  }
+  .field__styletag__x::before{transform:translate(-50%,-50%) rotate(45deg);}
+  .field__styletag__x::after{transform:translate(-50%,-50%) rotate(-45deg);}
+  .field__inline-input{
+    flex:1 1 120px;min-width:120px;
+    border:none;outline:none;background:transparent;padding:4px;
+    font:var(--type-body-lg);letter-spacing:var(--type-body-lg-tracking);
+    color:var(--sys-on-surface);
+  }
+  .field__inline-input.is-placeholder{color:var(--sys-on-surface-variant);}
+  .field__inline-input-ghost{
+    padding:4px;
+    font:var(--type-body-lg);letter-spacing:var(--type-body-lg-tracking);
+    color:var(--sys-on-surface-variant);
+  }
+
+  .field__dropdown{
+    position:absolute;
+    left:0;right:0;
+    margin-top:4px;
+    padding:12px;
+    background:var(--sys-surface-container-high);
+    border-radius:var(--radius-ref-medium, 12px);
+    box-shadow:var(--sys-shadow-level3);
+    display:flex;flex-wrap:wrap;gap:8px;
+    z-index:10;
+  }
+  /* Dropdown anchored below input row — matrix cells don't need z-stacking */
+  .matrix .field__dropdown{position:relative;left:auto;right:auto;margin-top:8px;}
 
   /* ── playground ──────────────────────────────────── */
   .playground__stage{
@@ -209,10 +287,7 @@
     border-bottom:1px solid var(--sys-outline-variant);
   }
   .tweaks__title{font:var(--type-title-md);letter-spacing:var(--type-title-md-tracking);color:var(--sys-on-surface);}
-  .tweaks__body{
-    padding:16px;display:flex;flex-direction:column;gap:16px;
-    overflow-y:auto;
-  }
+  .tweaks__body{padding:16px;display:flex;flex-direction:column;gap:16px;overflow-y:auto;}
   .tweaks__row{display:flex;flex-direction:column;gap:6px;}
   .tweaks__row > label{
     font:var(--type-label-md);letter-spacing:var(--type-label-md-tracking);
@@ -234,14 +309,8 @@
     background:var(--sys-secondary-container);
     color:var(--sys-on-secondary-container);
   }
-  .tweaks__toggle{
-    display:flex;align-items:center;justify-content:space-between;gap:8px;
-    padding:4px 0;
-  }
-  .tweaks__toggle > span{
-    font:var(--type-body-md);letter-spacing:var(--type-body-md-tracking);
-    color:var(--sys-on-surface);
-  }
+  .tweaks__toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 0;}
+  .tweaks__toggle > span{font:var(--type-body-md);letter-spacing:var(--type-body-md-tracking);color:var(--sys-on-surface);}
   .tweaks__switch{
     width:36px;height:20px;border-radius:999px;border:none;padding:0;cursor:pointer;
     background:var(--sys-surface-container-highest);
@@ -264,31 +333,25 @@
   }
   .tweaks__input:focus{outline:2px solid var(--sys-primary);outline-offset:-1px;border-color:transparent;}
 
+  /* ── interactive demo ─────────────────────────────── */
+  .demo{
+    padding:24px;border-radius:12px;
+    background:var(--sys-surface-container-low);
+    border:1px solid var(--sys-outline-variant);
+    max-width:520px;
+  }
+
   /* ── token legend ────────────────────────────────── */
   .tokens{
     margin-top:64px;padding:24px;border-radius:12px;
     background:var(--sys-surface-container-low);
     border:1px solid var(--sys-outline-variant);
   }
-  .tokens h3{
-    font:var(--type-title-md);letter-spacing:var(--type-title-md-tracking);
-    margin:0 0 16px;color:var(--sys-on-surface);
-  }
+  .tokens h3{font:var(--type-title-md);letter-spacing:var(--type-title-md-tracking);margin:0 0 16px;color:var(--sys-on-surface);}
   .tokens table{border-collapse:collapse;width:100%;font:var(--type-body-md);letter-spacing:var(--type-body-md-tracking);}
-  .tokens th, .tokens td{
-    text-align:left;padding:8px 12px;
-    border-bottom:1px solid var(--sys-outline-variant);
-    color:var(--sys-on-surface-variant);
-    vertical-align:top;
-  }
+  .tokens th, .tokens td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--sys-outline-variant);color:var(--sys-on-surface-variant);vertical-align:top;}
   .tokens th{color:var(--sys-on-surface);font-weight:500;}
-  .tokens code{
-    font:500 12px/16px ui-monospace, SFMono-Regular, Menlo, monospace;
-    letter-spacing:0;
-    background:var(--sys-surface-container);
-    color:var(--sys-on-surface);
-    padding:2px 6px;border-radius:4px;
-  }
+  .tokens code{font:500 12px/16px ui-monospace, SFMono-Regular, Menlo, monospace;letter-spacing:0;background:var(--sys-surface-container);color:var(--sys-on-surface);padding:2px 6px;border-radius:4px;}
 </style>
 </head>
 <body>
@@ -296,20 +359,18 @@
 
   <h1 class="doc-h1">Fields</h1>
   <p class="doc-sub">
-    Single-line text input (Field) and dropdown trigger (FieldSelect). 56&nbsp;dp tall, 4&nbsp;dp corner,
-    1&nbsp;dp border that shifts color — <code>--sys-outline</code> at rest, <code>--sys-primary</code> on
-    focus or just-entered (<em>Filled</em>), <code>--sys-outline</code> again once validated or when
-    content overflows, <code>--sys-error</code> in error. Label row supports an optional Tag chip and an
-    AssistiveChip (right-aligned). Helper text below with a 16&nbsp;dp left gutter so it aligns to the
-    input text, not the border. Matches Figma <code>1243:5664</code> (Field) and <code>1243:5824</code>
-    (Field/Select).
+    The Field family: single-line text (<code>Field</code>), dropdown trigger (<code>FieldSelect</code>),
+    multi-line auto-growing text (<code>FieldTextArea</code>), and chip-input with optional suggestions
+    (<code>FieldStyleTags</code>). All share the Title row (label + optional Tag + AssistiveChip) and
+    the Supporting text row. Inline chips use <code>--sys-secondary-container</code> /
+    <code>--sys-on-secondary-container</code> (deliberate override of Figma's <code>--sys-primary-fixed</code>
+    for system-wide consistency across Tag, StyleTag, and suggestions).
   </p>
 
-  <!-- ══════════ Playground (Tweaks) ══════════ -->
+  <!-- ══════════ Playground (Field only) ══════════ -->
   <section class="section playground" id="playground" hidden>
-    <h2 class="section-h2">Playground</h2>
-    <p class="section-sub">Live sandbox — configure every prop and watch the field react. Toggle <em>Tweaks</em> from the toolbar to open the control panel.</p>
-
+    <h2 class="section-h2">Playground · Field</h2>
+    <p class="section-sub">Live sandbox for single-line Field. Toggle <em>Tweaks</em> from the toolbar to configure.</p>
     <div class="playground__stage">
       <div id="pg-field" class="field">
         <div class="field__title">
@@ -328,9 +389,7 @@
           <span class="field__input" id="pg-input"></span>
           <span class="field__caret" id="pg-caret" hidden></span>
           <span class="field__trail" id="pg-trail" aria-label="Clear" hidden>
-            <svg id="pg-trail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>
-            </svg>
+            <svg id="pg-trail-icon" viewBox="0 0 24 24" fill="currentColor"><use id="pg-trail-use" href="../assets/icons.svg#x"/></svg>
           </span>
         </div>
         <div class="field__help" id="pg-help">Up to 100 characters.</div>
@@ -341,344 +400,78 @@
   <!-- ══════════ SECTION 1 · Field state matrix ══════════ -->
   <section class="section">
     <h2 class="section-h2">Field · state matrix</h2>
-    <p class="section-sub">Rows are interaction states. Columns are content configurations.</p>
+    <p class="section-sub">Single-line text input. Rows are interaction states. All borders 1px; color shifts per state.</p>
 
     <div class="matrix">
-      <!-- header row -->
       <div class="col-head"></div>
       <div class="col-head">Basic<span class="sub">Label + input</span></div>
       <div class="col-head">Prefix<span class="sub">Leading unit</span></div>
       <div class="col-head">With Tag<span class="sub">Status chip</span></div>
-      <div class="col-head">With AssistiveChip<span class="sub">Right-aligned action</span></div>
+      <div class="col-head">With AssistiveChip<span class="sub">Right-aligned</span></div>
       <div class="col-head">Trailing icon<span class="sub">Clear / chevron</span></div>
 
-      <!-- ─── ENABLED ─── -->
+      <!-- ENABLED -->
       <div class="row-head">Enabled<span class="sub">Default resting</span></div>
-      <div>
-        <div class="field">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field">
-          <div class="field__title"><span class="field__label">Price</span></div>
-          <div class="field__box"><span class="field__prefix">$</span><span class="field__input is-placeholder">0.00</span></div>
-          <div class="field__help">Before fees and shipping.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field">
-          <div class="field__title">
-            <span class="field__label">Title</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span>
-          </div>
-          <div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field">
-          <div class="field__title">
-            <span class="field__label">Description</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button>
-          </div>
-          <div class="field__box"><span class="field__input is-placeholder">Describe the item</span></div>
-          <div class="field__help">Rewrite anytime from the AI menu.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field">
-          <div class="field__title"><span class="field__label">Search</span></div>
-          <div class="field__box">
-            <span class="field__input is-placeholder">Search listings</span>
-            <span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span>
-          </div>
-          <div class="field__help">Press enter to search.</div>
-        </div>
-      </div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Price</span></div><div class="field__box"><span class="field__prefix">$</span><span class="field__input is-placeholder">0.00</span></div><div class="field__help">Before fees and shipping.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Title</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span></div><div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__box"><span class="field__input is-placeholder">Describe the item</span></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Search</span></div><div class="field__box"><span class="field__input is-placeholder">Search listings</span><span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span></div><div class="field__help">Press enter to search.</div></div></div>
 
-      <!-- ─── FOCUSED ─── -->
+      <!-- FOCUSED -->
       <div class="row-head">Focused<span class="sub">Primary border, caret</span></div>
-      <div>
-        <div class="field field--focused">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input is-placeholder">Enter a title</span><span class="field__caret"></span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--focused">
-          <div class="field__title"><span class="field__label">Price</span></div>
-          <div class="field__box"><span class="field__prefix">$</span><span class="field__input">48.00</span><span class="field__caret"></span></div>
-          <div class="field__help">Before fees and shipping.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--focused">
-          <div class="field__title">
-            <span class="field__label">Title</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span>
-          </div>
-          <div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span><span class="field__caret"></span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--focused">
-          <div class="field__title">
-            <span class="field__label">Description</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button>
-          </div>
-          <div class="field__box"><span class="field__input">Soft pastel-purple knit</span><span class="field__caret"></span></div>
-          <div class="field__help">Rewrite anytime from the AI menu.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--focused">
-          <div class="field__title"><span class="field__label">Search</span></div>
-          <div class="field__box">
-            <span class="field__input">Knit sweater</span><span class="field__caret"></span>
-            <span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span>
-          </div>
-          <div class="field__help">Press enter to search.</div>
-        </div>
-      </div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input is-placeholder">Enter a title</span><span class="field__caret"></span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Price</span></div><div class="field__box"><span class="field__prefix">$</span><span class="field__input">48.00</span><span class="field__caret"></span></div><div class="field__help">Before fees and shipping.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Title</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span></div><div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span><span class="field__caret"></span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__box"><span class="field__input">Soft pastel-purple knit</span><span class="field__caret"></span></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Search</span></div><div class="field__box"><span class="field__input">Knit sweater</span><span class="field__caret"></span><span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span></div><div class="field__help">Press enter to search.</div></div></div>
 
-      <!-- ─── FILLED ─── (primary border, just-entered emphasis) -->
+      <!-- FILLED -->
       <div class="row-head">Filled<span class="sub">Just entered · primary border</span></div>
-      <div>
-        <div class="field field--filled">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--filled">
-          <div class="field__title"><span class="field__label">Price</span></div>
-          <div class="field__box"><span class="field__prefix">$</span><span class="field__input">48.00</span></div>
-          <div class="field__help">Before fees and shipping.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--filled">
-          <div class="field__title">
-            <span class="field__label">Title</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span>
-          </div>
-          <div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--filled">
-          <div class="field__title">
-            <span class="field__label">Description</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button>
-          </div>
-          <div class="field__box"><span class="field__input">Soft pastel-purple knit, relaxed 90s fit.</span></div>
-          <div class="field__help">Rewrite anytime from the AI menu.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--filled">
-          <div class="field__title"><span class="field__label">Search</span></div>
-          <div class="field__box">
-            <span class="field__input">Knit sweater</span>
-            <span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span>
-          </div>
-          <div class="field__help">Press enter to search.</div>
-        </div>
-      </div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Price</span></div><div class="field__box"><span class="field__prefix">$</span><span class="field__input">48.00</span></div><div class="field__help">Before fees and shipping.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Title</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span></div><div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__box"><span class="field__input">Soft pastel-purple knit, relaxed 90s fit.</span></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Search</span></div><div class="field__box"><span class="field__input">Knit sweater</span><span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span></div><div class="field__help">Press enter to search.</div></div></div>
 
-      <!-- ─── VALIDATED ─── (outline border, settled value) -->
-      <div class="row-head">Validated<span class="sub">Settled value · outline border</span></div>
-      <div>
-        <div class="field field--validated">
-          <div class="field__title"><span class="field__label">Brand</span></div>
-          <div class="field__box"><span class="field__input">Uniqlo</span></div>
-          <div class="field__help">Matched from catalog.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--validated">
-          <div class="field__title"><span class="field__label">Weight</span></div>
-          <div class="field__box"><span class="field__prefix">lb</span><span class="field__input">1.2</span></div>
-          <div class="field__help">Used to calculate shipping.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--validated">
-          <div class="field__title">
-            <span class="field__label">Title</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span>
-          </div>
-          <div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--validated">
-          <div class="field__title">
-            <span class="field__label">Description</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button>
-          </div>
-          <div class="field__box"><span class="field__input">Soft pastel-purple knit, relaxed 90s fit.</span></div>
-          <div class="field__help">Rewrite anytime from the AI menu.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--validated">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters › Crewneck</span>
-            <span class="field__trail" aria-label="Change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-          <div class="field__help">Required for Poshmark &amp; Mercari.</div>
-        </div>
-      </div>
+      <!-- VALIDATED -->
+      <div class="row-head">Validated<span class="sub">Settled · outline border</span></div>
+      <div><div class="field field--validated"><div class="field__title"><span class="field__label">Brand</span></div><div class="field__box"><span class="field__input">Uniqlo</span></div><div class="field__help">Matched from catalog.</div></div></div>
+      <div><div class="field field--validated"><div class="field__title"><span class="field__label">Weight</span></div><div class="field__box"><span class="field__prefix">lb</span><span class="field__input">1.2</span></div><div class="field__help">Used to calculate shipping.</div></div></div>
+      <div><div class="field field--validated"><div class="field__title"><span class="field__label">Title</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span></div><div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--validated"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__box"><span class="field__input">Soft pastel-purple knit, relaxed 90s fit.</span></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+      <div><div class="field field--validated"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters › Crewneck</span><span class="field__trail" aria-label="Change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="field__help">Required for Poshmark &amp; Mercari.</div></div></div>
 
-      <!-- ─── LONG TEXT ─── -->
+      <!-- LONG TEXT -->
       <div class="row-head">Long text<span class="sub">Value overflows · ellipsis</span></div>
-      <div>
-        <div class="field field--long-text">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input">Vintage 90s Ralph Lauren Cable-Knit Wool Sweater — Pastel Purple with Contrast Trim</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--long-text">
-          <div class="field__title"><span class="field__label">URL</span></div>
-          <div class="field__box"><span class="field__prefix">https://</span><span class="field__input">vendoo.co/listings/vintage-90s-ralph-lauren-cable-knit-wool-sweater</span></div>
-          <div class="field__help">Public listing link.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--long-text">
-          <div class="field__title">
-            <span class="field__label">Title</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span>
-          </div>
-          <div class="field__box"><span class="field__input">Vintage 90s Ralph Lauren Cable-Knit Wool Sweater — Pastel Purple</span></div>
-          <div class="field__help">Up to 100 characters.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--long-text">
-          <div class="field__title">
-            <span class="field__label">Description</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button>
-          </div>
-          <div class="field__box"><span class="field__input">Soft pastel-purple knit, relaxed 90s silhouette, barely worn, from a smoke-free home.</span></div>
-          <div class="field__help">Rewrite anytime from the AI menu.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--long-text">
-          <div class="field__title"><span class="field__label">Search</span></div>
-          <div class="field__box">
-            <span class="field__input">Pastel purple knit sweater vintage 90s relaxed fit</span>
-            <span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span>
-          </div>
-          <div class="field__help">Press enter to search.</div>
-        </div>
-      </div>
+      <div><div class="field field--long-text"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input">Vintage 90s Ralph Lauren Cable-Knit Wool Sweater — Pastel Purple with Contrast Trim</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--long-text"><div class="field__title"><span class="field__label">URL</span></div><div class="field__box"><span class="field__prefix">https://</span><span class="field__input">vendoo.co/listings/vintage-90s-ralph-lauren-cable-knit-wool-sweater</span></div><div class="field__help">Public listing link.</div></div></div>
+      <div><div class="field field--long-text"><div class="field__title"><span class="field__label">Title</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span></div><div class="field__box"><span class="field__input">Vintage 90s Ralph Lauren Cable-Knit Wool Sweater — Pastel Purple</span></div><div class="field__help">Up to 100 characters.</div></div></div>
+      <div><div class="field field--long-text"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__box"><span class="field__input">Soft pastel-purple knit, relaxed 90s silhouette, barely worn, smoke-free home.</span></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+      <div><div class="field field--long-text"><div class="field__title"><span class="field__label">Search</span></div><div class="field__box"><span class="field__input">Pastel purple knit sweater vintage 90s relaxed fit</span><span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span></div><div class="field__help">Press enter to search.</div></div></div>
 
-      <!-- ─── ERROR ─── -->
+      <!-- ERROR -->
       <div class="row-head">Error<span class="sub">Red label + border + helper</span></div>
-      <div>
-        <div class="field field--error">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div>
-          <div class="field__help">Title is required.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--error">
-          <div class="field__title"><span class="field__label">Price</span></div>
-          <div class="field__box"><span class="field__prefix">$</span><span class="field__input is-placeholder">—</span></div>
-          <div class="field__help">Add a price to publish to Poshmark.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--error">
-          <div class="field__title">
-            <span class="field__label">Title</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#alert"/></svg>Too long</span>
-          </div>
-          <div class="field__box"><span class="field__input">A really long title that exceeds the 100-character max</span></div>
-          <div class="field__help">Title is 12 characters over the limit.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--error">
-          <div class="field__title"><span class="field__label">Description</span></div>
-          <div class="field__box"><span class="field__input">Sweater</span></div>
-          <div class="field__help">Too short — include brand and item type.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--error">
-          <div class="field__title"><span class="field__label">Search</span></div>
-          <div class="field__box">
-            <span class="field__input">Knit sweater</span>
-            <span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span>
-          </div>
-          <div class="field__help">No results — try a different query.</div>
-        </div>
-      </div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div><div class="field__help">Title is required.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Price</span></div><div class="field__box"><span class="field__prefix">$</span><span class="field__input is-placeholder">—</span></div><div class="field__help">Add a price to publish to Poshmark.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Title</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#alert"/></svg>Too long</span></div><div class="field__box"><span class="field__input">A really long title that exceeds the 100-char max</span></div><div class="field__help">Title is 12 characters over the limit.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Description</span></div><div class="field__box"><span class="field__input">Sweater</span></div><div class="field__help">Too short — include brand and item type.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Search</span></div><div class="field__box"><span class="field__input">Knit sweater</span><span class="field__trail" aria-label="Clear"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#x"/></svg></span></div><div class="field__help">No results — try a different query.</div></div></div>
 
-      <!-- ─── DISABLED ─── -->
-      <div class="row-head">Disabled<span class="sub">Opacity 0.38 · no chips</span></div>
-      <div>
-        <div class="field field--disabled">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div>
-          <div class="field__help">Unlocks after photos are uploaded.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--disabled">
-          <div class="field__title"><span class="field__label">Price</span></div>
-          <div class="field__box"><span class="field__prefix">$</span><span class="field__input">48.00</span></div>
-          <div class="field__help">Locked during active auction.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--disabled">
-          <div class="field__title"><span class="field__label">Title</span></div>
-          <div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div>
-          <div class="field__help">Published — unlist to edit.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--disabled">
-          <div class="field__title"><span class="field__label">Description</span></div>
-          <div class="field__box"><span class="field__input">Pastel purple knit, 90s fit.</span></div>
-          <div class="field__help">AI rewrite disabled on this plan.</div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--disabled">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters › Crewneck</span>
-            <span class="field__trail" aria-label="Change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-          <div class="field__help">Locked during active auction.</div>
-        </div>
-      </div>
-
+      <!-- DISABLED -->
+      <div class="row-head">Disabled<span class="sub">Opacity 0.38</span></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input is-placeholder">Enter a title</span></div><div class="field__help">Unlocks after photos are uploaded.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Price</span></div><div class="field__box"><span class="field__prefix">$</span><span class="field__input">48.00</span></div><div class="field__help">Locked during active auction.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Title</span></div><div class="field__box"><span class="field__input">Vintage 90s Knit Sweater</span></div><div class="field__help">Published — unlist to edit.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__box"><span class="field__input">Pastel purple knit, 90s fit.</span></div><div class="field__help">AI rewrite disabled on this plan.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters › Crewneck</span><span class="field__trail" aria-label="Change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div><div class="field__help">Locked during active auction.</div></div></div>
     </div>
   </section>
 
   <!-- ══════════ SECTION 2 · FieldSelect state matrix ══════════ -->
   <section class="section">
     <h2 class="section-h2">FieldSelect · state matrix</h2>
-    <p class="section-sub">Dropdown trigger. Chevron rotates 180° when open (focused or filled). Shares <code>.field__box</code> with Field via the <code>.field--select</code> modifier.</p>
+    <p class="section-sub">Dropdown trigger. Chevron rotates 180° when open (focused or filled).</p>
 
     <div class="matrix matrix--select">
       <div class="col-head"></div>
@@ -686,140 +479,136 @@
       <div class="col-head">With value<span class="sub">Selection committed</span></div>
       <div class="col-head">With Tag + Chip<span class="sub">Full label row</span></div>
 
-      <!-- Enabled -->
       <div class="row-head">Enabled<span class="sub">Default</span></div>
-      <div>
-        <div class="field field--select">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input is-placeholder">Select a category</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select">
-          <div class="field__title">
-            <span class="field__label">Category</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>Suggest</button>
-          </div>
-          <div class="field__box">
-            <span class="field__input is-placeholder">Select a category</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
+      <div><div class="field field--select"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input is-placeholder">Select a category</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select"><div class="field__title"><span class="field__label">Category</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>Suggest</button></div><div class="field__box"><span class="field__input is-placeholder">Select a category</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
 
-      <!-- Focused -->
       <div class="row-head">Focused<span class="sub">Open · chevron up</span></div>
-      <div>
-        <div class="field field--select field--focused">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input is-placeholder">Select a category</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select field--focused">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select field--focused">
-          <div class="field__title">
-            <span class="field__label">Category</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>Suggest</button>
-          </div>
-          <div class="field__box">
-            <span class="field__input is-placeholder">Select a category</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
+      <div><div class="field field--select field--focused"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input is-placeholder">Select a category</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select field--focused"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select field--focused"><div class="field__title"><span class="field__label">Category</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#info"/></svg>Required</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>Suggest</button></div><div class="field__box"><span class="field__input is-placeholder">Select a category</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
 
-      <!-- Filled -->
       <div class="row-head">Filled<span class="sub">Open with value</span></div>
-      <div>
-        <div class="field field--select field--filled">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters › Crewneck</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select field--filled">
-          <div class="field__title"><span class="field__label">Condition</span></div>
-          <div class="field__box">
-            <span class="field__input">New with tags</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select field--filled">
-          <div class="field__title">
-            <span class="field__label">Category</span>
-            <span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span>
-            <button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>Suggest</button>
-          </div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters › Crewneck</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
+      <div><div class="field field--select field--filled"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters › Crewneck</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select field--filled"><div class="field__title"><span class="field__label">Condition</span></div><div class="field__box"><span class="field__input">New with tags</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select field--filled"><div class="field__title"><span class="field__label">Category</span><span class="field__tag"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#check"/></svg>Saved</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>Suggest</button></div><div class="field__box"><span class="field__input">Women › Sweaters › Crewneck</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
 
-      <!-- Disabled -->
       <div class="row-head">Disabled<span class="sub">Opacity 0.38</span></div>
-      <div>
-        <div class="field field--select field--disabled">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input is-placeholder">Select a category</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select field--disabled">
-          <div class="field__title"><span class="field__label">Category</span></div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters › Crewneck</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <div>
-        <div class="field field--select field--disabled">
-          <div class="field__title">
-            <span class="field__label">Category</span>
-          </div>
-          <div class="field__box">
-            <span class="field__input">Women › Sweaters › Crewneck</span>
-            <span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span>
-          </div>
-        </div>
-      </div>
+      <div><div class="field field--select field--disabled"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input is-placeholder">Select a category</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select field--disabled"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters › Crewneck</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+      <div><div class="field field--select field--disabled"><div class="field__title"><span class="field__label">Category</span></div><div class="field__box"><span class="field__input">Women › Sweaters › Crewneck</span><span class="field__trail" aria-label="Open"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></span></div></div></div>
+    </div>
+  </section>
 
+  <!-- ══════════ SECTION 3 · FieldTextArea state matrix ══════════ -->
+  <section class="section">
+    <h2 class="section-h2">FieldTextArea · state matrix</h2>
+    <p class="section-sub">Multi-line input. Min-height 112px (<code>--size-alias-field-height-text-area</code>), auto-grows with content. Padding 12/16. No trailing icon slot. Optional <code>maxHeight</code> caps growth and switches to scroll.</p>
+
+    <div class="matrix matrix--textarea">
+      <div class="col-head"></div>
+      <div class="col-head">Empty<span class="sub">Placeholder visible</span></div>
+      <div class="col-head">Text entered<span class="sub">Short content</span></div>
+      <div class="col-head">Long text<span class="sub">Auto-grown past min</span></div>
+      <div class="col-head">With AssistiveChip<span class="sub">AI rewrite action</span></div>
+
+      <!-- ENABLED -->
+      <div class="row-head">Enabled<span class="sub">Default resting</span></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content is-placeholder">Describe the item condition, fabric, fit, and any flaws...</div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit, 90s fit.</div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box" style="min-height:168px"><div class="field__textarea-content">Soft pastel-purple knit with a relaxed 90s silhouette. Barely worn, kept folded in a smoke-free home. Minor pilling along the cuffs but otherwise excellent condition. Pairs well with high-rise denim.</div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__textarea-box"><div class="field__textarea-content is-placeholder">Describe the item...</div></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+
+      <!-- FOCUSED -->
+      <div class="row-head">Focused<span class="sub">Primary border</span></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content is-placeholder">Describe the item<span class="field__caret"></span></div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit<span class="field__caret"></span></div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box" style="min-height:168px"><div class="field__textarea-content">Soft pastel-purple knit with a relaxed 90s silhouette. Barely worn, kept folded in a smoke-free home<span class="field__caret"></span></div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit<span class="field__caret"></span></div></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+
+      <!-- FILLED -->
+      <div class="row-head">Filled<span class="sub">Just entered · primary</span></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content is-placeholder">Describe the item...</div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit, 90s fit.</div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box" style="min-height:168px"><div class="field__textarea-content">Soft pastel-purple knit with a relaxed 90s silhouette. Barely worn. Minor pilling along the cuffs but otherwise excellent condition.</div></div><div class="field__help">Add details that help buyers understand.</div></div></div>
+      <div><div class="field field--filled"><div class="field__title"><span class="field__label">Description</span><button class="field__assistive-chip" type="button"><svg viewBox="0 0 24 24" fill="currentColor"><use href="../assets/icons.svg#sparkle"/></svg>AI rewrite</button></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit, 90s fit.</div></div><div class="field__help">Rewrite anytime from the AI menu.</div></div></div>
+
+      <!-- ERROR -->
+      <div class="row-head">Error<span class="sub">Red border + helper</span></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content is-placeholder">Describe the item...</div></div><div class="field__help">Description is required to publish.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Sweater</div></div><div class="field__help">Too short — add brand, condition, and fit.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box" style="min-height:168px"><div class="field__textarea-content">A really long description that exceeds the 1000-character maximum allowed on Poshmark and will need trimming before publishing. Keep it concise. Add brand, condition, and fit. Mention flaws if any. Sized relative to standard fits. Fabric content listed on the care tag. Washed cold, air-dried.</div></div><div class="field__help">Description is 87 characters over the Poshmark limit.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Sweater</div></div><div class="field__help">Too short — add brand, condition, and fit.</div></div></div>
+
+      <!-- DISABLED -->
+      <div class="row-head">Disabled<span class="sub">Opacity 0.38</span></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content is-placeholder">Describe the item...</div></div><div class="field__help">Unlocks after photos are uploaded.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit, 90s fit.</div></div><div class="field__help">Published — unlist to edit.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box" style="min-height:168px"><div class="field__textarea-content">Soft pastel-purple knit with a relaxed 90s silhouette. Barely worn, kept folded in a smoke-free home.</div></div><div class="field__help">Published — unlist to edit.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Description</span></div><div class="field__textarea-box"><div class="field__textarea-content">Pastel purple knit, 90s fit.</div></div><div class="field__help">AI rewrite disabled on this plan.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ SECTION 4 · FieldStyleTags state matrix ══════════ -->
+  <section class="section">
+    <h2 class="section-h2">FieldStyleTags · state matrix</h2>
+    <p class="section-sub">Chip-input with optional suggestions dropdown. Commit: Enter · Tab · comma. Backspace on empty removes the last chip. Exact-string duplicates silently dropped.</p>
+
+    <div class="matrix matrix--styletags">
+      <div class="col-head"></div>
+      <div class="col-head">Empty<span class="sub">No chips yet</span></div>
+      <div class="col-head">With chips<span class="sub">Two committed</span></div>
+      <div class="col-head">Typing<span class="sub">Inline input has chars</span></div>
+      <div class="col-head">With dropdown<span class="sub">Suggestions open</span></div>
+
+      <!-- ENABLED -->
+      <div class="row-head">Enabled<span class="sub">Default resting</span></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__inline-input-ghost">Add style tags</span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove Vintage" type="button"></button></span><span class="field__styletag">Y2K<button class="field__styletag__x" aria-label="Remove Y2K" type="button"></button></span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">streetw<span class="field__caret"></span></span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+      <div><div class="field"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">streetw<span class="field__caret"></span></span></div><div class="field__dropdown"><span class="field__styletag">Streetwear</span><span class="field__styletag">Street style</span><span class="field__styletag">Streetchic</span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+
+      <!-- FOCUSED -->
+      <div class="row-head">Focused<span class="sub">Primary border</span></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__inline-input-ghost">Add style tags<span class="field__caret"></span></span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__styletag">Y2K<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost"><span class="field__caret"></span></span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">streetw<span class="field__caret"></span></span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+      <div><div class="field field--focused"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">streetw<span class="field__caret"></span></span></div><div class="field__dropdown"><span class="field__styletag">Streetwear</span><span class="field__styletag">Street style</span><span class="field__styletag">Streetchic</span></div><div class="field__help">Press Enter, Tab, or comma to confirm a tag</div></div></div>
+
+      <!-- ERROR -->
+      <div class="row-head">Error<span class="sub">Red border</span></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__inline-input-ghost">Add style tags</span></div><div class="field__help">At least one style tag is required.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__styletag">Y2K<button class="field__styletag__x" aria-label="Remove" type="button"></button></span></div><div class="field__help">Remove a tag — Poshmark allows up to 2.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">vintag<span class="field__caret"></span></span></div><div class="field__help">"vintag" is not a valid tag.</div></div></div>
+      <div><div class="field field--error"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">vintag<span class="field__caret"></span></span></div><div class="field__dropdown"><span class="field__styletag">Vintage</span><span class="field__styletag">Vintage-inspired</span></div><div class="field__help">"Vintage" already added — pick a different suggestion.</div></div></div>
+
+      <!-- DISABLED -->
+      <div class="row-head">Disabled<span class="sub">Opacity 0.38</span></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__inline-input-ghost">Add style tags</span></div><div class="field__help">Unlocks after basic details.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__styletag">Y2K<button class="field__styletag__x" aria-label="Remove" type="button"></button></span></div><div class="field__help">Published — unlist to edit.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">streetw</span></div><div class="field__help">Published — unlist to edit.</div></div></div>
+      <div><div class="field field--disabled"><div class="field__title"><span class="field__label">Style Tags</span></div><div class="field__tagflow-box"><span class="field__styletag">Vintage<button class="field__styletag__x" aria-label="Remove" type="button"></button></span><span class="field__inline-input-ghost">streetw</span></div><div class="field__help">Dropdown hidden when disabled.</div></div></div>
+    </div>
+  </section>
+
+  <!-- ══════════ SECTION 5 · Interactive StyleTags demo ══════════ -->
+  <section class="section">
+    <h2 class="section-h2">FieldStyleTags · interactive</h2>
+    <p class="section-sub">Try the commit rules yourself. Enter / Tab / comma commits. Backspace on empty removes the last chip. Exact-string duplicates silently dropped. Click a suggestion below to add it.</p>
+
+    <div class="demo">
+      <div class="field" id="demo-styletags">
+        <div class="field__title"><span class="field__label">Style Tags</span></div>
+        <div class="field__tagflow-box" id="demo-tagflow">
+          <input class="field__inline-input" id="demo-input" placeholder="Add style tags" autocomplete="off" />
+        </div>
+        <div class="field__help">Press Enter, Tab, or comma to confirm a tag</div>
+      </div>
+      <div style="margin-top:16px;">
+        <p style="font:var(--type-label-md);letter-spacing:var(--type-label-md-tracking);color:var(--sys-on-surface-variant);margin:0 0 8px;text-transform:uppercase;font-size:11px;">Click to add</p>
+        <div id="demo-suggestions" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+      </div>
     </div>
   </section>
 
@@ -831,68 +620,27 @@
         <tr><th style="width:22%">Part</th><th style="width:26%">Enabled / Validated / Long Text</th><th style="width:26%">Focused / Filled</th><th>Error</th></tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Container border</td>
-          <td>1&nbsp;dp <code>--sys-outline</code></td>
-          <td>1&nbsp;dp <code>--sys-primary</code></td>
-          <td>1&nbsp;dp <code>--sys-error</code></td>
-        </tr>
-        <tr>
-          <td>Label color</td>
-          <td><code>--sys-on-surface-variant</code></td>
-          <td><code>--sys-on-surface-variant</code></td>
-          <td><code>--sys-error</code></td>
-        </tr>
-        <tr>
-          <td>Input text · caret</td>
-          <td><code>--sys-on-surface</code></td>
-          <td><code>--sys-on-surface</code> + caret <code>--sys-primary</code></td>
-          <td><code>--sys-on-surface</code></td>
-        </tr>
-        <tr>
-          <td>Helper / supporting</td>
-          <td><code>--sys-on-surface-variant</code></td>
-          <td><code>--sys-on-surface-variant</code></td>
-          <td><code>--sys-error</code> <em>(accessibility override; Figma shows neutral)</em></td>
-        </tr>
-        <tr>
-          <td>Trailing icon</td>
-          <td><code>--sys-on-surface-variant</code> · hover <code>--state-onSurface-08</code></td>
-          <td>same</td>
-          <td><code>--sys-error</code></td>
-        </tr>
-        <tr>
-          <td>Tag chip</td>
-          <td colspan="2">bg <code>--sys-primary-fixed</code> · text <code>--sys-on-primary-fixed</code> · radius <code>--radius-alias-chip</code> · 11/14 Lexend</td>
-          <td>bg <code>--sys-surface-dim</code> · text <code>--sys-on-surface-variant</code></td>
-        </tr>
-        <tr>
-          <td>AssistiveChip</td>
-          <td colspan="3"><code>--sys-primary</code> text · hover <code>--state-primary-08</code> · 32&nbsp;dp tall · 18&nbsp;dp icon · 12/16 Lexend Medium · hidden in Error + Disabled</td>
-        </tr>
-        <tr>
-          <td>Disabled</td>
-          <td colspan="3">Entire component at opacity <code>0.38</code> · Tag + AssistiveChip hidden.</td>
-        </tr>
-        <tr>
-          <td>Shape · Height · Padding</td>
-          <td colspan="3"><code>--radius-alias-field</code> (4&nbsp;dp) · 56&nbsp;dp input box · 16&nbsp;dp horizontal padding</td>
-        </tr>
-        <tr>
-          <td>Type</td>
-          <td colspan="3">Label <code>--type-title-md</code> · Input <code>--type-body-lg</code> · Helper <code>--type-body-sm</code> · Tag/Helper 11/14</td>
-        </tr>
+        <tr><td>Container border</td><td>1 dp <code>--sys-outline</code></td><td>1 dp <code>--sys-primary</code></td><td>1 dp <code>--sys-error</code></td></tr>
+        <tr><td>Label color</td><td><code>--sys-on-surface-variant</code></td><td><code>--sys-on-surface-variant</code></td><td><code>--sys-error</code></td></tr>
+        <tr><td>Input text · caret</td><td><code>--sys-on-surface</code></td><td><code>--sys-on-surface</code> + caret <code>--sys-primary</code></td><td><code>--sys-on-surface</code></td></tr>
+        <tr><td>Helper / supporting</td><td><code>--sys-on-surface-variant</code></td><td><code>--sys-on-surface-variant</code></td><td><code>--sys-error</code> <em>(accessibility override; Figma shows neutral)</em></td></tr>
+        <tr><td>Trailing icon</td><td><code>--sys-on-surface-variant</code> · hover <code>--state-onSurface-08</code></td><td>same</td><td><code>--sys-error</code></td></tr>
+        <tr><td>Tag chip</td><td colspan="2">bg <code>--sys-secondary-container</code> · text <code>--sys-on-secondary-container</code> · radius <code>--radius-alias-chip</code> · 11/14 Lexend <em>(overrides Figma's primary-fixed)</em></td><td>bg <code>--sys-surface-dim</code> · text <code>--sys-on-surface-variant</code></td></tr>
+        <tr><td>AssistiveChip</td><td colspan="3"><code>--sys-primary</code> text · hover <code>--state-primary-08</code> · 32 dp tall · 18 dp icon · 12/16 Lexend Medium · hidden in Error + Disabled</td></tr>
+        <tr><td>Disabled</td><td colspan="3">Entire component at opacity <code>0.38</code> · Tag + AssistiveChip hidden. Dropdown hidden.</td></tr>
+        <tr><td>TextArea height</td><td colspan="3">min <code>--size-alias-field-height-text-area</code> (112 dp) · auto-grows with content · optional <code>maxHeight</code> prop caps growth and switches to internal scroll · padding 12/16</td></tr>
+        <tr><td>StyleTags chip</td><td colspan="3">22 dp pill · 4/8 padding · 8 dp gap between chips · <code>--sys-secondary-container</code> · inline × remove glyph is <code>currentColor</code>, 10×1.5 px bars rotated ±45°</td></tr>
+        <tr><td>Dropdown</td><td colspan="3">bg <code>--sys-surface-container-high</code> · radius <code>--radius-ref-medium</code> (12 dp) · elevation <code>--sys-shadow-level3</code> · 12 dp padding · 8 dp gap</td></tr>
+        <tr><td>Shape · Padding</td><td colspan="3"><code>--radius-alias-field</code> (4 dp) · Field: 56 dp · Select: 56 dp · TextArea: 112 dp min · StyleTags: 56 dp min</td></tr>
+        <tr><td>Type</td><td colspan="3">Label <code>--type-title-md</code> · Input <code>--type-body-lg</code> · Helper/Tag 11/14 · AssistiveChip <code>--type-label-md</code></td></tr>
       </tbody>
     </table>
   </div>
 
-  <!-- ══════════ Tweaks panel ══════════ -->
+  <!-- ══════════ Tweaks panel (Field playground only) ══════════ -->
   <aside class="tweaks" id="tweaks" aria-hidden="true">
-    <div class="tweaks__head">
-      <span class="tweaks__title">Tweaks</span>
-    </div>
+    <div class="tweaks__head"><span class="tweaks__title">Tweaks · Field</span></div>
     <div class="tweaks__body">
-
       <div class="tweaks__row">
         <label>State</label>
         <div class="tweaks__segs" data-key="state">
@@ -905,45 +653,14 @@
           <button data-val="disabled"  aria-pressed="false">Disabled</button>
         </div>
       </div>
-
-      <div class="tweaks__row">
-        <label for="tw-label">Label</label>
-        <input id="tw-label" class="tweaks__input" value="Title" data-key="label">
-      </div>
-
-      <div class="tweaks__row">
-        <label for="tw-value">Value</label>
-        <input id="tw-value" class="tweaks__input" value="Vintage 90s Knit Sweater" data-key="value" placeholder="Enter a title">
-      </div>
-
-      <div class="tweaks__row">
-        <label for="tw-help">Helper text</label>
-        <input id="tw-help" class="tweaks__input" value="Up to 100 characters." data-key="help">
-      </div>
-
-      <div class="tweaks__toggle">
-        <span>Show Tag</span>
-        <button class="tweaks__switch" data-key="showTag" aria-checked="false" role="switch"></button>
-      </div>
-      <div class="tweaks__row">
-        <label for="tw-tag">Tag label</label>
-        <input id="tw-tag" class="tweaks__input" value="Required" data-key="tagLabel">
-      </div>
-
-      <div class="tweaks__toggle">
-        <span>Show AssistiveChip</span>
-        <button class="tweaks__switch" data-key="showChip" aria-checked="false" role="switch"></button>
-      </div>
-      <div class="tweaks__row">
-        <label for="tw-chip">Chip label</label>
-        <input id="tw-chip" class="tweaks__input" value="AI rewrite" data-key="chipLabel">
-      </div>
-
-      <div class="tweaks__row">
-        <label for="tw-prefix">Prefix (leave empty = off)</label>
-        <input id="tw-prefix" class="tweaks__input" value="" data-key="prefix" placeholder="$ · lb · @">
-      </div>
-
+      <div class="tweaks__row"><label for="tw-label">Label</label><input id="tw-label" class="tweaks__input" value="Title" data-key="label"></div>
+      <div class="tweaks__row"><label for="tw-value">Value</label><input id="tw-value" class="tweaks__input" value="Vintage 90s Knit Sweater" data-key="value" placeholder="Enter a title"></div>
+      <div class="tweaks__row"><label for="tw-help">Helper text</label><input id="tw-help" class="tweaks__input" value="Up to 100 characters." data-key="help"></div>
+      <div class="tweaks__toggle"><span>Show Tag</span><button class="tweaks__switch" data-key="showTag" aria-checked="false" role="switch"></button></div>
+      <div class="tweaks__row"><label for="tw-tag">Tag label</label><input id="tw-tag" class="tweaks__input" value="Required" data-key="tagLabel"></div>
+      <div class="tweaks__toggle"><span>Show AssistiveChip</span><button class="tweaks__switch" data-key="showChip" aria-checked="false" role="switch"></button></div>
+      <div class="tweaks__row"><label for="tw-chip">Chip label</label><input id="tw-chip" class="tweaks__input" value="AI rewrite" data-key="chipLabel"></div>
+      <div class="tweaks__row"><label for="tw-prefix">Prefix (empty = off)</label><input id="tw-prefix" class="tweaks__input" value="" data-key="prefix" placeholder="$ · lb · @"></div>
       <div class="tweaks__row">
         <label>Trailing icon</label>
         <div class="tweaks__segs" data-key="trail">
@@ -952,144 +669,129 @@
           <button data-val="chevron" aria-pressed="false">Chevron</button>
         </div>
       </div>
-
     </div>
   </aside>
 
   <script>
+  // ── Field playground ─────────────────────────────────────────────
   (() => {
-    // ── tweak state (editable default) ───────────────
     const DEFAULTS = /*EDITMODE-BEGIN*/{
-      "state": "enabled",
-      "label": "Title",
-      "value": "Vintage 90s Knit Sweater",
-      "help": "Up to 100 characters.",
-      "showTag": false,
-      "tagLabel": "Required",
-      "showChip": false,
-      "chipLabel": "AI rewrite",
-      "prefix": "",
-      "trail": "none"
+      "state":"enabled","label":"Title","value":"Vintage 90s Knit Sweater",
+      "help":"Up to 100 characters.","showTag":false,"tagLabel":"Required",
+      "showChip":false,"chipLabel":"AI rewrite","prefix":"","trail":"none"
     }/*EDITMODE-END*/;
     const state = {...DEFAULTS};
-
-    // ── dom refs ─────────────────────────────────────
-    const $pg        = document.getElementById('playground');
-    const $field     = document.getElementById('pg-field');
-    const $label     = document.getElementById('pg-label');
-    const $tag       = document.getElementById('pg-tag');
-    const $tagLabel  = document.getElementById('pg-tag-label');
-    const $chip      = document.getElementById('pg-chip');
-    const $chipLabel = document.getElementById('pg-chip-label');
-    const $box       = document.getElementById('pg-box');
-    const $prefix    = document.getElementById('pg-prefix');
-    const $input     = document.getElementById('pg-input');
-    const $caret     = document.getElementById('pg-caret');
-    const $trail     = document.getElementById('pg-trail');
-    const $trailSvg  = document.getElementById('pg-trail-icon');
-    const $help      = document.getElementById('pg-help');
-    const $tweaks    = document.getElementById('tweaks');
-
+    const $pg=document.getElementById('playground'), $field=document.getElementById('pg-field');
+    const $label=document.getElementById('pg-label'), $tag=document.getElementById('pg-tag');
+    const $tagLabel=document.getElementById('pg-tag-label'), $chip=document.getElementById('pg-chip');
+    const $chipLabel=document.getElementById('pg-chip-label'), $prefix=document.getElementById('pg-prefix');
+    const $input=document.getElementById('pg-input'), $caret=document.getElementById('pg-caret');
+    const $trail=document.getElementById('pg-trail'), $trailUse=document.getElementById('pg-trail-use');
+    const $help=document.getElementById('pg-help'), $tweaks=document.getElementById('tweaks');
     const STATE_CLASSES = ['field--focused','field--filled','field--validated','field--long-text','field--error','field--disabled'];
-    const TRAIL_ICONS = {
-      clear:   '<circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>',
-      chevron: '<path d="M6 9l6 6 6-6"/>',
-    };
+    const TRAIL_ICONS = { clear:'../assets/icons.svg#x', chevron:'../assets/icons.svg#chevron_down' };
 
-    // ── apply state → dom ────────────────────────────
     function render(){
-      // reset state classes, add current one
       STATE_CLASSES.forEach(c => $field.classList.remove(c));
       if (state.state !== 'enabled') $field.classList.add(`field--${state.state}`);
       $caret.hidden = state.state !== 'focused';
-
-      // label / tag / chip / value / help
       $label.textContent = state.label || '\u00A0';
       $tag.hidden = !state.showTag || state.state === 'disabled';
       $tagLabel.textContent = state.tagLabel || 'Status';
       $chip.hidden = !state.showChip || state.state === 'disabled' || state.state === 'error';
       $chipLabel.textContent = state.chipLabel || 'Label';
-
       const empty = !state.value;
       $input.textContent = empty ? (document.getElementById('tw-value').placeholder || '') : state.value;
       $input.classList.toggle('is-placeholder', empty);
       $help.textContent = state.help;
-
-      // prefix
       const hasPrefix = !!state.prefix.trim();
-      $prefix.hidden = !hasPrefix;
-      $prefix.textContent = state.prefix;
-
-      // trail
-      if (state.trail === 'none'){
-        $trail.hidden = true;
-      } else {
-        $trail.hidden = false;
-        $trailSvg.innerHTML = TRAIL_ICONS[state.trail];
-      }
+      $prefix.hidden = !hasPrefix; $prefix.textContent = state.prefix;
+      if (state.trail === 'none') $trail.hidden = true;
+      else { $trail.hidden = false; $trailUse.setAttribute('href', TRAIL_ICONS[state.trail]); }
     }
-
-    // ── input wiring ─────────────────────────────────
-    function setKey(k, v){
-      state[k] = v;
-      render();
-      window.parent.postMessage({type:'__edit_mode_set_keys', edits:{[k]: v}}, '*');
-    }
-
+    function setKey(k,v){ state[k]=v; render(); window.parent.postMessage({type:'__edit_mode_set_keys',edits:{[k]:v}},'*'); }
     $tweaks.querySelectorAll('.tweaks__segs').forEach(seg => {
       const key = seg.dataset.key;
-      seg.addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-val]');
-        if (!btn) return;
+      seg.addEventListener('click', e => {
+        const btn = e.target.closest('button[data-val]'); if (!btn) return;
         seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
         setKey(key, btn.dataset.val);
       });
     });
-
-    $tweaks.querySelectorAll('.tweaks__input').forEach(inp => {
-      inp.addEventListener('input', e => setKey(inp.dataset.key, inp.value));
-    });
-
-    $tweaks.querySelectorAll('.tweaks__switch').forEach(sw => {
-      sw.addEventListener('click', () => {
-        const next = sw.getAttribute('aria-checked') !== 'true';
-        sw.setAttribute('aria-checked', next ? 'true' : 'false');
-        setKey(sw.dataset.key, next);
-      });
-    });
-
-    // ── seed UI from defaults ────────────────────────
+    $tweaks.querySelectorAll('.tweaks__input').forEach(inp => inp.addEventListener('input', e => setKey(inp.dataset.key, inp.value)));
+    $tweaks.querySelectorAll('.tweaks__switch').forEach(sw => sw.addEventListener('click', () => {
+      const next = sw.getAttribute('aria-checked') !== 'true';
+      sw.setAttribute('aria-checked', next ? 'true' : 'false');
+      setKey(sw.dataset.key, next);
+    }));
     function syncUiToState(){
       $tweaks.querySelectorAll('.tweaks__segs').forEach(seg => {
         const key = seg.dataset.key;
-        seg.querySelectorAll('button').forEach(b => {
-          b.setAttribute('aria-pressed', b.dataset.val === state[key] ? 'true' : 'false');
-        });
+        seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.val === state[key] ? 'true' : 'false'));
       });
-      $tweaks.querySelectorAll('.tweaks__input').forEach(inp => {
-        inp.value = state[inp.dataset.key] ?? '';
-      });
-      $tweaks.querySelectorAll('.tweaks__switch').forEach(sw => {
-        sw.setAttribute('aria-checked', state[sw.dataset.key] ? 'true' : 'false');
-      });
+      $tweaks.querySelectorAll('.tweaks__input').forEach(inp => inp.value = state[inp.dataset.key] ?? '');
+      $tweaks.querySelectorAll('.tweaks__switch').forEach(sw => sw.setAttribute('aria-checked', state[sw.dataset.key] ? 'true' : 'false'));
     }
-    syncUiToState();
-    render();
-
-    // ── host <-> iframe contract ─────────────────────
-    window.addEventListener('message', (e) => {
+    syncUiToState(); render();
+    window.addEventListener('message', e => {
       const d = e.data || {};
-      if (d.type === '__activate_edit_mode'){
-        $tweaks.dataset.open = 'true';
-        $tweaks.setAttribute('aria-hidden','false');
-        $pg.hidden = false;
-      } else if (d.type === '__deactivate_edit_mode'){
-        $tweaks.dataset.open = 'false';
-        $tweaks.setAttribute('aria-hidden','true');
-        $pg.hidden = true;
-      }
+      if (d.type === '__activate_edit_mode') { $tweaks.dataset.open = 'true'; $tweaks.setAttribute('aria-hidden','false'); $pg.hidden = false; }
+      else if (d.type === '__deactivate_edit_mode') { $tweaks.dataset.open = 'false'; $tweaks.setAttribute('aria-hidden','true'); $pg.hidden = true; }
     });
     window.parent.postMessage({type:'__edit_mode_available'}, '*');
+  })();
+
+  // ── FieldStyleTags interactive demo ──────────────────────────────
+  (() => {
+    const SUGGESTIONS = ['Vintage','Y2K','Streetwear','Minimalist','Boho','Preppy','Cottagecore','Workwear'];
+    const $box = document.getElementById('demo-tagflow');
+    const $input = document.getElementById('demo-input');
+    const $sugg = document.getElementById('demo-suggestions');
+    let tags = [];
+
+    function render(){
+      // Remove all existing chips (keep only the input)
+      [...$box.querySelectorAll('.field__styletag')].forEach(el => el.remove());
+      // Insert chips before the input
+      tags.forEach(t => {
+        const chip = document.createElement('span');
+        chip.className = 'field__styletag';
+        chip.innerHTML = `${escapeHtml(t)}<button class="field__styletag__x" aria-label="Remove ${escapeHtml(t)}" type="button"></button>`;
+        chip.querySelector('.field__styletag__x').addEventListener('click', () => remove(t));
+        $box.insertBefore(chip, $input);
+      });
+      $input.placeholder = tags.length === 0 ? 'Add style tags' : '';
+      // Rebuild suggestions (exclude ones already added)
+      $sugg.innerHTML = '';
+      SUGGESTIONS.filter(s => !tags.includes(s)).forEach(s => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'field__styletag';
+        btn.style.cursor = 'pointer';
+        btn.style.border = 'none';
+        btn.textContent = s;
+        btn.addEventListener('click', () => commit(s));
+        $sugg.appendChild(btn);
+      });
+    }
+    function commit(raw){
+      const next = raw.trim();
+      if (!next) return;
+      if (tags.includes(next)) { $input.value = ''; return; }
+      tags.push(next); $input.value = ''; render(); $input.focus();
+    }
+    function remove(t){ tags = tags.filter(x => x !== t); render(); $input.focus(); }
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    $input.addEventListener('keydown', e => {
+      if (['Enter','Tab',','].includes(e.key)) {
+        if ($input.value.trim()) { e.preventDefault(); commit($input.value); }
+      } else if (e.key === 'Backspace' && !$input.value && tags.length) {
+        e.preventDefault(); remove(tags[tags.length - 1]);
+      }
+    });
+    $input.addEventListener('blur', () => { if ($input.value.trim()) commit($input.value); });
+    render();
   })();
   </script>
 
