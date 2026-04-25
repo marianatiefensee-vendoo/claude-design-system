@@ -50,12 +50,14 @@
       <p style="margin-top:12px;">
         Tap the <span class="kbd">+</span> FAB to start a listing, tap a listing to re-open it, or switch tabs in the bottom nav. Everything's clickable.
       </p>
+      <div id="dialog-demo-root" style="margin-top:24px;"></div>
     </div>
     <div id="root"></div>
   </div>
 
 <script src="../../assets/icons-manifest.js"></script>
 <script type="text/babel" src="./Icon.jsx"></script>
+<script type="text/babel" src="./Dialog.jsx"></script>
 <script type="text/babel" src="./Button.jsx"></script>
 <script type="text/babel" src="./IconButton.jsx"></script>
 <script type="text/babel" src="./Fields.jsx"></script>
@@ -137,6 +139,36 @@ function Placeholder({ title, body }) {
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+// ── Dialog demo (sidebar) ─────────────────────────────────────────────────────
+function DialogDemo() {
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const handlePrimary = () => {
+    setLoading(true);
+    setTimeout(() => { setLoading(false); setOpen(false); }, 1500);
+  };
+
+  return (
+    <React.Fragment>
+      <Button variant="tonal" onClick={() => setOpen(true)}>
+        Show dialog
+      </Button>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Publish listing?"
+        primaryAction={{ label: "Publish", onClick: handlePrimary, loading }}
+        secondaryAction={{ label: "Cancel", onClick: () => setOpen(false) }}
+      >
+        This listing will be crossposted to your connected marketplaces. You can unpublish it at any time from your inventory.
+      </Dialog>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("dialog-demo-root")).render(<DialogDemo />);
 </script>
 </body>
 </html>
