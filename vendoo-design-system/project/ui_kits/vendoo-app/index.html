@@ -92,136 +92,226 @@
 <script src="./data.js?v=3"></script>
 <script type="text/babel" src="./Inventory.jsx"></script>
 <script type="text/babel" src="./CreateListing.jsx"></script>
-<!-- Pass 2: lazy listing flow screens -->
 <script type="text/babel" src="./CameraScreen.jsx"></script>
+<script type="text/babel" src="./ListingFormScreen.jsx"></script>
 
 <script type="text/babel">
 
-// ─────────────────────────────────────────────────────────────────────────────
-// FlowShell — minimal phone frame for the linear listing flow screens.
-// These screens manage their own top nav / back / close buttons, so this
-// wrapper only provides the 420×820 device chrome (no app bar, no bottom nav).
-// ─────────────────────────────────────────────────────────────────────────────
-function FlowShell({ children }) {
+// ── Lazy-create draft shape ────────────────────────────────────────────────────
+const EMPTY_DRAFT = {
+  photos: [],
+  generalDetails: {
+    category: '', condition: '', brand: '', model: '', color: '', size: '',
+  },
+  pricing: { price: '' },
+};
+
+// ── FlowShell — wizard frame for the lazy-create flow ─────────────────────────
+function FlowShell({ step, totalSteps, stepLabel, onBack, onClose, footer, children }) {
+  const progress = step / totalSteps;
   return (
     <div style={{
-      position: 'relative',
+      position: "relative",
       width: 420, height: 820,
       borderRadius: 28,
-      overflow: 'hidden',
-      boxShadow: 'var(--elev-3)',
-      display: 'flex', flexDirection: 'column',
-      fontFamily: 'var(--font-sans)',
-      border: '1px solid var(--sys-outline-variant)',
+      overflow: "hidden",
+      background: "var(--sys-background)",
+      boxShadow: "var(--elev-3)",
+      display: "flex", flexDirection: "column",
+      fontFamily: "var(--font-sans)",
+      border: "1px solid var(--sys-outline-variant)",
     }}>
-      {children}
+      {/* Top bar */}
+      <div style={{
+        height: 56, flex: "none", padding: "0 8px",
+        display: "flex", alignItems: "center", gap: 4,
+        background: "var(--sys-surface)",
+        borderBottom: "1px solid var(--sys-outline-variant)",
+      }}>
+        <IconButton icon="arrow_left" title="Back" onClick={onBack} />
+        <div style={{
+          flex: 1, textAlign: "center",
+          font: "500 16px/24px var(--font-sans)", letterSpacing: "0.15px",
+          color: "var(--sys-on-surface)",
+        }}>{stepLabel}</div>
+        <IconButton icon="x" title="Discard and close" onClick={onClose} />
+      </div>
+
+      {/* Progress bar */}
+      <div style={{ height: 3, flex: "none", background: "var(--sys-surface-container-high)" }}>
+        <div style={{
+          height: "100%",
+          width: (progress * 100) + "%",
+          background: "var(--sys-primary)",
+          transition: "width 300ms ease",
+        }} />
+      </div>
+
+      {/* Scrollable body */}
+      <div style={{ flex: 1, overflowY: "auto", position: "relative" }}>
+        {children}
+      </div>
+
+      {/* Sticky footer */}
+      {footer && (
+        <div style={{
+          flex: "none", padding: "12px 16px",
+          borderTop: "1px solid var(--sys-outline-variant)",
+          background: "var(--sys-surface)",
+          display: "flex", alignItems: "center", gap: 12,
+        }}>
+          {footer}
+        </div>
+      )}
     </div>
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Listing draft — initial state (zero Firestore until Phase 7)
-// ─────────────────────────────────────────────────────────────────────────────
-const EMPTY_DRAFT = {
-  images:               [],     // CapturedImageStateType[]
-  enrichments:          null,   // AIEnrichmentsType | null
-  generalDetails:       {},     // Partial<GeneralDetailsType>
-  analyzingStatus:      'idle', // 'idle' | 'analyzing' | 'ready'
-  presentationStatus:   'idle', // 'idle' | 'generating' | 'ready'
-  selectedMarketplaces: [],     // Marketplace[]
-  itemId:               null,   // string | null — only set in Phase 7
-};
+// ── Pricing placeholder (stub for Phase 4+) ───────────────────────────────────
+function PricingPlaceholder({ draft }) {
+  return (
+    <div style={{ padding: "20px 16px 40px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div>
+        <h2 style={{
+          fontFamily: "var(--font-sans)", fontSize: 20, fontWeight: 500,
+          lineHeight: "28px", color: "var(--sys-on-surface)", margin: "0 0 4px",
+        }}>Set your price</h2>
+        <p style={{
+          fontFamily: "var(--font-sans)", fontSize: 14,
+          lineHeight: "20px", letterSpacing: "0.25px",
+          color: "var(--sys-on-surface-variant)", margin: 0,
+        }}>We'll recommend a price once our AI finishes analyzing your item.</p>
+      </div>
+      <div style={{
+        display: "flex", gap: 10, alignItems: "center",
+        padding: "14px 16px",
+        background: "var(--sys-surface-container)",
+        borderRadius: 12,
+      }}>
+        <Icon name="sparkle" size={20} color="var(--sys-primary)" />
+        <span style={{
+          fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 400,
+          lineHeight: "18px", letterSpacing: "0.25px",
+          color: "var(--sys-on-surface-variant)",
+        }}>
+          AI pricing analysis running in background…
+        </span>
+      </div>
+    </div>
+  );
+}
 
-// ─────────────────────────────────────────────────────────────────────────────
-// App — root router
-// ─────────────────────────────────────────────────────────────────────────────
+// ── App ────────────────────────────────────────────────────────────────────────
+const FLOW_STEPS  = ['camera', 'form', 'pricing'];
+const STEP_LABELS = { camera: 'Add photos', form: 'Item details', pricing: 'Set your price' };
+
 function App() {
-  // ── Navigation ──────────────────────────────────────────────────────────
-  // Inventory-side views:   inventory | home | messages | profile
-  // Listing flow views:     camera | listing-form | pricing | publish | success
-  const [view, setView] = React.useState("inventory");
+  const [view, setView] = React.useState("inventory"); // inventory | home | messages | profile | lazyCreate
+  const [editing, setEditing] = React.useState(null);
 
-  // ── Listing draft (single source of truth for the flow) ─────────────────
-  const [draft, setDraft] = React.useState(EMPTY_DRAFT);
+  // ── Lazy-create state ──
+  const [flowStep, setFlowStep]   = React.useState('camera');
+  const [draft, setDraft]         = React.useState(EMPTY_DRAFT);
+  const phase4Ref                 = React.useRef(null);
+  const [draftMarkets, setDraftMarkets] = React.useState(["poshmark", "ebay", "mercari"]);
 
-  const updateDraft = (updates) =>
-    setDraft(prev => ({ ...prev, ...updates }));
+  const updateDraft = (patch) => setDraft(d => ({ ...d, ...patch }));
+  const updateGeneralDetails = (patch) => setDraft(d => ({
+    ...d, generalDetails: { ...d.generalDetails, ...patch },
+  }));
 
-  const resetDraft = () => setDraft(EMPTY_DRAFT);
-
-  // ── Flow navigation helpers ──────────────────────────────────────────────
-  const startFlow = () => { resetDraft(); setView('camera'); };
-  const closeFlow = () => { resetDraft(); setView('inventory'); };
-
-  // ── Which views are part of the listing flow? ────────────────────────────
-  const FLOW_VIEWS = new Set(['camera', 'listing-form', 'pricing', 'publish', 'success']);
-  const isFlow     = FLOW_VIEWS.has(view);
-
-  // ── App bar config for inventory-side views ──────────────────────────────
-  const titles = {
-    home:      "Home",
-    inventory: "Inventory",
-    messages:  "Messages",
-    profile:   "Profile",
+  const openLazyCreate = () => {
+    setDraft(EMPTY_DRAFT);
+    setFlowStep('camera');
+    setView('lazyCreate');
   };
+
+  const flowStepIndex = FLOW_STEPS.indexOf(flowStep) + 1;
+  const isLastStep    = flowStepIndex === FLOW_STEPS.length;
+
+  const goNextStep = () => {
+    if (flowStep === 'form') {
+      // Fire Phase 4 compute-presentation in background; don't await it
+      if (phase4Ref.current) clearTimeout(phase4Ref.current);
+      phase4Ref.current = setTimeout(() => {
+        console.log('[Phase 4] compute-presentation complete');
+      }, 2000);
+    }
+    const nextIdx = FLOW_STEPS.indexOf(flowStep) + 1;
+    if (nextIdx < FLOW_STEPS.length) setFlowStep(FLOW_STEPS[nextIdx]);
+    else setView('inventory');
+  };
+
+  const goBackStep = () => {
+    const prevIdx = FLOW_STEPS.indexOf(flowStep) - 1;
+    if (prevIdx < 0) setView('inventory');
+    else setFlowStep(FLOW_STEPS[prevIdx]);
+  };
+
+  // ── Lazy-create view ──
+  if (view === 'lazyCreate') {
+    return (
+      <FlowShell
+        step={flowStepIndex}
+        totalSteps={FLOW_STEPS.length}
+        stepLabel={STEP_LABELS[flowStep]}
+        onBack={goBackStep}
+        onClose={() => setView('inventory')}
+        footer={
+          <React.Fragment>
+            <Button variant="text" onClick={() => setView('inventory')}>Save draft</Button>
+            <Button
+              variant="filled"
+              style={{ marginLeft: "auto" }}
+              disabled={flowStep === 'camera' && draft.photos.length === 0}
+              onClick={goNextStep}
+            >
+              {isLastStep ? 'Publish' : 'Next'}
+            </Button>
+          </React.Fragment>
+        }
+      >
+        {flowStep === 'camera' && (
+          <CameraScreen
+            photos={draft.photos}
+            onUpdatePhotos={(photos) => updateDraft({ photos })}
+          />
+        )}
+        {flowStep === 'form' && (
+          <ListingFormScreen
+            draft={draft}
+            onUpdateGeneralDetails={updateGeneralDetails}
+          />
+        )}
+        {flowStep === 'pricing' && (
+          <PricingPlaceholder draft={draft} />
+        )}
+      </FlowShell>
+    );
+  }
+
+  // ── Inventory / other views ──
+  const titles = {
+    home: "Home", inventory: "Inventory",
+    create: editing ? "Edit listing" : "Create listing",
+    messages: "Messages", profile: "Profile",
+  };
+
+  const openCreate  = () => { setEditing(null); setView("create"); };
+  const openListing = (l) => { setEditing(l);   setView("create"); };
 
   const trailing = view === "inventory" ? (
     <IconButton icon="filter" title="Filter" />
   ) : null;
 
-  // ── Render ───────────────────────────────────────────────────────────────
-  if (isFlow) {
-    let flowContent;
-    switch (view) {
-      case 'camera':
-        flowContent = (
-          <CameraScreen
-            draft={draft}
-            updateDraft={updateDraft}
-            onNext={() => setView('listing-form')}
-            onClose={closeFlow}
-          />
-        );
-        break;
-
-      // Phases 3–8 screens will be wired in as they are built (Phases 3–8).
-      // Placeholder until each phase lands:
-      default:
-        flowContent = (
-          <div style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center', gap: 16,
-            background: '#fff', padding: 32,
-          }}>
-            <div style={{
-              font: '500 18px/24px var(--font-sans)',
-              color: 'var(--go-neutral-2)', textAlign: 'center',
-            }}>
-              Screen coming soon
-            </div>
-            <div style={{
-              font: '400 13px/18px var(--font-sans)',
-              color: 'var(--go-gray-800)', textAlign: 'center',
-            }}>
-              View: <code>{view}</code>
-            </div>
-            <button
-              onClick={closeFlow}
-              style={{
-                marginTop: 8, padding: '10px 20px', borderRadius: 5,
-                background: 'var(--go-secondary)', color: '#fff',
-                border: 'none', cursor: 'pointer',
-                font: '500 14px/20px var(--font-sans)',
-              }}
-            >
-              ← Back to inventory
-            </button>
-          </div>
-        );
-    }
-
-    return <FlowShell>{flowContent}</FlowShell>;
-  }
+  const footer = view === "create" ? (
+    <React.Fragment>
+      <Button variant="text" onClick={() => setView("inventory")}>Save draft</Button>
+      <Button variant="filled" style={{ marginLeft: "auto" }} disabled={draftMarkets.length === 0}>
+        Crosslist to {draftMarkets.length}
+      </Button>
+    </React.Fragment>
+  ) : null;
 
   // ── Inventory-side views (wrapped in AppShell) ────────────────────────────
   let content;
@@ -240,11 +330,10 @@ function App() {
 
   return (
     <AppShell
-      view={view}
-      setView={setView}
-      title={titles[view] || ""}
-      trailing={trailing}
-      onFabPress={startFlow}
+      view={view} setView={setView}
+      title={titles[view]} trailing={trailing}
+      stickyFooter={footer}
+      onFabPress={openLazyCreate}
     >
       {content}
     </AppShell>

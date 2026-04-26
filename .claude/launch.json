@@ -4,8 +4,9 @@
     {
       "name": "design-system",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "vendoo-design-system/project", "-p", "7890", "--no-clipboard"],
-      "port": 7890
+      "runtimeArgs": ["serve", "vendoo-design-system/project", "--no-clipboard"],
+      "port": 7890,
+      "autoPort": true
     }
   ]
 }
