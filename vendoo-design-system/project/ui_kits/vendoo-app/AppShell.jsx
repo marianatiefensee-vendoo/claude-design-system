@@ -1,5 +1,5 @@
 // AppShell — mobile-first frame with top App Bar + bottom nav + FAB
-function AppShell({ view, setView, title, trailing, children, stickyFooter }) {
+function AppShell({ view, setView, title, trailing, children, stickyFooter, onFabPress }) {
   return (
     <div style={{
       position: "relative",
@@ -60,7 +60,7 @@ function AppShell({ view, setView, title, trailing, children, stickyFooter }) {
           background: "var(--sys-primary)", color: "#fff",
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "var(--elev-3)", cursor: "pointer",
-        }} onClick={() => setView("create")} title="Create listing">
+        }} onClick={onFabPress ?? (() => setView("create"))} title="Create listing">
           <Icon name="plus_circle" size={28} color="#fff" />
         </div>
         <NavItem icon="shopping_bag" label="Sales"    active={view === "messages"} onClick={() => setView("messages")} />
