@@ -317,7 +317,7 @@ function App() {
   let content;
   switch (view) {
     case "inventory":
-      content = <Inventory onOpen={() => {}} onCreate={startFlow} />; break;
+      content = <Inventory onOpen={() => {}} onCreate={openLazyCreate} />; break;
     case "home":
       content = <Placeholder title="Home"     body="Your dashboard will show sales, views and suggested actions here." />; break;
     case "messages":
