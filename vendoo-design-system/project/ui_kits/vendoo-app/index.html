@@ -5,10 +5,13 @@
 <base href="/ui_kits/vendoo-app/">
 <title>Vendoo — UI kit</title>
 <link rel="stylesheet" href="../../colors_and_type.css">
+<!-- Lexend Deca — used for button labels in the Go Flow screens -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@400;500;600&display=swap">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <style>
+  /* ── Prototype stage layout ─────────────────────────────────────────── */
   html, body { margin: 0; padding: 0; background: #F2EBF9; min-height: 100vh; }
   body {
     font-family: var(--font-sans);
@@ -40,6 +43,27 @@
     color: var(--sys-on-surface);
   }
   @media (max-width: 900px) { .stage { flex-direction: column; } .meta { width: 100%; } }
+
+  /* ── Go Flow design tokens ──────────────────────────────────────────── */
+  :root {
+    --go-bg-camera:  #141A21;   /* Camera screen background          */
+    --go-neutral:    #EEEEEE;   /* Borders, dashed outlines          */
+    --go-neutral-2:  #240643;   /* Section / page headings           */
+    --go-secondary:  #653CC9;   /* Primary CTA, switches, accents    */
+    --go-gray-50:    #F7F7F7;   /* Form item card background         */
+    --go-gray-800:   #474747;   /* Secondary / body text             */
+    --go-tonal-100:  #E9E3F7;   /* Light purple tint (icon btn bg)   */
+    --go-indigo-950: #230F38;   /* Dark body text                    */
+    --go-success:    #71D831;   /* "Connected" marketplace badge     */
+    --go-purple-700: #432197;   /* Success screen heading            */
+  }
+
+  /* ── Go Flow animations ─────────────────────────────────────────────── */
+  @keyframes go-spin    { to { transform: rotate(360deg); } }
+  @keyframes go-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position:  200% 0; }
+  }
 </style>
 </head>
 <body>
@@ -60,6 +84,7 @@
 <script type="text/babel" src="./Dialog.jsx"></script>
 <script type="text/babel" src="./Button.jsx"></script>
 <script type="text/babel" src="./IconButton.jsx"></script>
+<script type="text/babel" src="./SelectionControl.jsx"></script>
 <script type="text/babel" src="./Fields.jsx"></script>
 <script type="text/babel" src="./Field.jsx"></script>
 <script type="text/babel" src="./ListingSectionCard.jsx"></script>
@@ -277,8 +302,6 @@ function App() {
 
   const trailing = view === "inventory" ? (
     <IconButton icon="filter" title="Filter" />
-  ) : view === "create" ? (
-    <IconButton icon="x" title="Close" onClick={() => { setEditing(null); setView("inventory"); }} />
   ) : null;
 
   const footer = view === "create" ? (
@@ -290,18 +313,17 @@ function App() {
     </React.Fragment>
   ) : null;
 
+  // ── Inventory-side views (wrapped in AppShell) ────────────────────────────
   let content;
   switch (view) {
     case "inventory":
-      content = <Inventory onOpen={openListing} onCreate={openCreate} />; break;
-    case "create":
-      content = <CreateListing markets={draftMarkets} setMarkets={setDraftMarkets} />; break;
+      content = <Inventory onOpen={() => {}} onCreate={startFlow} />; break;
     case "home":
-      content = <Placeholder title="Home" body="Your dashboard will show sales, views and suggested actions here." />; break;
+      content = <Placeholder title="Home"     body="Your dashboard will show sales, views and suggested actions here." />; break;
     case "messages":
       content = <Placeholder title="Messages" body="No new messages across your marketplaces." />; break;
     case "profile":
-      content = <Placeholder title="Profile" body="Account, connected marketplaces, and plan settings." />; break;
+      content = <Placeholder title="Profile"  body="Account, connected marketplaces, and plan settings." />; break;
     default:
       content = null;
   }
